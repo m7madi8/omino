@@ -107,6 +107,7 @@
     }
     if (countryEl && cityEl && O.fillCitySelect) {
       refreshPlaces(true);
+      if (O.enhancePlaceSelects) O.enhancePlaceSelects(countryEl, cityEl);
       countryEl.addEventListener('change', () => refreshPlaces(false));
     }
 

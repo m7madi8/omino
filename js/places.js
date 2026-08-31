@@ -442,6 +442,7 @@
       select.appendChild(opt);
     });
     select.value = places[keep] ? keep : 'ps';
+    if (select._pick) select._pick.refresh();
   }
 
   function fillCitySelect(select, country, lang, selected) {
@@ -468,6 +469,7 @@
     if (keep && findCity(country, keep)) select.value = keep;
     else select.value = '';
     ph.selected = !select.value;
+    if (select._pick) select._pick.refresh();
   }
 
   function countryName(code, lang) {
@@ -479,9 +481,204 @@
     return hit ? loc(hit, lang) : value;
   }
 
+  function copy(lang) {
+    return lang === 'ar'
+      ? { search: 'ابحث عن مدينة', empty: 'لا نتائج', close: 'إغلاق' }
+      : { search: 'Search city', empty: 'No matches', close: 'Close' };
+  }
+
+  function readGroups(select) {
+    const groups = [];
+    const loose = [];
+    Array.from(select.children).forEach((node) => {
+      if (node.tagName === 'OPTGROUP') {
+        groups.push({
+          label: node.label,
+          items: Array.from(node.children)
+            .filter((o) => o.value)
+            .map((o) => ({ value: o.value, label: o.textContent }))
+        });
+      } else if (node.tagName === 'OPTION' && node.value) {
+        loose.push({ value: node.value, label: node.textContent });
+      }
+    });
+    if (loose.length) groups.unshift({ label: '', items: loose });
+    return groups;
+  }
+
+  function ensureShell() {
+    let root = document.getElementById('placePick');
+    if (root) return root;
+    root = document.createElement('div');
+    root.id = 'placePick';
+    root.className = 'place-pick';
+    root.hidden = true;
+    root.innerHTML =
+      '<div class="place-pick-scrim" data-pick-close="1"></div>' +
+      '<div class="place-pick-panel" role="dialog" aria-modal="true">' +
+        '<div class="place-pick-handle" aria-hidden="true"></div>' +
+        '<div class="place-pick-head">' +
+          '<p class="place-pick-title" id="placePickTitle"></p>' +
+          '<button type="button" class="place-pick-close" data-pick-close="1" aria-label="Close">×</button>' +
+        '</div>' +
+        '<div class="place-pick-search"><input type="search" id="placePickSearch" autocomplete="off"></div>' +
+        '<div class="place-pick-list" id="placePickList" role="listbox"></div>' +
+      '</div>';
+    document.body.appendChild(root);
+    return root;
+  }
+
+  let activePick = null;
+
+  function closePick() {
+    const root = document.getElementById('placePick');
+    if (!root) return;
+    root.classList.remove('is-open');
+    root.hidden = true;
+    document.documentElement.classList.remove('pick-open');
+    if (activePick && activePick.button) {
+      activePick.button.setAttribute('aria-expanded', 'false');
+      activePick.button.focus();
+    }
+    activePick = null;
+  }
+
+  function openPick(select, button, searchable) {
+    const lang = document.documentElement.lang === 'ar' ? 'ar' : 'en';
+    const t = copy(lang);
+    const root = ensureShell();
+    const panel = root.querySelector('.place-pick-panel');
+    const list = root.querySelector('#placePickList');
+    const searchWrap = root.querySelector('.place-pick-search');
+    const search = root.querySelector('#placePickSearch');
+    const title = root.querySelector('#placePickTitle');
+    const closeBtn = root.querySelector('.place-pick-close');
+    const label = document.querySelector('label[for="' + select.id + '"]');
+    title.textContent = label ? label.textContent.trim() : '';
+    closeBtn.setAttribute('aria-label', t.close);
+    search.placeholder = t.search;
+    searchWrap.hidden = !searchable;
+    search.value = '';
+    activePick = { select, button };
+    button.setAttribute('aria-expanded', 'true');
+
+    function render(filter) {
+      const q = (filter || '').trim().toLowerCase();
+      const groups = readGroups(select);
+      list.innerHTML = '';
+      let shown = 0;
+      groups.forEach((g) => {
+        const items = g.items.filter((item) => !q || item.label.toLowerCase().includes(q) || item.value.toLowerCase().includes(q));
+        if (!items.length) return;
+        if (g.label) {
+          const head = document.createElement('div');
+          head.className = 'place-pick-group';
+          head.textContent = g.label;
+          list.appendChild(head);
+        }
+        items.forEach((item) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'place-pick-item' + (item.value === select.value ? ' is-on' : '');
+          btn.setAttribute('role', 'option');
+          btn.setAttribute('aria-selected', item.value === select.value ? 'true' : 'false');
+          btn.textContent = item.label;
+          btn.addEventListener('click', () => {
+            select.value = item.value;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+            if (select._pick) select._pick.refresh();
+            closePick();
+          });
+          list.appendChild(btn);
+          shown += 1;
+        });
+      });
+      if (!shown) {
+        const empty = document.createElement('p');
+        empty.className = 'place-pick-empty';
+        empty.textContent = t.empty;
+        list.appendChild(empty);
+      }
+      const on = list.querySelector('.place-pick-item.is-on');
+      if (on) on.scrollIntoView({ block: 'center' });
+    }
+
+    render('');
+    search.oninput = () => render(search.value);
+
+    const desktop = window.matchMedia('(min-width: 769px)').matches;
+    if (desktop) {
+      const r = button.getBoundingClientRect();
+      panel.style.setProperty('--pick-w', Math.max(r.width, 260) + 'px');
+      panel.style.setProperty('--pick-t', Math.min(r.bottom + 8, window.innerHeight - 80) + 'px');
+      const left = document.documentElement.dir === 'rtl' ? r.right - Math.max(r.width, 260) : r.left;
+      panel.style.setProperty('--pick-l', Math.max(12, Math.min(left, window.innerWidth - 272)) + 'px');
+    } else {
+      panel.style.removeProperty('--pick-w');
+      panel.style.removeProperty('--pick-t');
+      panel.style.removeProperty('--pick-l');
+    }
+
+    root.hidden = false;
+    root.classList.add('is-open');
+    document.documentElement.classList.add('pick-open');
+    if (searchable) search.focus();
+  }
+
+  function enhanceSelect(select, searchable) {
+    if (!select || select._pick) {
+      if (select && select._pick) select._pick.refresh();
+      return;
+    }
+    const wrap = document.createElement('div');
+    wrap.className = 'pick';
+    select.parentNode.insertBefore(wrap, select);
+    wrap.appendChild(select);
+    select.classList.add('pick-native');
+    select.tabIndex = -1;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pick-trigger';
+    btn.setAttribute('aria-haspopup', 'listbox');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.id = select.id + 'Pick';
+    function placeholder() {
+      return document.documentElement.lang === 'ar' ? 'اختر المدينة' : 'Select city';
+    }
+    function refresh() {
+      const opt = select.selectedOptions[0];
+      const empty = !select.value;
+      btn.textContent = empty ? (select.id === 'country' ? (document.documentElement.lang === 'ar' ? 'اختر الدولة' : 'Select country') : placeholder()) : (opt ? opt.textContent : '');
+      btn.classList.toggle('is-empty', empty);
+    }
+    btn.addEventListener('click', () => {
+      if (activePick && activePick.select === select) closePick();
+      else openPick(select, btn, searchable);
+    });
+    wrap.appendChild(btn);
+    select._pick = { refresh, button: btn };
+    refresh();
+  }
+
+  function enhancePlaceSelects(countryEl, cityEl) {
+    enhanceSelect(countryEl, false);
+    enhanceSelect(cityEl, true);
+    const root = ensureShell();
+    if (!root._bound) {
+      root._bound = true;
+      root.addEventListener('click', (e) => {
+        if (e.target.closest('[data-pick-close]')) closePick();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && activePick) closePick();
+      });
+    }
+  }
+
   O.places = places;
   O.fillCountrySelect = fillCountrySelect;
   O.fillCitySelect = fillCitySelect;
   O.countryName = countryName;
   O.cityName = cityName;
+  O.enhancePlaceSelects = enhancePlaceSelects;
 })(window);

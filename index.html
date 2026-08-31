@@ -338,7 +338,8 @@ header.site-nav.scrolled{
 }
 .nav-inner{
   display:flex;align-items:center;justify-content:space-between;
-  gap:16px;
+  gap:12px;
+  min-width:0;
   padding:8px 10px 8px 18px;
   padding-inline:18px 10px;
   background:rgba(255,255,255,0.78);
@@ -355,7 +356,7 @@ header.site-nav.scrolled .nav-inner{
   box-shadow:var(--shadow-lift);
 }
 .nav-links{display:none;align-items:center;gap:4px;}
-@media(min-width:860px){.nav-links{display:flex;}}
+@media(min-width:980px){.nav-links{display:flex;}}
 .nav-links a{
   font-size:12px;color:var(--ink-2);
   padding:8px 14px;
@@ -364,7 +365,7 @@ header.site-nav.scrolled .nav-inner{
 }
 .nav-links a:hover{background:rgba(7,8,9,0.05);}
 .nav-links a:focus-visible{box-shadow:var(--ring);}
-.nav-actions{display:flex;align-items:center;gap:8px;}
+.nav-actions{display:flex;align-items:center;gap:4px;flex:none;}
 .lang-btn{
   font-family:var(--font-body);
   font-size:12px;
@@ -384,6 +385,8 @@ header.site-nav.scrolled .nav-inner{
   font-family:var(--font-body);
   letter-spacing:0.08em;text-transform:uppercase;
   min-height:44px;
+  white-space:nowrap;
+  flex:none;
   cursor:pointer;
   border:1px solid transparent;
   transition:
@@ -451,7 +454,21 @@ html[lang="ar"] .btn-sm{font-size:14px;padding:9px 16px;}
   transition:background 400ms var(--ease);
 }
 .menu-btn:hover{background:rgba(7,8,9,0.05);}
-@media(min-width:860px){.menu-btn{display:none;}}
+@media(min-width:980px){.menu-btn{display:none;}}
+@media(max-width:979px){
+  header.site-nav{top:10px;}
+  header.site-nav .wrap{
+    padding-inline:max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right));
+  }
+  .nav-inner{
+    gap:8px;
+    padding:6px 6px 6px 14px;
+    padding-inline:14px 6px;
+  }
+  header.site-nav .logo-img{height:22px;}
+  header.site-nav .nav-actions .btn-primary{display:none;}
+  .lang-btn{min-width:40px;padding:8px;letter-spacing:0.1em;}
+}
 .menu-btn span{
   display:block;width:18px;height:1.5px;background:var(--ink);
   border-radius:var(--radius-pill);
@@ -997,18 +1014,20 @@ footer.band-footer{
 <header class="site-nav" id="siteNav">
   <div class="wrap">
     <div class="nav-inner">
-    <a href="#" class="logo-lockup" aria-label="OMINO">
+    <a href="index.html" class="logo-lockup" aria-label="OMINO">
       <img class="logo-img logo-on-light" src="img/omino-lockup-ink.png" alt="" width="683" height="235">
       <img class="logo-img logo-on-dark" src="img/omino-lockup-paper.png" alt="" width="685" height="235">
     </a>
-    <nav class="nav-links" aria-label="Primary">
-      <a class="en" href="#business" data-i18n="nav.solutions">Solutions</a>
+      <nav class="nav-links" aria-label="Primary">
+      <a class="en" href="#business" data-i18n="nav.product">Product</a>
       <a class="en" href="#ai" data-i18n="nav.ai">AI</a>
       <a class="en" href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a class="en" href="about.html" data-i18n="nav.about">About</a>
+      <a class="en" href="login.html" data-i18n="nav.login">Login</a>
     </nav>
     <div class="nav-actions">
       <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
-      <a href="#pricing" class="btn btn-primary btn-sm" data-i18n="cta.start">Get started</a>
+      <a href="login.html#signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
       <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span>
       </button>
@@ -1045,7 +1064,7 @@ footer.band-footer{
     <nav class="menu-nav" aria-label="Mobile">
       <a class="menu-link" href="#business">
         <span class="menu-idx">01</span>
-        <span class="menu-name" data-i18n="nav.solutions">Solutions</span>
+        <span class="menu-name" data-i18n="nav.product">Product</span>
       </a>
       <a class="menu-link" href="#ai">
         <span class="menu-idx">02</span>
@@ -1055,9 +1074,17 @@ footer.band-footer{
         <span class="menu-idx">03</span>
         <span class="menu-name" data-i18n="nav.pricing">Pricing</span>
       </a>
+      <a class="menu-link" href="about.html">
+        <span class="menu-idx">04</span>
+        <span class="menu-name" data-i18n="nav.about">About</span>
+      </a>
+      <a class="menu-link" href="login.html">
+        <span class="menu-idx">05</span>
+        <span class="menu-name" data-i18n="nav.login">Login</span>
+      </a>
     </nav>
     <div class="menu-cta">
-      <a href="#pricing" class="btn btn-primary" data-i18n="cta.start">Get started</a>
+      <a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
     </div>
     <div class="menu-foot">
       <span class="menu-connect" data-i18n="menu.connect">Connect</span>
@@ -1092,7 +1119,7 @@ footer.band-footer{
       <h1 id="heroTitle" data-i18n-html="hero.title">Your business.<br>One intelligence.</h1>
       <p class="sub" id="heroSub" data-i18n="hero.sub">OMINO brings your store, POS, inventory, customers, payments and analytics into one intelligent business system — so you can see what’s happening, understand why, and know what to do next.</p>
       <div class="hero-ctas" id="heroCtas">
-        <a href="#pricing" class="btn btn-primary" data-i18n="cta.start">Get started</a>
+        <a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
         <a href="#system" class="btn btn-ghost" data-i18n="cta.fit">Explore OMINO</a>
       </div>
       <p class="hero-fine" id="heroFine" data-i18n="hero.fine">Founding pricing for the first 50 businesses.</p>
@@ -1194,7 +1221,7 @@ footer.band-footer{
           <div data-i18n="plan.s.3">Customers</div>
           <div data-i18n="plan.s.4">Basic analytics</div>
         </div>
-        <a href="#" class="btn btn-ghost" data-i18n="plan.s.cta">Start Starter</a>
+        <a href="login.html#signup" class="btn btn-ghost" data-i18n="plan.s.cta">Start Starter</a>
       </div>
 
       <div class="plan pro">
@@ -1208,7 +1235,7 @@ footer.band-footer{
           <div data-i18n="plan.p.3">WhatsApp</div>
           <div data-i18n="plan.p.4">AI recommendations</div>
         </div>
-        <a href="#" class="btn btn-primary" data-i18n="plan.p.cta">Start Pro</a>
+        <a href="login.html#signup" class="btn btn-primary" data-i18n="plan.p.cta">Start Pro</a>
       </div>
 
       <div class="plan">
@@ -1221,7 +1248,7 @@ footer.band-footer{
           <div data-i18n="plan.b.3">Wholesale &amp; automation</div>
           <div data-i18n="plan.b.4">Priority support</div>
         </div>
-        <a href="#" class="btn btn-ghost" data-i18n="plan.b.cta">Start Business</a>
+        <a href="login.html#signup" class="btn btn-ghost" data-i18n="plan.b.cta">Start Business</a>
       </div>
     </div>
 
@@ -1398,8 +1425,8 @@ const langToggle = document.getElementById('langToggle');
 const copy = {
   en: {
     title: 'OMINO — AI Business OS',
-    'nav.solutions': 'Solutions', 'nav.ai': 'AI', 'nav.pricing': 'Pricing',
-    'cta.start': 'Get started', 'cta.fit': 'Explore OMINO',
+    'nav.product': 'Product', 'nav.ai': 'AI', 'nav.pricing': 'Pricing', 'nav.about': 'About', 'nav.login': 'Login',
+    'cta.start': 'Start for free', 'cta.fit': 'Explore OMINO',
     'menu.open': 'Open menu', 'menu.close': 'Close menu',
     'menu.kicker': 'Menu / 00',
     'menu.tag': 'AI Business OS',
@@ -1434,8 +1461,8 @@ const copy = {
   },
   ar: {
     title: 'OMINO — نظام تشغيل الأعمال',
-    'nav.solutions': 'Solutions', 'nav.ai': 'AI', 'nav.pricing': 'Pricing',
-    'cta.start': 'ابدأ', 'cta.fit': 'استكشف OMINO',
+    'nav.product': 'المنتج', 'nav.ai': 'AI', 'nav.pricing': 'التسعير', 'nav.about': 'عن OMINO', 'nav.login': 'دخول',
+    'cta.start': 'ابدأ مجاناً', 'cta.fit': 'استكشف OMINO',
     'menu.open': 'فتح القائمة', 'menu.close': 'إغلاق القائمة',
     'menu.kicker': 'Menu / 00',
     'menu.tag': 'نظام تشغيل الأعمال',

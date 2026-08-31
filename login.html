@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMINO — Sign in</title>
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/omino.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+body{background:var(--paper);}
+.auth-shell{
+  min-height:100svh;
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(320px,0.85fr);
+}
+.auth-stage{
+  background:var(--ink);
+  color:var(--paper);
+  position:relative;
+  overflow:hidden;
+  padding:120px 64px 64px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:100svh;
+}
+.auth-stage-copy{max-width:440px;position:relative;z-index:1;}
+.auth-kicker{color:#8A9096;margin-bottom:28px;}
+.auth-stage h1{
+  font-size:clamp(2.4rem,5vw,3.6rem);
+  line-height:1.05;
+  color:var(--paper);
+}
+.auth-stage .lede{
+  margin-top:20px;
+  color:#C5C9CE;
+  max-width:32ch;
+  font-size:17px;
+}
+.auth-viz{
+  position:relative;
+  z-index:1;
+  margin-top:48px;
+  max-width:520px;
+}
+.auth-nodes{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:28px;
+}
+.auth-node{
+  border:1px solid var(--hairline-dark);
+  color:#A8ADB3;
+  padding:8px 12px;
+  border-radius:var(--radius-pill);
+  font-size:11px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+}
+.auth-converge{
+  display:flex;
+  align-items:center;
+  gap:18px;
+}
+.auth-line{
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.35));
+}
+html[dir="rtl"] .auth-line{background:linear-gradient(270deg, transparent, rgba(255,255,255,.35));}
+.auth-mark{width:52px;height:52px;flex:none;}
+.auth-mark img{width:100%;height:100%;object-fit:contain;}
+.auth-glow{
+  position:absolute;
+  width:70%;height:50%;
+  right:-10%;bottom:10%;
+  background:radial-gradient(ellipse, rgba(91,124,255,0.22), transparent 68%);
+  filter:blur(40px);
+  pointer-events:none;
+}
+.auth-panel{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:120px 56px 64px;
+  background:var(--paper);
+}
+.auth-card{max-width:400px;width:100%;margin:0 auto;}
+.auth-card h2{
+  font-size:clamp(1.8rem,3vw,2.35rem);
+  line-height:1.1;
+}
+.auth-card .sub{
+  margin-top:10px;
+  color:var(--stone-2);
+  font-size:15px;
+}
+.auth-form{margin-top:36px;display:flex;flex-direction:column;gap:16px;}
+.field{display:flex;flex-direction:column;gap:8px;}
+.field-label{
+  font-size:12px;
+  font-weight:500;
+  color:var(--stone-2);
+  letter-spacing:0.06em;
+}
+html[lang="ar"] .field-label{letter-spacing:0;}
+.field-control{
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+.field input{
+  width:100%;
+  min-height:52px;
+  border:1px solid var(--hairline);
+  border-radius:14px;
+  padding:0 16px;
+  background:#fff;
+  color:var(--ink);
+  font-size:16px;
+  transition:border-color 400ms var(--ease), box-shadow 400ms var(--ease);
+}
+.field input::placeholder{color:#B4B8BC;}
+.field input:hover{border-color:#c5c9ce;}
+.field input:focus{border-color:var(--ink);box-shadow:var(--ring);}
+.field.is-error input{border-color:var(--danger);}
+.field-error{
+  font-size:13px;
+  color:var(--danger);
+  min-height:1.15em;
+}
+.eye{
+  position:absolute;
+  inset-inline-end:6px;
+  width:44px;height:44px;
+  border:0;background:none;
+  color:var(--stone);
+  border-radius:10px;
+}
+.eye:hover{color:var(--ink);}
+.auth-row{
+  display:flex;
+  justify-content:flex-end;
+}
+.auth-row button,.text-btn{
+  background:none;border:0;padding:8px 0;
+  color:var(--stone-2);
+  font-size:13px;
+  min-height:44px;
+}
+.auth-row button:hover,.text-btn:hover{color:var(--ink);}
+.auth-submit{width:100%;margin-top:4px;min-height:52px;border-radius:var(--radius-pill);}
+.auth-status{
+  font-size:13px;
+  min-height:1.2em;
+  color:var(--danger);
+}
+.auth-status.is-ok{color:var(--stone-2);}
+.or{
+  display:flex;align-items:center;gap:14px;
+  color:var(--stone);
+  font-size:11px;
+  letter-spacing:0.16em;
+  margin:8px 0;
+}
+.or::before,.or::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:var(--hairline);
+}
+.google{
+  width:100%;
+  min-height:52px;
+  border-radius:16px;
+  background:#fff;
+  border:1px solid var(--hairline);
+  color:var(--ink);
+  font-size:14px;
+  letter-spacing:0;
+  text-transform:none;
+  font-weight:500;
+}
+.google svg{width:18px;height:18px;}
+.google:hover:not(:disabled){border-color:var(--ink);transform:none;background:#fff;}
+.auth-switch{
+  margin-top:28px;
+  font-size:14px;
+  color:var(--stone-2);
+}
+.auth-switch button{
+  background:none;border:0;padding:0;
+  color:var(--ink);
+  font-weight:500;
+  min-height:auto;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.auth-panel[data-mode="signup"] .only-signin,
+.auth-panel[data-mode="forgot"] .only-signin{display:none;}
+.auth-panel[data-mode="signin"] .only-signup,
+.auth-panel[data-mode="forgot"] .only-signup{display:none;}
+.auth-panel[data-mode="signin"] .only-forgot,
+.auth-panel[data-mode="signup"] .only-forgot{display:none;}
+.spinner{
+  width:16px;height:16px;
+  border:1.5px solid rgba(255,255,255,.3);
+  border-top-color:currentColor;
+  border-radius:50%;
+  animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media (max-width:980px){
+  .auth-shell{grid-template-columns:1fr;}
+  .auth-stage{
+    min-height:auto;
+    padding:108px 24px 36px;
+  }
+  .auth-viz{display:none;}
+  .auth-panel{padding:40px 24px 80px;}
+  .auth-stage h1{font-size:2rem;}
+}
+@media (prefers-reduced-motion: reduce){
+  .spinner{animation:none;border-color:currentColor;}
+}
+</style>
+</head>
+<body class="page-login">
+<a class="skip" href="#authMain">Skip to sign in</a>
+
+<header class="site-nav" id="siteNav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <a href="index.html" class="logo-lockup" aria-label="OMINO">
+        <img class="logo-img logo-on-light" src="img/omino-lockup-ink.png" alt="" width="683" height="235">
+        <img class="logo-img logo-on-dark" src="img/omino-lockup-paper.png" alt="" width="685" height="235">
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="en" href="index.html#business" data-i18n="nav.product">Product</a>
+        <a class="en" href="index.html#ai" data-i18n="nav.ai">AI</a>
+        <a class="en" href="index.html#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a class="en" href="about.html" data-i18n="nav.about">About</a>
+        <a class="en is-active" href="login.html" data-i18n="nav.login">Login</a>
+      </nav>
+      <div class="nav-actions">
+        <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
+        <a href="login.html#signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="menu-shell" id="mobileMenu" aria-hidden="true" inert>
+  <button type="button" class="menu-scrim" id="menuScrim" tabindex="-1" aria-label="Close menu"></button>
+  <aside class="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menuKicker">
+    <div class="menu-drawer-top">
+      <p class="idx menu-kicker" id="menuKicker" data-i18n="menu.kicker">Menu / 00</p>
+      <p class="menu-tag" data-i18n="menu.tag">AI Business OS</p>
+    </div>
+    <nav class="menu-nav" aria-label="Mobile">
+      <a class="menu-link" href="index.html#business"><span class="menu-idx">01</span><span class="menu-name" data-i18n="nav.product">Product</span></a>
+      <a class="menu-link" href="index.html#ai"><span class="menu-idx">02</span><span class="menu-name" data-i18n="nav.ai">AI</span></a>
+      <a class="menu-link" href="index.html#pricing"><span class="menu-idx">03</span><span class="menu-name" data-i18n="nav.pricing">Pricing</span></a>
+      <a class="menu-link" href="about.html"><span class="menu-idx">04</span><span class="menu-name" data-i18n="nav.about">About</span></a>
+      <a class="menu-link" href="login.html"><span class="menu-idx">05</span><span class="menu-name" data-i18n="nav.login">Login</span></a>
+    </nav>
+    <div class="menu-cta">
+      <a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
+    </div>
+    <div class="menu-foot">
+      <span class="menu-connect" data-i18n="menu.connect">Connect</span>
+    </div>
+  </aside>
+</div>
+
+<main class="auth-shell" id="authMain">
+  <section class="auth-stage" aria-hidden="false">
+    <div class="auth-glow" aria-hidden="true"></div>
+    <div class="auth-stage-copy">
+      <p class="idx auth-kicker">AI Business OS</p>
+      <h1 data-i18n="stage.title">Your business, in one intelligent system.</h1>
+      <p class="lede" data-i18n="stage.lede">Commerce, operations, and intelligence — connected before you sign in.</p>
+    </div>
+    <div class="auth-viz" aria-hidden="true">
+      <div class="auth-nodes">
+        <span class="auth-node en">POS</span>
+        <span class="auth-node en">Store</span>
+        <span class="auth-node en">Inventory</span>
+        <span class="auth-node en">Customers</span>
+        <span class="auth-node en">Payments</span>
+      </div>
+      <div class="auth-converge">
+        <div class="auth-line"></div>
+        <div class="auth-mark">
+          <img src="img/omino-mark-paper.png" alt="" width="240" height="244">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="auth-panel" data-mode="signin" aria-labelledby="authTitle">
+    <div class="auth-card">
+      <h2 id="authTitle" data-i18n="signin.title">Welcome back.</h2>
+      <p class="sub" id="authSub" data-i18n="signin.sub">Your business is ready.</p>
+
+      <form class="auth-form" id="authForm" novalidate>
+        <div class="field only-signup" id="businessField">
+          <label class="field-label" for="business" data-i18n="field.business">Business name</label>
+          <div class="field-control">
+            <input id="business" name="business" type="text" autocomplete="organization" maxlength="80" aria-describedby="businessError">
+          </div>
+          <p class="field-error" id="businessError" role="alert"></p>
+        </div>
+
+        <div class="field" id="emailField">
+          <label class="field-label" for="email" data-i18n="field.email">Email</label>
+          <div class="field-control">
+            <input id="email" name="email" type="email" inputmode="email" autocomplete="username" required aria-describedby="emailError">
+          </div>
+          <p class="field-error" id="emailError" role="alert"></p>
+        </div>
+
+        <div class="field" id="passwordField">
+          <label class="field-label" for="password" data-i18n="field.password">Password</label>
+          <div class="field-control">
+            <input id="password" name="password" type="password" autocomplete="current-password" required minlength="8" aria-describedby="passwordError">
+            <button type="button" class="eye" id="togglePw" aria-pressed="false" aria-label="Show password">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <p class="field-error" id="passwordError" role="alert"></p>
+        </div>
+
+        <div class="auth-row only-signin">
+          <button type="button" id="toForgot" data-i18n="signin.forgot">Forgot password?</button>
+        </div>
+
+        <button type="submit" class="btn btn-primary auth-submit" id="submitBtn" data-i18n="signin.submit">Sign in</button>
+        <p class="auth-status" id="formStatus" role="status" aria-live="polite"></p>
+
+        <div class="or only-signin" data-i18n="or">or</div>
+        <div class="or only-signup" data-i18n="or">or</div>
+
+        <button type="button" class="btn google" id="googleBtn">
+          <svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.6 9.2c0-.6-.1-1.2-.2-1.8H9v3.4h4.8c-.2 1.1-.9 2-1.8 2.6v2.2h3c1.7-1.6 2.6-3.9 2.6-6.4z"/><path fill="#34A853" d="M9 18c2.4 0 4.5-.8 6-2.2l-3-2.2c-.8.6-1.9.9-3 .9-2.3 0-4.3-1.6-5-3.7H1v2.3C2.4 16.1 5.5 18 9 18z"/><path fill="#FBBC05" d="M4 10.8c-.2-.6-.3-1.2-.3-1.8s.1-1.2.3-1.8V4.9H1C.4 6.2 0 7.6 0 9s.4 2.8 1 4.1l3-2.3z"/><path fill="#EA4335" d="M9 3.5c1.3 0 2.5.5 3.4 1.3l2.5-2.5C13.5.8 11.4 0 9 0 5.5 0 2.4 1.9 1 4.9l3 2.3C4.7 5.1 6.7 3.5 9 3.5z"/></svg>
+          <span data-i18n="google">Continue with Google</span>
+        </button>
+      </form>
+
+      <p class="auth-switch only-signin">
+        <span data-i18n="signin.switch">New to OMINO?</span>
+        <button type="button" id="toSignup" data-i18n="signin.create">Create your business</button>
+      </p>
+      <p class="auth-switch only-signup">
+        <span data-i18n="signup.switch">Already have an account?</span>
+        <button type="button" id="toSignin" data-i18n="signup.back">Sign in</button>
+      </p>
+      <p class="auth-switch only-forgot">
+        <button type="button" id="toSignin2" data-i18n="signup.back">Sign in</button>
+      </p>
+    </div>
+  </section>
+</main>
+
+<script src="js/auth.js"></script>
+<script src="js/omino-nav.js"></script>
+<script>
+const copy = {
+  en: {
+    title: 'OMINO — Sign in',
+    'nav.product': 'Product', 'nav.ai': 'AI', 'nav.pricing': 'Pricing', 'nav.about': 'About', 'nav.login': 'Login',
+    'cta.start': 'Start for free',
+    'menu.open': 'Open menu', 'menu.close': 'Close menu',
+    'menu.kicker': 'Menu / 00', 'menu.tag': 'AI Business OS', 'menu.connect': 'Connect',
+    'stage.title': 'Your business, in one intelligent system.',
+    'stage.lede': 'Commerce, operations, and intelligence — connected before you sign in.',
+    'signin.title': 'Welcome back.',
+    'signin.sub': 'Your business is ready.',
+    'signin.forgot': 'Forgot password?',
+    'signin.submit': 'Sign in',
+    'signin.switch': 'New to OMINO?',
+    'signin.create': 'Create your business',
+    'signup.title': 'Create your business.',
+    'signup.sub': 'Join the first 50 founding businesses.',
+    'signup.submit': 'Create account',
+    'signup.switch': 'Already have an account?',
+    'signup.back': 'Sign in',
+    'forgot.title': 'Reset password.',
+    'forgot.sub': 'Enter your email and a new password.',
+    'forgot.submit': 'Update password',
+    'field.email': 'Email',
+    'field.password': 'Password',
+    'field.business': 'Business name',
+    or: 'or',
+    google: 'Continue with Google',
+    'err.email': 'Enter a valid email.',
+    'err.password': 'Use at least 8 characters.',
+    'err.business': 'Enter your business name.',
+    'err.invalid': 'Email or password is incorrect.',
+    'err.exists': 'An account already exists for this email.',
+    'err.cap': 'Founding access is full. Join the waitlist from the site.',
+    'err.google': 'Google sign-in is not connected in this environment.',
+    'err.generic': 'Something went wrong. Try again.',
+    'ok.reset': 'Password updated. You can sign in.',
+    'ok.loading': 'Please wait…',
+    showPw: 'Show password',
+    hidePw: 'Hide password'
+  },
+  ar: {
+    title: 'OMINO — دخول',
+    'nav.product': 'المنتج', 'nav.ai': 'AI', 'nav.pricing': 'التسعير', 'nav.about': 'عن OMINO', 'nav.login': 'دخول',
+    'cta.start': 'ابدأ مجاناً',
+    'menu.open': 'فتح القائمة', 'menu.close': 'إغلاق القائمة',
+    'menu.kicker': 'Menu / 00', 'menu.tag': 'نظام تشغيل الأعمال', 'menu.connect': 'تواصل',
+    'stage.title': 'عملك، في نظام ذكي واحد.',
+    'stage.lede': 'التجارة، التشغيل، والذكاء — متصلة قبل ما تدخل.',
+    'signin.title': 'مرحباً بعودتك.',
+    'signin.sub': 'نشاطك جاهز.',
+    'signin.forgot': 'نسيت كلمة المرور؟',
+    'signin.submit': 'دخول',
+    'signin.switch': 'جديد على OMINO؟',
+    'signin.create': 'أنشئ نشاطك',
+    'signup.title': 'أنشئ نشاطك.',
+    'signup.sub': 'انضم لأول 50 نشاطاً مؤسساً.',
+    'signup.submit': 'إنشاء حساب',
+    'signup.switch': 'عندك حساب؟',
+    'signup.back': 'دخول',
+    'forgot.title': 'إعادة تعيين كلمة المرور.',
+    'forgot.sub': 'أدخل بريدك وكلمة مرور جديدة.',
+    'forgot.submit': 'تحديث كلمة المرور',
+    'field.email': 'البريد',
+    'field.password': 'كلمة المرور',
+    'field.business': 'اسم النشاط',
+    or: 'أو',
+    google: 'المتابعة عبر Google',
+    'err.email': 'أدخل بريداً صحيحاً.',
+    'err.password': 'استخدم 8 أحرف على الأقل.',
+    'err.business': 'أدخل اسم النشاط.',
+    'err.invalid': 'البريد أو كلمة المرور غير صحيحة.',
+    'err.exists': 'يوجد حساب لهذا البريد.',
+    'err.cap': 'مقاعد المؤسسين مكتملة.',
+    'err.google': 'تسجيل Google غير متصل في هذه البيئة.',
+    'err.generic': 'حدث خطأ. حاول مرة أخرى.',
+    'ok.reset': 'تم التحديث. يمكنك الدخول.',
+    'ok.loading': 'لحظة…',
+    showPw: 'إظهار كلمة المرور',
+    hidePw: 'إخفاء كلمة المرور'
+  }
+};
+
+const panel = document.querySelector('.auth-panel');
+const form = document.getElementById('authForm');
+const title = document.getElementById('authTitle');
+const sub = document.getElementById('authSub');
+const submitBtn = document.getElementById('submitBtn');
+const statusEl = document.getElementById('formStatus');
+const pw = document.getElementById('password');
+const togglePw = document.getElementById('togglePw');
+let nav;
+
+function t(key){
+  const lang = nav ? nav.getLang() : (localStorage.getItem('omino-lang') === 'ar' ? 'ar' : 'en');
+  return copy[lang][key];
+}
+
+function modeFromHash(){
+  const h = (location.hash || '').replace('#','');
+  if(h === 'signup' || h === 'forgot') return h;
+  return 'signin';
+}
+
+function setMode(mode){
+  panel.dataset.mode = mode;
+  if(mode === 'signup') history.replaceState(null,'','#signup');
+  else if(mode === 'forgot') history.replaceState(null,'','#forgot');
+  else history.replaceState(null,'', location.pathname);
+
+  title.textContent = t(mode + '.title');
+  sub.textContent = t(mode + '.sub');
+  submitBtn.textContent = t(mode + '.submit');
+  document.title = t('title');
+  pw.autocomplete = mode === 'signin' ? 'current-password' : 'new-password';
+  document.getElementById('business').required = mode === 'signup';
+  clearErrors();
+  statusEl.textContent = '';
+  statusEl.classList.remove('is-ok');
+}
+
+function clearErrors(){
+  ['email','password','business'].forEach(id => {
+    document.getElementById(id + 'Field').classList.remove('is-error');
+    document.getElementById(id + 'Error').textContent = '';
+    document.getElementById(id).removeAttribute('aria-invalid');
+  });
+}
+
+function setError(id, msg){
+  document.getElementById(id + 'Field').classList.add('is-error');
+  document.getElementById(id + 'Error').textContent = msg;
+  document.getElementById(id).setAttribute('aria-invalid','true');
+}
+
+function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+function setBusy(on){
+  submitBtn.disabled = on;
+  document.getElementById('googleBtn').disabled = on;
+  submitBtn.setAttribute('aria-busy', on ? 'true' : 'false');
+  if(on){
+    submitBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span>'+t('ok.loading')+'</span>';
+  } else {
+    submitBtn.textContent = t(panel.dataset.mode + '.submit');
+  }
+}
+
+document.getElementById('toSignup').addEventListener('click', ()=> setMode('signup'));
+document.getElementById('toSignin').addEventListener('click', ()=> setMode('signin'));
+document.getElementById('toSignin2').addEventListener('click', ()=> setMode('signin'));
+document.getElementById('toForgot').addEventListener('click', ()=> setMode('forgot'));
+window.addEventListener('hashchange', ()=> setMode(modeFromHash()));
+
+togglePw.addEventListener('click', ()=>{
+  const show = pw.type === 'password';
+  pw.type = show ? 'text' : 'password';
+  togglePw.setAttribute('aria-pressed', show ? 'true' : 'false');
+  togglePw.setAttribute('aria-label', show ? t('hidePw') : t('showPw'));
+});
+
+document.getElementById('googleBtn').addEventListener('click', async ()=>{
+  statusEl.classList.remove('is-ok');
+  try {
+    await OminoAuth.google();
+  } catch {
+    statusEl.textContent = t('err.google');
+  }
+});
+
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  clearErrors();
+  statusEl.textContent = '';
+  statusEl.classList.remove('is-ok');
+  const mode = panel.dataset.mode;
+  const email = document.getElementById('email').value.trim();
+  const password = pw.value;
+  const business = document.getElementById('business').value.trim();
+  let bad = false;
+  if(!validEmail(email)){ setError('email', t('err.email')); bad = true; }
+  if(password.length < 8){ setError('password', t('err.password')); bad = true; }
+  if(mode === 'signup' && business.length < 2){ setError('business', t('err.business')); bad = true; }
+  if(bad) return;
+
+  setBusy(true);
+  try {
+    if(mode === 'signin') await OminoAuth.signIn(email, password);
+    else if(mode === 'signup') await OminoAuth.signUp({ email, password, business });
+    else {
+      await OminoAuth.resetPassword(email, password);
+      statusEl.textContent = t('ok.reset');
+      statusEl.classList.add('is-ok');
+      setBusy(false);
+      setMode('signin');
+      return;
+    }
+    location.href = 'app.html';
+  } catch (err) {
+    const map = { INVALID:'err.invalid', NOT_FOUND:'err.invalid', EXISTS:'err.exists', CAP:'err.cap' };
+    statusEl.textContent = t(map[err.message] || 'err.generic');
+    setBusy(false);
+  }
+});
+
+if(OminoAuth.session()) location.replace('app.html');
+nav = OminoNav.init({
+  copy,
+  afterLang(){ setMode(panel.dataset.mode); }
+});
+setMode(modeFromHash());
+
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.gsap){
+  const tl = gsap.timeline({defaults:{ease:'power4.out'}});
+  tl.from('.auth-stage-copy',{opacity:0,y:18,duration:.8})
+    .from('.auth-viz',{opacity:0,y:14,duration:.7},'-=.45')
+    .from('.auth-card',{opacity:0,y:16,duration:.75},'-=.55');
+}
+</script>
+</body>
+</html>

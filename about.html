@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMINO — The idea</title>
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/omino.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+body{
+  background:
+    radial-gradient(ellipse 80% 42% at 70% -8%, rgba(91,124,255,0.07), transparent 58%),
+    var(--paper);
+}
+.about-hero{padding:168px 0 100px;}
+.about-kicker{color:var(--stone);margin-bottom:28px;}
+.about-hero h1{
+  font-size:clamp(2.6rem,7vw,5.4rem);
+  line-height:1.02;
+  max-width:14ch;
+}
+.about-hero .lead{
+  margin-top:28px;
+  max-width:42ch;
+  font-size:18px;
+  color:var(--stone-2);
+}
+.about-hero .second{
+  margin-top:72px;
+  padding-top:72px;
+  border-top:1px solid var(--hairline);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  align-items:end;
+}
+.about-hero .second h2{
+  font-size:clamp(2rem,4vw,3.2rem);
+  line-height:1.1;
+}
+.serif{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:0;
+  font-stretch:normal;
+}
+html[lang="ar"] .serif{font-family:var(--font-ar);font-style:normal;font-weight:600;}
+.story{padding:40px 0 120px;}
+.story h2{font-size:clamp(2rem,4.5vw,3.4rem);max-width:16ch;line-height:1.08;}
+.story-body{margin-top:28px;max-width:46ch;color:var(--stone-2);font-size:18px;}
+.tool-cloud{
+  display:flex;flex-wrap:wrap;gap:10px;
+  margin-top:48px;
+  max-width:720px;
+}
+.tool{
+  border:1px solid var(--hairline);
+  padding:10px 16px;
+  border-radius:var(--radius-pill);
+  font-size:13px;
+  color:var(--stone-2);
+}
+.story-turn{
+  margin-top:72px;
+  padding:56px 0 0;
+  border-top:1px solid var(--hairline);
+}
+.story-turn p{font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.2;max-width:18ch;}
+.story-turn .mark{
+  margin-top:36px;
+  display:flex;align-items:center;gap:16px;
+}
+.story-turn img{width:48px;height:48px;object-fit:contain;}
+.dark{
+  background:var(--ink);
+  color:var(--paper);
+  padding:120px 0;
+  margin:0 20px;
+  border-radius:var(--radius-2xl);
+}
+@media(max-width:768px){.dark{margin:0 12px;padding:88px 0;}}
+.dark .idx{color:#8A9096;}
+.philo h2{font-size:clamp(2rem,4vw,3.2rem);margin-bottom:56px;}
+.belief{
+  padding:36px 0;
+  border-top:1px solid var(--hairline-dark);
+}
+.belief h3{
+  font-family:var(--font-display);
+  font-stretch:125%;
+  font-size:clamp(1.6rem,3vw,2.4rem);
+  line-height:1.15;
+}
+html[lang="ar"] .belief h3{font-family:var(--font-ar);font-stretch:normal;}
+.belief p{margin-top:12px;max-width:46ch;color:#A8ADB3;}
+.diff{padding:120px 0;}
+.diff h2{font-size:clamp(2rem,4vw,3.2rem);margin-bottom:56px;}
+.diff-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+}
+.diff-col h3{font-size:14px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);margin-bottom:24px;}
+html[lang="ar"] .diff-col h3{letter-spacing:0;text-transform:none;}
+.diff-col ul{list-style:none;margin:0;padding:0;}
+.diff-col li{
+  padding:14px 0;
+  border-bottom:1px solid var(--hairline);
+  font-size:22px;
+}
+.diff-col.after{background:var(--ink);color:var(--paper);padding:36px;border-radius:var(--radius-lg);}
+.diff-col.after h3{color:#8A9096;}
+.diff-col.after li{border-color:var(--hairline-dark);}
+.intel{padding:40px 0 120px;}
+.intel h2{font-size:clamp(2rem,4.5vw,3.6rem);max-width:16ch;line-height:1.08;}
+.intel .note{margin-top:20px;max-width:46ch;color:var(--stone-2);}
+.dialogue{
+  margin-top:56px;
+  display:grid;
+  gap:16px;
+  max-width:640px;
+}
+.bubble{
+  padding:16px 20px;
+  border-radius:18px;
+  max-width:90%;
+}
+.bubble.owner{background:#fff;border:1px solid var(--hairline);justify-self:end;}
+.bubble.sys{background:var(--ink);color:var(--paper);}
+.bubble span{display:block;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;opacity:.55;margin-bottom:6px;}
+html[lang="ar"] .bubble span{letter-spacing:0;text-transform:none;}
+.chain{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-top:40px;
+}
+.chain i{
+  font-style:normal;
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  padding:8px 12px;
+  border:1px solid var(--hairline);
+  border-radius:var(--radius-pill);
+}
+.future{padding:120px 0;}
+.future h2{font-size:clamp(2.2rem,5vw,4rem);max-width:16ch;line-height:1.06;}
+.future-list{margin-top:48px;max-width:520px;}
+.future-list p{
+  padding:18px 0;
+  border-top:1px solid var(--hairline);
+  font-size:20px;
+}
+.trades{padding:40px 0 120px;}
+.trades h2{font-size:clamp(2rem,4vw,3.2rem);margin-bottom:16px;}
+.trades .note{color:var(--stone-2);max-width:42ch;margin-bottom:40px;}
+.trade-row{display:flex;flex-wrap:wrap;gap:10px;}
+.home{padding:80px 0;}
+.home-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:40px;
+  align-items:center;
+}
+.home h2{font-size:clamp(1.8rem,3.5vw,2.8rem);line-height:1.12;}
+.home p{color:#A8ADB3;max-width:42ch;}
+.founding{padding:120px 0;}
+.founding h2{font-size:clamp(2.2rem,5vw,4rem);line-height:1.06;}
+.founding p{margin-top:20px;max-width:42ch;color:var(--stone-2);font-size:18px;}
+.founding .btn{margin-top:36px;}
+.end{
+  padding:140px 0 100px;
+  text-align:start;
+}
+.end h2{font-size:clamp(2.4rem,6vw,4.6rem);line-height:1.04;max-width:14ch;}
+.end-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px;}
+.end-foot{margin-top:80px;color:var(--stone);}
+@media(max-width:800px){
+  .about-hero .second,.diff-grid,.home-grid{grid-template-columns:1fr;}
+  .bubble.owner{justify-self:stretch;}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+
+<header class="site-nav" id="siteNav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <a href="index.html" class="logo-lockup" aria-label="OMINO">
+        <img class="logo-img logo-on-light" src="img/omino-lockup-ink.png" alt="" width="683" height="235">
+        <img class="logo-img logo-on-dark" src="img/omino-lockup-paper.png" alt="" width="685" height="235">
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="en" href="index.html#business" data-i18n="nav.product">Product</a>
+        <a class="en" href="index.html#ai" data-i18n="nav.ai">AI</a>
+        <a class="en" href="index.html#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a class="en is-active" href="about.html" data-i18n="nav.about">About</a>
+        <a class="en" href="login.html" data-i18n="nav.login">Login</a>
+      </nav>
+      <div class="nav-actions">
+        <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
+        <a href="login.html#signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="menu-shell" id="mobileMenu" aria-hidden="true" inert>
+  <button type="button" class="menu-scrim" id="menuScrim" tabindex="-1" aria-label="Close menu"></button>
+  <aside class="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menuKicker">
+    <div class="menu-drawer-top">
+      <p class="idx menu-kicker" id="menuKicker" data-i18n="menu.kicker">Menu / 00</p>
+      <p class="menu-tag" data-i18n="menu.tag">AI Business OS</p>
+    </div>
+    <nav class="menu-nav" aria-label="Mobile">
+      <a class="menu-link" href="index.html#business"><span class="menu-idx">01</span><span class="menu-name" data-i18n="nav.product">Product</span></a>
+      <a class="menu-link" href="index.html#ai"><span class="menu-idx">02</span><span class="menu-name" data-i18n="nav.ai">AI</span></a>
+      <a class="menu-link" href="index.html#pricing"><span class="menu-idx">03</span><span class="menu-name" data-i18n="nav.pricing">Pricing</span></a>
+      <a class="menu-link" href="about.html"><span class="menu-idx">04</span><span class="menu-name" data-i18n="nav.about">About</span></a>
+      <a class="menu-link" href="login.html"><span class="menu-idx">05</span><span class="menu-name" data-i18n="nav.login">Login</span></a>
+    </nav>
+    <div class="menu-cta">
+      <a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
+    </div>
+    <div class="menu-foot"><span class="menu-connect" data-i18n="menu.connect">Connect</span></div>
+  </aside>
+</div>
+
+<main id="content">
+  <section class="about-hero">
+    <div class="wrap">
+      <p class="idx about-kicker" data-i18n="hero.kicker">The idea behind OMINO</p>
+      <h1 data-i18n-html="hero.title">Business shouldn’t feel<br>this fragmented.</h1>
+      <p class="lead" data-i18n="hero.lead">Modern businesses generate more data than ever, yet the people running them still jump between disconnected tools to understand what is happening.</p>
+      <div class="second">
+        <h2 data-i18n-html="hero.omino">OMINO brings<br>it together.</h2>
+        <p class="lead" data-i18n="hero.together">Commerce, POS, inventory, customers, payments and intelligence — connected through one system.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="story">
+    <div class="wrap">
+      <p class="idx reveal">Story / 01</p>
+      <h2 class="reveal" data-i18n="story.title">We didn’t build another tool.</h2>
+      <p class="story-body reveal serif" data-i18n="story.line">Businesses don’t need another dashboard. They need clarity.</p>
+      <p class="story-body reveal" data-i18n="story.body">A business owner may already have Instagram, WhatsApp, a POS, a website, a spreadsheet, inventory software, a payment provider, a customer list, and analytics. None of these systems truly understand the business as a whole.</p>
+      <div class="tool-cloud reveal" aria-label="Fragmented tools">
+        <span class="tool">Instagram</span><span class="tool">WhatsApp</span><span class="tool">POS</span>
+        <span class="tool">Website</span><span class="tool">Spreadsheet</span><span class="tool">Inventory</span>
+        <span class="tool">Payments</span><span class="tool">Customers</span><span class="tool">Analytics</span>
+      </div>
+      <div class="story-turn reveal">
+        <p data-i18n="story.turn">All of these signals converge into one system.</p>
+        <div class="mark">
+          <img src="img/omino-mark-ink.png" alt="" width="240" height="244">
+          <div>
+            <strong>OMINO</strong>
+            <p data-i18n="story.one">One source of truth. One intelligent layer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark philo on-dark">
+    <div class="wrap">
+      <p class="idx reveal">Philosophy / 02</p>
+      <h2 class="reveal" data-i18n="philo.title">Our philosophy</h2>
+      <article class="belief reveal">
+        <h3 data-i18n="p1.t">Simplicity is a feature.</h3>
+        <p data-i18n="p1.b">Business software shouldn’t require a manual to understand.</p>
+      </article>
+      <article class="belief reveal">
+        <h3 data-i18n="p2.t">Data should become decisions.</h3>
+        <p data-i18n="p2.b">Numbers are only useful when they help someone know what to do next.</p>
+      </article>
+      <article class="belief reveal">
+        <h3 data-i18n="p3.t">AI should do more than talk.</h3>
+        <p data-i18n="p3.b">AI should understand context, recommend actions, and eventually help execute them.</p>
+      </article>
+      <article class="belief reveal">
+        <h3 data-i18n="p4.t">One business should feel like one system.</h3>
+        <p data-i18n="p4.b">Online sales, physical sales, inventory, customers and payments shouldn’t live in separate worlds.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="diff">
+    <div class="wrap">
+      <p class="idx reveal">Difference / 03</p>
+      <h2 class="reveal" data-i18n="diff.title">The OMINO difference</h2>
+      <div class="diff-grid">
+        <div class="diff-col reveal">
+          <h3 data-i18n="diff.before">Before — disconnected</h3>
+          <ul>
+            <li>POS</li><li>Website</li><li>Inventory</li>
+            <li>Customers</li><li>Payments</li><li>Reports</li>
+          </ul>
+        </div>
+        <div class="diff-col after reveal">
+          <h3 data-i18n="diff.after">After — connected</h3>
+          <ul>
+            <li>Commerce</li><li>Operations</li><li>Finance</li>
+            <li>Customers</li><li>Intelligence</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="intel">
+    <div class="wrap">
+      <p class="idx reveal">Intelligence / 04</p>
+      <h2 class="reveal" data-i18n="ai.title">AI that understands the business.</h2>
+      <p class="note reveal" data-i18n="ai.note">OMINO doesn’t simply answer questions. It understands business context.</p>
+      <div class="dialogue reveal">
+        <div class="bubble owner"><span data-i18n="ai.owner">Owner</span><p data-i18n="ai.q">Why did my profit drop this month?</p></div>
+        <div class="bubble sys"><span>OMINO</span><p data-i18n="ai.a">Revenue increased 8%, but gross profit decreased 4%.</p></div>
+        <div class="bubble sys"><span data-i18n="ai.next">Next</span><p data-i18n="ai.rec">Here are the actions I recommend.</p></div>
+      </div>
+      <div class="chain reveal" aria-label="Intelligence path">
+        <i>Data</i><i>Understanding</i><i>Recommendation</i><i>Action</i>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark future on-dark">
+    <div class="wrap">
+      <p class="idx reveal">Future / 05</p>
+      <h2 class="reveal" data-i18n-html="future.title">The future of business software isn’t more software.<br>It is intelligence.</h2>
+      <div class="future-list">
+        <p class="reveal" data-i18n="f1">What happened.</p>
+        <p class="reveal" data-i18n="f2">Why it happened.</p>
+        <p class="reveal" data-i18n="f3">What needs attention.</p>
+        <p class="reveal" data-i18n="f4">What opportunity exists.</p>
+        <p class="reveal" data-i18n="f5">What should happen next.</p>
+        <p class="reveal" data-i18n="f6">And with approval — OMINO helps execute it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="trades">
+    <div class="wrap">
+      <p class="idx reveal">Verticals / 06</p>
+      <h2 class="reveal" data-i18n="tr.title">Built for real businesses.</h2>
+      <p class="note reveal" data-i18n="tr.note">The same operating system. Different numbers. No separate product pages.</p>
+      <div class="trade-row reveal">
+        <span class="tool">Perfume</span><span class="tool">Fashion</span><span class="tool">Beauty</span>
+        <span class="tool">Retail</span><span class="tool">Electronics</span><span class="tool">Cafés</span>
+        <span class="tool">Restaurants</span><span class="tool">Services</span><span class="tool">Wholesale</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark home on-dark">
+    <div class="wrap home-grid">
+      <h2 class="reveal" data-i18n-html="home.title">Built close to home.<br>Designed to go far.</h2>
+      <p class="reveal" data-i18n="home.body">OMINO starts by solving real problems for businesses in Palestine, with a product architecture designed to grow beyond one market.</p>
+    </div>
+  </section>
+
+  <section class="founding">
+    <div class="wrap">
+      <p class="idx reveal">Founding / 07</p>
+      <h2 class="reveal" data-i18n="found.title">The first chapter.</h2>
+      <p class="reveal" data-i18n="found.body">The first 50 businesses are not just customers. They are the businesses helping shape OMINO.</p>
+      <a href="login.html#signup" class="btn btn-primary reveal" data-i18n="found.cta">Become a founding business</a>
+    </div>
+  </section>
+
+  <section class="end">
+    <div class="wrap">
+      <h2 data-i18n-html="end.title">Your business already has the data.<br>OMINO turns it into intelligence.</h2>
+      <div class="end-ctas">
+        <a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
+        <a href="index.html" class="btn btn-ghost" data-i18n="end.explore">Explore OMINO</a>
+      </div>
+      <div class="end-foot">
+        <strong>OMINO</strong>
+        <p class="idx" style="margin-top:8px">AI Business OS</p>
+        <p style="margin-top:10px" data-i18n="end.line">One intelligent system for your business.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="band-footer on-dark">
+  <div class="wrap footer-bottom">
+    <div class="footer-brand">
+      <img class="logo-img" src="img/omino-lockup-paper.png" alt="OMINO" width="685" height="235">
+      <span data-i18n="footer.copy">© 2026 OMINO. All rights reserved.</span>
+    </div>
+    <div class="footer-legal">
+      <a href="login.html" data-i18n="nav.login">Login</a>
+      <a href="about.html" data-i18n="nav.about">About</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/omino-nav.js"></script>
+<script>
+const copy = {
+  en: {
+    title: 'OMINO — The idea',
+    'nav.product':'Product','nav.ai':'AI','nav.pricing':'Pricing','nav.about':'About','nav.login':'Login',
+    'cta.start':'Start for free','menu.open':'Open menu','menu.close':'Close menu',
+    'menu.kicker':'Menu / 00','menu.tag':'AI Business OS','menu.connect':'Connect',
+    'hero.kicker':'The idea behind OMINO',
+    'hero.title':'Business shouldn’t feel<br>this fragmented.',
+    'hero.lead':'Modern businesses generate more data than ever, yet the people running them still jump between disconnected tools to understand what is happening.',
+    'hero.omino':'OMINO brings<br>it together.',
+    'hero.together':'Commerce, POS, inventory, customers, payments and intelligence — connected through one system.',
+    'story.title':'We didn’t build another tool.',
+    'story.line':'Businesses don’t need another dashboard. They need clarity.',
+    'story.body':'A business owner may already have Instagram, WhatsApp, a POS, a website, a spreadsheet, inventory software, a payment provider, a customer list, and analytics. None of these systems truly understand the business as a whole.',
+    'story.turn':'All of these signals converge into one system.',
+    'story.one':'One source of truth. One intelligent layer.',
+    'philo.title':'Our philosophy',
+    'p1.t':'Simplicity is a feature.','p1.b':'Business software shouldn’t require a manual to understand.',
+    'p2.t':'Data should become decisions.','p2.b':'Numbers are only useful when they help someone know what to do next.',
+    'p3.t':'AI should do more than talk.','p3.b':'AI should understand context, recommend actions, and eventually help execute them.',
+    'p4.t':'One business should feel like one system.','p4.b':'Online sales, physical sales, inventory, customers and payments shouldn’t live in separate worlds.',
+    'diff.title':'The OMINO difference','diff.before':'Before — disconnected','diff.after':'After — connected',
+    'ai.title':'AI that understands the business.',
+    'ai.note':'OMINO doesn’t simply answer questions. It understands business context.',
+    'ai.owner':'Owner','ai.q':'Why did my profit drop this month?',
+    'ai.a':'Revenue increased 8%, but gross profit decreased 4%.',
+    'ai.next':'Next','ai.rec':'Here are the actions I recommend.',
+    'future.title':'The future of business software isn’t more software.<br>It is intelligence.',
+    'f1':'What happened.','f2':'Why it happened.','f3':'What needs attention.','f4':'What opportunity exists.','f5':'What should happen next.','f6':'And with approval — OMINO helps execute it.',
+    'tr.title':'Built for real businesses.','tr.note':'The same operating system. Different numbers. No separate product pages.',
+    'home.title':'Built close to home.<br>Designed to go far.',
+    'home.body':'OMINO starts by solving real problems for businesses in Palestine, with a product architecture designed to grow beyond one market.',
+    'found.title':'The first chapter.',
+    'found.body':'The first 50 businesses are not just customers. They are the businesses helping shape OMINO.',
+    'found.cta':'Become a founding business',
+    'end.title':'Your business already has the data.<br>OMINO turns it into intelligence.',
+    'end.explore':'Explore OMINO',
+    'end.line':'One intelligent system for your business.',
+    'footer.copy':'© 2026 OMINO. All rights reserved.'
+  },
+  ar: {
+    title: 'OMINO — الفكرة',
+    'nav.product':'المنتج','nav.ai':'AI','nav.pricing':'التسعير','nav.about':'عن OMINO','nav.login':'دخول',
+    'cta.start':'ابدأ مجاناً','menu.open':'فتح القائمة','menu.close':'إغلاق القائمة',
+    'menu.kicker':'Menu / 00','menu.tag':'نظام تشغيل الأعمال','menu.connect':'تواصل',
+    'hero.kicker':'الفكرة خلف OMINO',
+    'hero.title':'الأعمال ما لازم تحس<br>بهذا التشتت.',
+    'hero.lead':'الأنشطة اليوم تولّد بيانات أكثر من أي وقت، والناس اللي تشغّلها ما زالت تنتقل بين أدوات منفصلة عشان تفهم وش صار.',
+    'hero.omino':'OMINO يجمعها.',
+    'hero.together':'التجارة، نقطة البيع، المخزون، العملاء، المدفوعات والذكاء — في نظام واحد.',
+    'story.title':'ما بنينا أداة ثانية.',
+    'story.line':'الأنشطة ما تحتاج لوحة ثانية. تحتاج وضوح.',
+    'story.body':'صاحب النشاط قد يكون عنده إنستغرام، واتساب، نقطة بيع، موقع، جدول، مخزون، بوابة دفع، قائمة عملاء، وتحليلات. ولا واحدة من هالأنظمة تفهم النشاط ككل.',
+    'story.turn':'كل هالإشارات تلتقي في نظام واحد.',
+    'story.one':'مصدر حقيقة واحد. طبقة ذكاء واحدة.',
+    'philo.title':'فلسفتنا',
+    'p1.t':'البساطة ميزة.','p1.b':'برنامج الأعمال ما يحتاج دليل عشان ينفهم.',
+    'p2.t':'البيانات لازم تصير قرارات.','p2.b':'الأرقام مفيدة فقط إذا ساعدت شخص يعرف الخطوة التالية.',
+    'p3.t':'الذكاء لازم يعمل أكثر من الكلام.','p3.b':'يفهم السياق، يقترح الإجراء، ويساعد على التنفيذ بموافقة.',
+    'p4.t':'نشاط واحد يحس كنظام واحد.','p4.b':'البيع أونلاين، والبيع في المحل، والمخزون، والعملاء، والمدفوعات ما تعيش في عوالم منفصلة.',
+    'diff.title':'فرق OMINO','diff.before':'قبل — منفصل','diff.after':'بعد — متصل',
+    'ai.title':'ذكاء يفهم النشاط.',
+    'ai.note':'OMINO ما يكتفي بالإجابة. يفهم سياق العمل.',
+    'ai.owner':'صاحب النشاط','ai.q':'ليش الربح نزل هذا الشهر؟',
+    'ai.a':'الإيرادات ارتفعت 8%، والربح الإجمالي نزل 4%.',
+    'ai.next':'بعدين','ai.rec':'هذه الإجراءات التي أوصي بها.',
+    'future.title':'مستقبل برمجيات الأعمال مو مزيد من البرامج.<br>هو الذكاء.',
+    'f1':'وش صار.','f2':'ليش صار.','f3':'وش يحتاج انتباه.','f4':'وين الفرصة.','f5':'وش المفروض بعدين.','f6':'وبموافقتك — OMINO يساعد على التنفيذ.',
+    'tr.title':'مصمم لأنشطة حقيقية.','tr.note':'نفس نظام التشغيل. أرقام مختلفة. بدون صفحات منتج منفصلة.',
+    'home.title':'قريب من البيت.<br>مصمم يروح أبعد.',
+    'home.body':'OMINO يبدأ بحل مشاكل حقيقية لأنشطة في فلسطين، بهندسة منتج مصممة تتوسع أبعد من سوق واحد.',
+    'found.title':'الفصل الأول.',
+    'found.body':'أول 50 نشاطاً مو مجرد عملاء. هم اللي يساعدون في تشكيل OMINO.',
+    'found.cta':'كن من أنشطة التأسيس',
+    'end.title':'نشاطك عنده البيانات.<br>OMINO يحوّلها إلى ذكاء.',
+    'end.explore':'استكشف OMINO',
+    'end.line':'نظام ذكي واحد لنشاطك.',
+    'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.'
+  }
+};
+OminoNav.init({ copy });
+if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.gsap){
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.from('.about-hero h1',{opacity:0,y:22,duration:.9,ease:'power4.out'});
+  gsap.utils.toArray('.reveal').forEach(el=>{
+    gsap.fromTo(el,{opacity:0,y:16},{opacity:1,y:0,duration:.85,ease:'power4.out',
+      scrollTrigger:{trigger:el,start:'top 88%'}
+    });
+  });
+}
+</script>
+</body>
+</html>

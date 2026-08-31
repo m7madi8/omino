@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMINO</title>
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+<style>
+:root {
+  --ink: #070809;
+  --ink-2: #101214;
+  --paper: #F4F5F6;
+  --paper-2: #E8EAEC;
+  --stone: #85898D;
+  --stone-2: #5D6267;
+  --hairline: #D7DADD;
+  --hairline-dark: #292D31;
+  --accent: #5B7CFF;
+  --accent-soft: #CBD3FF;
+  --good: #63D6A0;
+  --radius-xs: 10px;
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
+  --radius-2xl: 48px;
+  --radius-pill: 999px;
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --shadow-soft: 0 18px 40px -28px rgba(7, 8, 9, 0.16);
+  --shadow-lift: 0 28px 56px -32px rgba(7, 8, 9, 0.2);
+  --ring: 0 0 0 4px rgba(91, 124, 255, 0.22);
+  --font-display: 'Archivo', sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-ar: 'IBM Plex Sans Arabic', sans-serif;
+}
+@media (max-width: 768px) {
+  :root {
+    --radius-xs: 8px;
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-2xl: 32px;
+  }
+}
+*{box-sizing:border-box;}
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:104px;
+  overflow-x:hidden;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0;}
+body{
+  margin:0;
+  background:
+    radial-gradient(ellipse 80% 42% at 70% -8%, rgba(91,124,255,0.07), transparent 58%),
+    var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:16px;
+  font-weight:400;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  scrollbar-width:none;
+}
+html[lang="ar"] body{
+  font-family:var(--font-ar);
+  line-height:1.7;
+}
+h1,h2{
+  font-family:var(--font-display);
+  font-weight:500;
+  font-stretch:125%;
+  margin:0;
+  letter-spacing:-0.025em;
+  font-synthesis:none;
+}
+html[lang="ar"] h1,html[lang="ar"] h2{
+  font-family:var(--font-ar);
+  font-weight:600;
+  font-stretch:normal;
+  letter-spacing:0;
+}
+h3,h4{font-family:inherit;font-weight:500;margin:0;}
+p{margin:0;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;touch-action:manipulation;}
+img,svg{display:block;max-width:100%;}
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:0 max(32px, env(safe-area-inset-right)) 0 max(32px, env(safe-area-inset-left));
+}
+@media(max-width:640px){
+  .wrap{padding:0 max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));}
+}
+
+.en{
+  font-family:var(--font-body);
+  font-weight:500;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  direction:ltr;
+  unicode-bidi:isolate;
+}
+.idx{
+  font-family:var(--font-mono);
+  font-weight:500;
+  font-size:12px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+  direction:ltr;
+  unicode-bidi:isolate;
+  width:max-content;
+  max-width:100%;
+}
+html[dir="rtl"] .hero-index,
+html[dir="rtl"] .section-index{
+  margin-left:auto;
+  margin-right:0;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+}
+
+a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:none;
+  box-shadow:var(--ring);
+}
+
+.orbit{
+  position:fixed;
+  top:22vh;
+  bottom:16vh;
+  inset-inline-end:max(14px, env(safe-area-inset-right));
+  z-index:90;
+  width:56px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  pointer-events:none;
+  color:#fff;
+  mix-blend-mode:difference;
+}
+html.menu-open .orbit{opacity:0;visibility:hidden;}
+.orbit-field{
+  position:relative;
+  flex:1;
+  width:44px;
+  pointer-events:auto;
+  cursor:ns-resize;
+  touch-action:none;
+  user-select:none;
+}
+.orbit-beam{
+  position:absolute;
+  left:50%;
+  top:0;
+  width:1px;
+  height:0;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg, transparent, currentColor 18%, currentColor);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 500ms var(--ease);
+}
+.orbit.is-live .orbit-beam{opacity:.35;}
+.orbit-nodes{position:absolute;inset:0;pointer-events:none;}
+.orbit-node{
+  position:absolute;
+  left:50%;
+  width:28px;height:28px;
+  transform:translate(-50%,-50%);
+  pointer-events:auto;
+  cursor:pointer;
+  background:none;border:none;padding:0;
+  color:inherit;
+}
+.orbit-node i{
+  display:block;
+  width:5px;height:5px;
+  margin:0 auto;
+  border-radius:var(--radius-pill);
+  border:1px solid currentColor;
+  opacity:.28;
+  transition:transform 500ms var(--ease), opacity 500ms var(--ease), background 500ms var(--ease), box-shadow 500ms var(--ease);
+}
+.orbit.is-live .orbit-node i{opacity:.55;}
+.orbit-node.is-here i,
+.orbit-node:hover i{
+  opacity:1;
+  background:currentColor;
+  transform:scale(1.55);
+  box-shadow:0 0 14px rgba(255,255,255,.55);
+}
+.orbit-seed{
+  position:absolute;
+  left:50%;
+  top:0;
+  width:36px;height:36px;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+.orbit-ring{
+  position:absolute;
+  inset:-12px;
+  width:auto;
+  height:auto;
+  max-width:none;
+  overflow:visible;
+  transform:rotate(-90deg);
+  pointer-events:none;
+}
+.orbit-ring circle{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  shape-rendering:geometricPrecision;
+}
+.orbit-ring-track{opacity:.22;}
+.orbit-ring-value{stroke-linecap:round;}
+.orbit-core{
+  position:absolute;
+  inset:8px;
+}
+.orbit-core img{
+  width:100%;height:100%;
+  object-fit:contain;
+}
+.orbit-wake{
+  position:absolute;
+  left:50%;
+  width:2px;
+  transform:translateX(-50%);
+  background:linear-gradient(180deg, transparent, #fff, transparent);
+  opacity:0;
+  filter:blur(.4px);
+  pointer-events:none;
+}
+.orbit-readout{
+  position:absolute;
+  inset-inline-start:auto;
+  inset-inline-end:calc(100% + 10px);
+  top:0;
+  font-family:var(--font-mono);
+  font-size:11px;
+  letter-spacing:.06em;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(-50%);
+  transition:opacity 480ms var(--ease);
+}
+.orbit.is-live .orbit-readout{opacity:.85;}
+@media (max-width:859px){
+  .orbit{
+    top:auto;
+    bottom:calc(18px + env(safe-area-inset-bottom));
+    height:auto;
+    width:auto;
+    inset-inline-end:max(12px, env(safe-area-inset-right));
+  }
+  .orbit-field{
+    width:52px;height:52px;flex:none;
+    cursor:default;
+    pointer-events:none;
+  }
+  .orbit-beam,.orbit-nodes{display:none;}
+  .orbit-seed{top:50% !important;}
+  .orbit-readout{
+    position:absolute;
+    inset-inline-start:50% !important;
+    inset-inline-end:auto !important;
+    top:auto !important;
+    bottom:-18px;
+    transform:translate(-50%,0);
+    margin:0;
+    opacity:.7;
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .orbit-ring,.orbit-seed,.orbit-readout{transition:none;}
+}
+
+.logo-lockup{
+  display:grid;
+  align-items:center;
+  direction:ltr;
+  line-height:0;
+}
+.logo-img{
+  grid-area:1 / 1;
+  display:block;
+  height:26px;
+  width:auto;
+  max-width:none;
+  transition:opacity 280ms ease;
+}
+.logo-lockup .logo-on-dark{opacity:0;}
+header.site-nav .logo-lockup{flex:none;}
+html.menu-open header.site-nav .logo-on-light{opacity:0;}
+html.menu-open header.site-nav .logo-on-dark{opacity:1;}
+
+.label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;
+  color:var(--stone);
+}
+.label .dot{width:6px;height:6px;border-radius:var(--radius-pill);background:var(--accent);flex:none;}
+.on-dark .label{color:#A8ADB3;}
+
+header.site-nav{
+  position:fixed;top:16px;left:0;right:0;z-index:120;
+  padding:0;
+  background:transparent;
+  border:none;
+}
+header.site-nav.scrolled{
+  background:transparent;
+  padding:0;
+  border:none;
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:16px;
+  padding:8px 10px 8px 18px;
+  padding-inline:18px 10px;
+  background:rgba(255,255,255,0.78);
+  backdrop-filter:blur(18px) saturate(1.15);
+  -webkit-backdrop-filter:blur(18px) saturate(1.15);
+  border:1px solid rgba(215,218,221,0.7);
+  border-radius:var(--radius-pill);
+  box-shadow:var(--shadow-soft);
+  transition:background 500ms var(--ease), border-color 500ms var(--ease), box-shadow 500ms var(--ease);
+}
+header.site-nav.scrolled .nav-inner{
+  background:rgba(255,255,255,0.94);
+  border-color:rgba(215,218,221,0.9);
+  box-shadow:var(--shadow-lift);
+}
+.nav-links{display:none;align-items:center;gap:4px;}
+@media(min-width:860px){.nav-links{display:flex;}}
+.nav-links a{
+  font-size:12px;color:var(--ink-2);
+  padding:8px 14px;
+  border-radius:var(--radius-pill);
+  transition:background 400ms var(--ease), color 400ms var(--ease);
+}
+.nav-links a:hover{background:rgba(7,8,9,0.05);}
+.nav-links a:focus-visible{box-shadow:var(--ring);}
+.nav-actions{display:flex;align-items:center;gap:8px;}
+.lang-btn{
+  font-family:var(--font-body);
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  background:none;border:none;color:var(--ink-2);
+  min-width:44px;min-height:44px;
+  padding:8px 12px;
+  border-radius:var(--radius-pill);
+  transition:background 400ms var(--ease), color 400ms var(--ease);
+}
+.lang-btn:hover{background:rgba(7,8,9,0.05);}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 20px;font-size:12px;font-weight:500;
+  font-family:var(--font-body);
+  letter-spacing:0.08em;text-transform:uppercase;
+  min-height:44px;
+  cursor:pointer;
+  border:1px solid transparent;
+  transition:
+    transform 500ms var(--ease),
+    background-color 400ms ease,
+    box-shadow 500ms ease,
+    border-color 400ms ease,
+    color 400ms ease;
+}
+html[lang="ar"] .btn{
+  font-family:var(--font-ar);
+  font-size:15px;
+  letter-spacing:0;
+  text-transform:none;
+  padding:12px 22px;
+}
+.btn-primary{
+  background:var(--ink);color:var(--paper);
+  border-radius:var(--radius-pill);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    0 10px 22px -14px rgba(7,8,9,0.45);
+}
+.btn-primary:hover{
+  transform:translateY(-2px) scale(1.02);
+  background:var(--ink-2);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 14px 28px -14px rgba(7,8,9,0.5);
+}
+.btn-primary:focus-visible{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    0 10px 22px -14px rgba(7,8,9,0.45),
+    var(--ring);
+}
+.btn-ghost{
+  border-color:rgba(215,218,221,0.95);
+  color:var(--ink);
+  border-radius:16px;
+  background:transparent;
+}
+.btn-ghost:hover{
+  border-color:var(--ink);
+  transform:translateY(-1px) scale(1.015);
+  background:rgba(255,255,255,0.45);
+}
+.on-dark .btn-primary,
+.plan.pro .btn-primary{
+  background:var(--paper);color:var(--ink);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.7),
+    0 10px 22px -14px rgba(0,0,0,0.45);
+}
+.on-dark .btn-primary:hover,
+.plan.pro .btn-primary:hover{background:#fff;}
+.on-dark .btn-ghost{border-color:rgba(41,45,49,0.95);color:var(--paper);background:transparent;}
+.on-dark .btn-ghost:hover{border-color:var(--paper);background:rgba(255,255,255,0.04);}
+.btn-sm{padding:9px 16px;font-size:12px;min-height:40px;}
+html[lang="ar"] .btn-sm{font-size:14px;padding:9px 16px;}
+.menu-btn{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;
+  background:none;border:none;padding:10px;width:44px;height:44px;
+  border-radius:var(--radius-sm);
+  transition:background 400ms var(--ease);
+}
+.menu-btn:hover{background:rgba(7,8,9,0.05);}
+@media(min-width:860px){.menu-btn{display:none;}}
+.menu-btn span{
+  display:block;width:18px;height:1.5px;background:var(--ink);
+  border-radius:var(--radius-pill);
+  transition:transform 500ms var(--ease);
+}
+.menu-btn[aria-expanded="true"] span:first-child{transform:translateY(3.75px) rotate(45deg);}
+.menu-btn[aria-expanded="true"] span:last-child{transform:translateY(-3.75px) rotate(-45deg);}
+
+.menu-shell{
+  position:fixed;inset:0;z-index:200;
+  pointer-events:none;
+  visibility:hidden;
+}
+.menu-shell.open{
+  pointer-events:auto;
+  visibility:visible;
+}
+.menu-scrim{
+  position:absolute;inset:0;
+  background:rgba(7,8,9,0.72);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  opacity:0;
+  border:0;padding:0;width:100%;cursor:pointer;
+}
+.menu-drawer{
+  position:absolute;top:0;bottom:0;inset-inline-end:0;
+  width:min(428px, 100%);
+  background:var(--ink);
+  color:var(--paper);
+  display:flex;flex-direction:column;
+  padding:28px 28px calc(28px + env(safe-area-inset-bottom)) 28px;
+  box-shadow:-24px 0 64px -32px rgba(0,0,0,0.45);
+  transform:translateX(100%);
+}
+html[dir="rtl"] .menu-drawer{
+  transform:translateX(-100%);
+  box-shadow:24px 0 64px -32px rgba(0,0,0,0.45);
+}
+.menu-drawer-top{padding-top:88px;margin-bottom:36px;}
+.menu-kicker{font-size:12px;color:#8A9096;}
+.menu-tag{
+  margin-top:10px;
+  font-size:15px;
+  color:#C5C9CE;
+  max-width:22ch;
+  line-height:1.5;
+}
+.menu-nav{display:flex;flex-direction:column;flex:1;}
+.menu-link{
+  display:flex;align-items:baseline;gap:18px;
+  padding:18px 0;
+  border-bottom:1px solid var(--hairline-dark);
+  transition:color 400ms var(--ease), padding-inline-start 400ms var(--ease);
+}
+.menu-link:first-child{border-top:1px solid var(--hairline-dark);}
+.menu-idx{
+  font-family:var(--font-mono);
+  font-size:12px;
+  font-weight:500;
+  color:var(--accent);
+  letter-spacing:0.06em;
+  font-variant-numeric:tabular-nums;
+  direction:ltr;
+}
+.menu-name{
+  font-family:var(--font-display);
+  font-stretch:125%;
+  font-size:clamp(2rem,7vw,2.7rem);
+  font-weight:500;
+  letter-spacing:-0.025em;
+  line-height:1;
+}
+html[lang="ar"] .menu-name{
+  font-family:var(--font-ar);
+  font-stretch:normal;
+  letter-spacing:0;
+}
+.menu-link:hover{color:#fff;padding-inline-start:8px;}
+.menu-cta{margin-top:28px;}
+.menu-cta .btn{width:100%;}
+.menu-foot{
+  margin-top:auto;
+  padding-top:28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  border-top:1px solid var(--hairline-dark);
+}
+.menu-connect{
+  font-size:12px;
+  color:#8A9096;
+  font-weight:500;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+}
+html[lang="ar"] .menu-connect{
+  font-family:var(--font-ar);
+  letter-spacing:0;
+  text-transform:none;
+}
+.socials{display:flex;gap:10px;}
+.social{
+  width:44px;height:44px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  border:1px solid var(--hairline-dark);
+  color:var(--paper);
+  background:rgba(255,255,255,0.03);
+  transition:
+    background 400ms var(--ease),
+    color 400ms var(--ease),
+    border-color 400ms var(--ease),
+    transform 400ms var(--ease);
+}
+.social svg{width:18px;height:18px;}
+.social:hover{
+  background:var(--paper);
+  color:var(--ink);
+  border-color:var(--paper);
+  transform:translateY(-2px);
+}
+.social:focus-visible{box-shadow:var(--ring);}
+
+html.menu-open header.site-nav{z-index:220;}
+html.menu-open header.site-nav .nav-inner,
+html.menu-open header.site-nav.scrolled .nav-inner{
+  background:transparent;
+  border-color:transparent;
+  box-shadow:none;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+html.menu-open .lang-btn{color:var(--paper);}
+html.menu-open .lang-btn:hover,
+html.menu-open .menu-btn:hover{background:rgba(255,255,255,0.08);}
+html.menu-open .menu-btn span{background:var(--paper);}
+html.menu-open .nav-actions .btn-primary{display:none;}
+
+section{position:relative;}
+.section-pad{padding:148px 0;}
+@media(max-width:768px){.section-pad{padding:100px 0;}}
+
+.band{
+  position:relative;
+  z-index:3;
+  margin-block:-72px;
+  padding:188px 0 200px;
+  background:transparent;
+  color:var(--paper);
+  overflow:visible;
+}
+@media(max-width:768px){
+  .band{
+    margin-block:-40px;
+    padding:128px 0 140px;
+  }
+}
+.band-fill{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:var(--ink);
+  clip-path:url(#bandClip);
+}
+@media(max-width:768px){
+  .band-fill{clip-path:url(#bandClipSm);}
+}
+.band > .wrap{position:relative;z-index:1;}
+.section-flow.section-pad{padding:200px 0;}
+@media(max-width:768px){.section-flow.section-pad{padding:132px 0;}}
+.band-fill{transform-origin:50% 50%;}
+
+h2.section-head{
+  font-size:clamp(2.8rem,7vw,5.75rem);
+  line-height:0.96;
+  max-width:22ch;
+}
+html[lang="ar"] h2.section-head{line-height:1.12;}
+p.section-sub{
+  font-size:17px;
+  font-weight:400;
+  color:var(--stone-2);
+  max-width:42ch;
+  margin-top:28px;
+  line-height:1.7;
+}
+.on-dark p.section-sub{color:#A8ADB3;}
+.section-index{margin:0 0 22px;font-size:12px;color:var(--stone);}
+.on-dark .section-index{color:#8A9096;}
+
+.hero{padding:188px 0 120px;overflow:visible;z-index:1;}
+@media(max-width:768px){.hero{padding:148px 0 88px;}}
+.hero-top{max-width:none;}
+.hero-top h1{
+  font-size:clamp(4.25rem,11vw,8.5rem);
+  line-height:0.92;
+  max-width:16ch;
+}
+html[lang="ar"] .hero-top h1{line-height:1.08;max-width:12ch;}
+@media(max-width:640px){
+  .hero-top h1{font-size:clamp(3.1rem,15vw,4.6rem);}
+}
+.hero-index{
+  margin:0 0 28px;
+  font-size:12px;
+  color:var(--stone);
+}
+.hero-top p.sub{
+  font-size:17px;
+  font-weight:400;
+  color:var(--stone-2);
+  max-width:46ch;
+  margin-top:36px;
+  line-height:1.7;
+}
+.hero-ctas{display:flex;align-items:center;gap:14px;margin-top:40px;flex-wrap:wrap;}
+.hero-fine{font-size:15px;color:var(--stone);margin-top:20px;}
+
+.problem-visual{margin-top:80px;position:relative;}
+.frag-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+.frag-chip{
+  border:1px solid rgba(41,45,49,0.95);
+  color:#A8ADB3;
+  padding:10px 16px;
+  border-radius:var(--radius-pill);
+  font-size:12px;
+  background:rgba(255,255,255,0.03);
+}
+.merge-connect{
+  margin:28px auto 0;
+  text-align:center;
+  max-width:36ch;
+  font-size:16px;
+  line-height:1.6;
+  color:#A8ADB3;
+}
+.merge-arrow{display:flex;justify-content:center;margin:40px 0;}
+.merge-into{display:flex;justify-content:center;}
+.merge-into .logo-lockup{display:block;}
+.merge-into .logo-img{
+  height:auto;
+  width:min(460px, 78vw);
+}
+.merge-caption{
+  margin-top:22px;
+  text-align:center;
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:clamp(1.15rem,2.2vw,1.4rem);
+  letter-spacing:0;
+  color:#C5C9CE;
+  max-width:40ch;
+  margin-inline:auto;
+}
+html[lang="ar"] .merge-caption{
+  font-family:var(--font-ar);
+  font-style:normal;
+  font-weight:500;
+}
+
+.ai-wrap{
+  margin-top:56px;
+  max-width:760px;
+  position:relative;
+}
+@media(min-width:900px){
+  .band-asymmetric .ai-wrap{
+    margin-inline-start:16%;
+    max-width:680px;
+  }
+}
+.ai-glow{
+  position:absolute;
+  width:78%;height:86%;
+  inset-inline-end:-12%;
+  top:8%;
+  background:radial-gradient(ellipse at 60% 40%, rgba(91,124,255,0.32), rgba(91,124,255,0.04) 55%, transparent 72%);
+  filter:blur(42px);
+  pointer-events:none;
+  z-index:0;
+}
+.chat-shell{
+  position:relative;z-index:1;
+  border:1px solid rgba(41,45,49,0.9);
+  border-radius:36px;
+  background:var(--ink-2);
+  overflow:hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 28px 64px -36px rgba(0,0,0,0.55);
+}
+.chat-top{padding:16px 22px 8px;display:flex;align-items:center;gap:10px;}
+.chat-top span{font-size:12px;color:#8A9096;}
+.ai-dot{width:7px;height:7px;border-radius:var(--radius-pill);background:var(--accent);flex:none;}
+.chat-body{padding:18px 22px 26px;display:flex;flex-direction:column;gap:20px;}
+.msg{max-width:82%;}
+.msg.user{align-self:flex-end;}
+html[lang="ar"] .msg.user{align-self:flex-start;}
+.msg .bubble{
+  display:inline-block;padding:12px 16px;
+  border-radius:16px;
+  font-size:15px;line-height:1.6;
+}
+.msg.user .bubble{
+  background:#1A1D21;color:var(--paper);
+  border-end-end-radius:var(--radius-xs);
+}
+.msg.ai .bubble{
+  background:var(--paper);color:var(--ink);
+  border-end-start-radius:var(--radius-xs);
+  font-variant-numeric:tabular-nums;
+  line-height:1.45;
+}
+html[lang="ar"] .msg.user .bubble{
+  border-end-end-radius:var(--radius-md);
+  border-end-start-radius:var(--radius-xs);
+}
+html[lang="ar"] .msg.ai .bubble{
+  border-end-start-radius:var(--radius-md);
+  border-end-end-radius:var(--radius-xs);
+}
+.reveal-list{
+  margin-top:4px;padding-top:12px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.reveal-item{
+  display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#C5C9CE;
+}
+.reveal-item .m{color:var(--accent);font-family:var(--font-mono);font-size:12px;flex:none;padding-top:4px;direction:ltr;}
+.rec-box{
+  margin-top:20px;
+  background:#16191C;
+  border-radius:14px;
+  padding:18px 20px;
+}
+.rec-box .rk{font-size:12px;color:var(--accent);font-weight:500;margin-bottom:8px;}
+html[lang="ar"] .rec-box .rk{
+  font-family:var(--font-ar);
+  letter-spacing:0;
+  text-transform:none;
+  direction:rtl;
+}
+.rec-box .rv{font-size:15px;color:#E8EAEC;line-height:1.6;}
+.ai-note{margin-top:20px;font-size:14px;color:#A8ADB3;}
+
+.cat-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:56px;}
+.cat-tab{
+  padding:10px 18px;
+  border-radius:var(--radius-pill);
+  font-size:12px;font-weight:500;
+  font-family:var(--font-body);letter-spacing:0.08em;text-transform:uppercase;
+  border:none;
+  min-height:40px;
+  transition:background-color 400ms ease, color 400ms ease, transform 500ms var(--ease);
+  color:var(--stone-2);background:transparent;
+}
+html[lang="ar"] .cat-tab{
+  font-family:var(--font-ar);font-size:14px;letter-spacing:0;text-transform:none;
+}
+.cat-tab:hover{background:rgba(7,8,9,0.05);}
+.cat-tab.active{background:var(--ink);color:var(--paper);}
+.cat-tab:focus-visible{box-shadow:var(--ring);}
+.cat-panel{margin-top:28px;}
+.cat-metrics{
+  display:grid;grid-template-columns:repeat(5,1fr);
+  gap:0;
+  padding:8px 0 0;
+  background:transparent;
+  border:none;
+  border-radius:0;
+  box-shadow:none;
+  border-top:1px solid var(--hairline);
+}
+@media(max-width:900px){.cat-metrics{grid-template-columns:repeat(2,1fr);}}
+.cat-metric{padding:24px 20px 24px 0;}
+.cat-metric .k{font-size:12px;color:var(--stone);}
+html[lang="en"] .cat-metric .k{font-family:var(--font-body);letter-spacing:0.08em;text-transform:uppercase;}
+html[lang="ar"] .cat-metric .k{font-family:var(--font-ar);}
+.cat-metric .v{font-family:var(--font-mono);font-size:clamp(1.35rem,1.8vw,1.75rem);font-weight:500;margin-top:10px;letter-spacing:-0.03em;line-height:1.15;direction:ltr;font-variant-numeric:tabular-nums;}
+
+.price-toggle{
+  display:inline-flex;align-items:center;gap:0;
+  background:rgba(255,255,255,0.65);
+  border:1px solid rgba(215,218,221,0.8);
+  border-radius:var(--radius-pill);
+  padding:4px;
+  margin-top:40px;
+}
+.price-toggle button{
+  padding:9px 18px;
+  border-radius:var(--radius-pill);
+  font-size:12px;font-weight:500;
+  font-family:var(--font-body);letter-spacing:0.1em;text-transform:uppercase;
+  background:none;border:none;color:var(--stone-2);
+  min-height:40px;
+  transition:background-color 400ms ease, color 400ms ease, transform 500ms var(--ease);
+}
+html[lang="ar"] .price-toggle button{
+  font-family:var(--font-ar);font-size:14px;letter-spacing:0;text-transform:none;
+}
+.price-toggle button.active{background:var(--ink);color:var(--paper);}
+.price-toggle button:focus-visible{box-shadow:var(--ring);}
+.price-toggle .save{font-size:12px;color:var(--good);margin-inline-start:10px;margin-inline-end:10px;}
+.plans{
+  display:grid;
+  grid-template-columns:1fr 1.14fr 1fr;
+  gap:18px;
+  margin-top:56px;
+  padding-top:28px;
+  align-items:stretch;
+  background:transparent;
+  border:none;
+}
+@media(max-width:900px){.plans{grid-template-columns:1fr;padding-top:12px;}}
+.plan{
+  padding:38px 32px;
+  background:#fff;
+  border:1px solid rgba(215,218,221,0.8);
+  border-radius:22px;
+  position:relative;
+  box-shadow:var(--shadow-soft);
+  transition:transform 500ms var(--ease), box-shadow 500ms var(--ease);
+}
+.plan.pro{
+  border-radius:28px;
+  border-color:transparent;
+  background:
+    linear-gradient(165deg, rgba(91,124,255,0.18), transparent 44%),
+    linear-gradient(180deg, #16191C 0%, #070809 100%);
+  color:var(--paper);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 40px 80px -36px rgba(7,8,9,0.55),
+    0 0 72px -20px rgba(91,124,255,0.22);
+}
+@media(min-width:901px){
+  .plan.pro{transform:translateY(-22px);}
+}
+@media(max-width:900px){
+  .plan.pro{
+    transform:scale(1.03);
+    z-index:2;
+    margin-block:8px;
+  }
+}
+.plan-tab{
+  position:absolute;
+  top:0;left:50%;
+  transform:translate(-50%,-50%);
+  font-size:11px;
+  color:var(--accent-soft);
+  background:#0C0E11;
+  border:1px solid rgba(91,124,255,0.35);
+  padding:7px 14px;
+  border-radius:var(--radius-pill);
+  letter-spacing:0.12em;
+  white-space:nowrap;
+}
+.plan.pro{padding-top:48px;}
+.plan-name{font-size:12px;color:var(--stone);}
+.plan.pro .plan-name{color:#A8ADB3;}
+.plan-price{font-family:var(--font-mono);font-size:clamp(3.25rem,4.2vw,4.75rem);font-weight:500;margin-top:12px;display:flex;align-items:baseline;gap:6px;letter-spacing:-0.04em;line-height:1;direction:ltr;font-variant-numeric:tabular-nums;}
+.plan-price .pfx{font-size:1.35rem;font-family:var(--font-mono);color:var(--stone);}
+.plan-price .per{font-size:12px;font-family:var(--font-body);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--stone);}
+html[lang="ar"] .plan-price .per{font-family:var(--font-ar);font-size:13px;letter-spacing:0;text-transform:none;}
+.plan.pro .plan-price .pfx,.plan.pro .plan-price .per{color:#8A9096;}
+.plan-desc{font-size:15px;color:var(--stone-2);margin-top:10px;}
+.plan.pro .plan-desc{color:#A8ADB3;}
+.plan-feats{margin-top:26px;display:flex;flex-direction:column;gap:11px;}
+.plan-feats div{font-size:14px;display:flex;gap:10px;align-items:flex-start;color:var(--ink-2);}
+.plan.pro .plan-feats div{color:#E8EAEC;}
+.plan-feats div::before{content:'—';color:var(--stone);flex:none;}
+.plan .btn{width:100%;margin-top:28px;}
+.fee-note{
+  margin-top:20px;
+  background:#fff;
+  border:1px solid rgba(215,218,221,0.8);
+  border-radius:24px;
+  padding:22px 26px;
+  display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center;
+  box-shadow:var(--shadow-soft);
+}
+.fee-note h4{font-size:12px;}
+.fee-note p{font-size:14px;color:var(--stone-2);margin-top:6px;max-width:420px;}
+.fee-note .pct{font-family:var(--font-mono);font-size:clamp(1.6rem,2.4vw,2.2rem);font-weight:500;flex:none;letter-spacing:-0.03em;direction:ltr;font-variant-numeric:tabular-nums;}
+
+.founding-box{
+  margin-top:28px;
+  background:#fff;
+  border:1px solid rgba(215,218,221,0.8);
+  border-radius:28px;
+  padding:32px 36px;
+  display:flex;justify-content:space-between;gap:32px;align-items:center;flex-wrap:wrap;
+  box-shadow:var(--shadow-soft);
+}
+.founding-box .num{font-family:var(--font-mono);font-size:clamp(4.5rem,9vw,7rem);font-weight:500;flex:none;letter-spacing:-0.06em;line-height:0.9;direction:ltr;font-variant-numeric:tabular-nums;}
+.founding-box p{max-width:420px;font-size:16px;color:var(--stone-2);}
+
+footer.band-footer{
+  margin-top:-56px;
+  margin-bottom:0;
+  padding:88px 0 36px;
+  z-index:3;
+  color:#8A9096;
+}
+@media(max-width:768px){
+  footer.band-footer{
+    margin-top:-40px;
+    padding:72px 0 28px;
+  }
+}
+.footer-brand{display:flex;align-items:center;gap:14px;}
+.footer-brand .logo-img{height:22px;opacity:1;}
+.footer-bottom{display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:14px;align-items:center;}
+.footer-legal{display:flex;gap:8px;}
+.footer-legal a{
+  padding:8px 12px;
+  border-radius:var(--radius-pill);
+  transition:color 400ms ease, background 400ms var(--ease);
+}
+.footer-legal a:hover{color:var(--paper);background:rgba(255,255,255,0.05);}
+.footer-legal a:focus-visible{box-shadow:var(--ring);}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+  <defs>
+    <clipPath id="bandClip" clipPathUnits="objectBoundingBox">
+      <path d="M0 0.09 C0.22 0 0.78 0 1 0.09 L1 0.91 C0.78 1 0.22 1 0 0.91 Z"/>
+    </clipPath>
+    <clipPath id="bandClipSm" clipPathUnits="objectBoundingBox">
+      <path d="M0 0.05 C0.28 0.01 0.72 0.01 1 0.05 L1 0.95 C0.72 0.99 0.28 0.99 0 0.95 Z"/>
+    </clipPath>
+  </defs>
+</svg>
+
+<header class="site-nav" id="siteNav">
+  <div class="wrap">
+    <div class="nav-inner">
+    <a href="#" class="logo-lockup" aria-label="OMINO">
+      <img class="logo-img logo-on-light" src="img/omino-lockup-ink.png" alt="" width="683" height="235">
+      <img class="logo-img logo-on-dark" src="img/omino-lockup-paper.png" alt="" width="685" height="235">
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="en" href="#business" data-i18n="nav.solutions">Solutions</a>
+      <a class="en" href="#ai" data-i18n="nav.ai">AI</a>
+      <a class="en" href="#pricing" data-i18n="nav.pricing">Pricing</a>
+    </nav>
+    <div class="nav-actions">
+      <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
+      <a href="#pricing" class="btn btn-primary btn-sm" data-i18n="cta.start">Get started</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <span></span><span></span>
+      </button>
+    </div>
+    </div>
+  </div>
+</header>
+
+<aside class="orbit" id="orbit" role="progressbar" aria-label="Page progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <div class="orbit-field" id="orbitField">
+    <div class="orbit-beam" id="orbitBeam" aria-hidden="true"></div>
+    <div class="orbit-nodes" id="orbitNodes"></div>
+    <div class="orbit-seed" id="orbitSeed">
+      <svg class="orbit-ring" viewBox="0 0 40 40" aria-hidden="true">
+        <circle class="orbit-ring-track" cx="20" cy="20" r="18"/>
+        <circle class="orbit-ring-value" id="orbitRing" cx="20" cy="20" r="18"/>
+      </svg>
+      <span class="orbit-wake" id="orbitWake" aria-hidden="true"></span>
+      <span class="orbit-core">
+        <img src="img/omino-mark-paper.png" alt="" width="240" height="244">
+      </span>
+    </div>
+    <div class="orbit-readout" id="orbitIdx" aria-hidden="true">0%</div>
+  </div>
+</aside>
+
+<div class="menu-shell" id="mobileMenu" aria-hidden="true" inert>
+  <button type="button" class="menu-scrim" id="menuScrim" tabindex="-1" aria-label="Close menu"></button>
+  <aside class="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menuKicker">
+    <div class="menu-drawer-top">
+      <p class="idx menu-kicker" id="menuKicker" data-i18n="menu.kicker">Menu / 00</p>
+      <p class="menu-tag" data-i18n="menu.tag">AI Business OS</p>
+    </div>
+    <nav class="menu-nav" aria-label="Mobile">
+      <a class="menu-link" href="#business">
+        <span class="menu-idx">01</span>
+        <span class="menu-name" data-i18n="nav.solutions">Solutions</span>
+      </a>
+      <a class="menu-link" href="#ai">
+        <span class="menu-idx">02</span>
+        <span class="menu-name" data-i18n="nav.ai">AI</span>
+      </a>
+      <a class="menu-link" href="#pricing">
+        <span class="menu-idx">03</span>
+        <span class="menu-name" data-i18n="nav.pricing">Pricing</span>
+      </a>
+    </nav>
+    <div class="menu-cta">
+      <a href="#pricing" class="btn btn-primary" data-i18n="cta.start">Get started</a>
+    </div>
+    <div class="menu-foot">
+      <span class="menu-connect" data-i18n="menu.connect">Connect</span>
+      <div class="socials">
+        <a class="social" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+            <rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/>
+            <circle cx="12" cy="12" r="4.1"/>
+            <circle cx="17.4" cy="6.6" r="1.05" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+        <a class="social" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M14.2 8.2H17V4.7h-2.8c-2.9 0-5 2.2-5 5.1v2.5H6.4v3.6h2.8V22h3.7v-6.1h3.1l.6-3.6h-3.7V9.9c0-.9.5-1.7 1.3-1.7z"/>
+          </svg>
+        </a>
+        <a class="social" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19.1 4.9A9.9 9.9 0 0 0 12.05 2C6.5 2 2 6.5 2 12.05c0 1.77.46 3.5 1.34 5.02L2 22l5.08-1.33A10 10 0 0 0 12.05 22C17.6 22 22.1 17.5 22.1 12.05c0-2.66-1.04-5.16-3-7.15zM12.05 20.2c-1.52 0-3.01-.4-4.3-1.17l-.31-.18-3.16.83.85-3.08-.2-.32A8.2 8.2 0 0 1 3.8 12.05c0-4.55 3.7-8.25 8.25-8.25 2.2 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.55-3.7 8.15-8.25 8.15zm4.52-6.16c-.25-.13-1.48-.73-1.7-.81-.23-.09-.4-.13-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.06-.39-2.02-1.24-.75-.67-1.25-1.48-1.4-1.73-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42h-.47c-.16 0-.43.06-.66.31-.22.25-.86.84-.86 2.05s.88 2.38 1 2.56c.12.17 1.73 2.64 4.2 3.7.59.25 1.05.4 1.4.51.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.2-.58.2-1.07.14-1.17-.06-.12-.22-.18-.47-.3z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<main>
+<section class="hero" id="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <p class="hero-index idx" id="heroIndex">AI BUSINESS OS / 001</p>
+      <h1 id="heroTitle" data-i18n-html="hero.title">Your business.<br>One intelligence.</h1>
+      <p class="sub" id="heroSub" data-i18n="hero.sub">OMINO brings your store, POS, inventory, customers, payments and analytics into one intelligent business system — so you can see what’s happening, understand why, and know what to do next.</p>
+      <div class="hero-ctas" id="heroCtas">
+        <a href="#pricing" class="btn btn-primary" data-i18n="cta.start">Get started</a>
+        <a href="#system" class="btn btn-ghost" data-i18n="cta.fit">Explore OMINO</a>
+      </div>
+      <p class="hero-fine" id="heroFine" data-i18n="hero.fine">Founding pricing for the first 50 businesses.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band band-center on-dark" id="system">
+  <div class="band-fill" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="section-index idx reveal">System / 002</p>
+    <h2 class="section-head reveal" data-i18n-html="problem.title">Your business shouldn’t need<br>five systems to run.</h2>
+    <div class="problem-visual">
+      <div class="frag-row" id="fragRow">
+        <div class="frag-chip en">POS</div>
+        <div class="frag-chip en">Store</div>
+        <div class="frag-chip en">Inventory</div>
+        <div class="frag-chip en">Payments</div>
+        <div class="frag-chip en">Customers</div>
+        <div class="frag-chip en">Analytics</div>
+      </div>
+      <p class="merge-connect reveal" data-i18n="problem.connect">OMINO connects them into one source of truth.</p>
+      <div class="merge-arrow">
+        <svg width="18" height="34" viewBox="0 0 18 34" fill="none" aria-hidden="true"><path d="M9 0V32M9 32L2 25M9 32L16 25" stroke="#8A9096" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="merge-into">
+        <div class="logo-lockup">
+          <img class="logo-img" src="img/omino-lockup-paper.png" alt="OMINO" width="685" height="235" loading="lazy" decoding="async">
+        </div>
+      </div>
+      <p class="merge-caption reveal" data-i18n="problem.caption">One business. One system. One clear picture.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad section-flow" id="business">
+  <div class="wrap">
+    <p class="section-index idx reveal">Verticals / 003</p>
+    <h2 class="section-head reveal" data-i18n-html="business.title">One system.<br>Built around your business.</h2>
+    <p class="section-sub reveal" data-i18n="business.sub">The dashboard changes with what you sell — not a generic template.</p>
+    <div class="cat-tabs" id="catTabs"></div>
+    <div class="cat-panel">
+      <div class="cat-metrics" id="catMetrics"></div>
+    </div>
+  </div>
+</section>
+
+<section class="band band-asymmetric on-dark" id="ai">
+  <div class="band-fill" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="section-index idx reveal">Intelligence / 004</p>
+    <h2 class="section-head reveal" data-i18n-html="ai.title">Know what happened.<br>Know what to do next.</h2>
+    <p class="section-sub reveal" data-i18n="ai.sub">OMINO turns your business data into decisions — identifying problems, explaining why they happened, and recommending your next move.</p>
+
+    <div class="ai-wrap">
+      <div class="ai-glow" aria-hidden="true"></div>
+      <div class="chat-shell">
+        <div class="chat-top"><span class="ai-dot"></span><span class="en">Profit analysis</span></div>
+        <div class="chat-body">
+          <div class="msg user"><div class="bubble" data-i18n="chat.user">Why did my profit drop this month?</div></div>
+          <div class="msg ai">
+            <div class="bubble" data-i18n-html="chat.ai">Revenue grew 8%.<br>Gross profit fell 4%.</div>
+            <div class="reveal-list" id="revealList">
+              <div class="reveal-item"><span class="m">01</span><span data-i18n="chat.1">Product costs increased 7%</span></div>
+              <div class="reveal-item"><span class="m">02</span><span data-i18n="chat.2">Two high-volume products lost margin</span></div>
+              <div class="reveal-item"><span class="m">03</span><span data-i18n="chat.3">Discounts increased 18%</span></div>
+            </div>
+            <div class="rec-box" id="recBox">
+              <div class="rk en" data-i18n="chat.rk">Next move</div>
+              <div class="rv" data-i18n="chat.rec">Reduce discounting on Product A and increase Product B by 4%.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="ai-note" data-i18n="ai.note">Nothing sends or changes without your approval.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad section-flow" id="pricing">
+  <div class="wrap">
+    <p class="section-index idx reveal">Plans / 005</p>
+    <h2 class="section-head reveal" data-i18n-html="pricing.title">Start with what you need.<br>Grow into everything else.</h2>
+
+    <div class="price-toggle">
+      <button class="active" id="toggleMonthly" data-i18n="bill.month">Monthly</button>
+      <button id="toggleYearly" data-i18n="bill.year">Yearly</button>
+      <span class="save en">Save 2 mo</span>
+    </div>
+
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-name en">Starter</div>
+        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="9" data-yearly="7.5">9</span><span class="per">/ month</span></div>
+        <div class="plan-desc" data-i18n="plan.s.desc">Run your business.</div>
+        <div class="plan-feats">
+          <div data-i18n="plan.s.1">Online store &amp; POS</div>
+          <div data-i18n="plan.s.2">Inventory &amp; orders</div>
+          <div data-i18n="plan.s.3">Customers</div>
+          <div data-i18n="plan.s.4">Basic analytics</div>
+        </div>
+        <a href="#" class="btn btn-ghost" data-i18n="plan.s.cta">Start Starter</a>
+      </div>
+
+      <div class="plan pro">
+        <div class="plan-tab en">Most popular</div>
+        <div class="plan-name en">Pro</div>
+        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="19" data-yearly="15.8">19</span><span class="per">/ month</span></div>
+        <div class="plan-desc" data-i18n="plan.p.desc">Grow your business.</div>
+        <div class="plan-feats">
+          <div data-i18n="plan.p.1">Everything in Starter</div>
+          <div data-i18n="plan.p.2">CRM, loyalty, marketing</div>
+          <div data-i18n="plan.p.3">WhatsApp</div>
+          <div data-i18n="plan.p.4">AI recommendations</div>
+        </div>
+        <a href="#" class="btn btn-primary" data-i18n="plan.p.cta">Start Pro</a>
+      </div>
+
+      <div class="plan">
+        <div class="plan-name en">Business</div>
+        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="39" data-yearly="32.5">39</span><span class="per">/ month</span></div>
+        <div class="plan-desc" data-i18n="plan.b.desc">Scale your business.</div>
+        <div class="plan-feats">
+          <div data-i18n="plan.b.1">Everything in Pro</div>
+          <div data-i18n="plan.b.2">Branches &amp; permissions</div>
+          <div data-i18n="plan.b.3">Wholesale &amp; automation</div>
+          <div data-i18n="plan.b.4">Priority support</div>
+        </div>
+        <a href="#" class="btn btn-ghost" data-i18n="plan.b.cta">Start Business</a>
+      </div>
+    </div>
+
+    <div class="founding-box">
+      <div class="num">50</div>
+      <p data-i18n="founding">The first 50 businesses lock in founding pricing for as long as they stay on OMINO.</p>
+    </div>
+
+    <div class="fee-note">
+      <div>
+        <h4 class="en">Payments</h4>
+        <p data-i18n="fee">Platform fee of 0.3%–0.5% on every successful online payment. No hidden charges.</p>
+      </div>
+      <div class="pct">0.3–0.5%</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="band band-footer on-dark">
+  <div class="band-fill" aria-hidden="true"></div>
+  <div class="wrap footer-bottom">
+    <div class="footer-brand">
+      <img class="logo-img" src="img/omino-lockup-paper.png" alt="OMINO" width="685" height="235" loading="lazy" decoding="async">
+      <span data-i18n="footer.copy">© 2026 OMINO. All rights reserved.</span>
+    </div>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger, CustomEase);
+CustomEase.create('fluid','0.22, 1, 0.36, 1');
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fluidEase = 'fluid';
+
+const nav = document.getElementById('siteNav');
+const orbit = document.getElementById('orbit');
+const orbitField = document.getElementById('orbitField');
+const orbitSeed = document.getElementById('orbitSeed');
+const orbitBeam = document.getElementById('orbitBeam');
+const orbitWake = document.getElementById('orbitWake');
+const orbitIdx = document.getElementById('orbitIdx');
+const orbitRing = document.getElementById('orbitRing');
+const orbitRingLen = 2 * Math.PI * 18;
+if(orbitRing){
+  orbitRing.setAttribute('stroke-dasharray', orbitRingLen + ' ' + orbitRingLen);
+  orbitRing.setAttribute('stroke-dashoffset', String(orbitRingLen));
+}
+const orbitNodes = document.getElementById('orbitNodes');
+const orbitCompact = window.matchMedia('(max-width: 859px)');
+const orbitFine = window.matchMedia('(hover: hover) and (pointer: fine)');
+const orbitChapters = [
+  { sel: '#hero', idx: '001' },
+  { sel: '#system', idx: '002' },
+  { sel: '#business', idx: '003' },
+  { sel: '#ai', idx: '004' },
+  { sel: '#pricing', idx: '005' }
+];
+let orbitP = 0, orbitNow = 0, orbitVel = 0, orbitRaf = 0, orbitIdle = 0, orbitDrag = false;
+
+function scrollMax(){
+  return Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+}
+function scrollProgress(){
+  return Math.min(1, Math.max(0, window.scrollY / scrollMax()));
+}
+function placeOrbitNodes(){
+  const max = scrollMax();
+  const h = orbitField.clientHeight;
+  orbitNodes.replaceChildren();
+  orbitChapters.forEach(item => {
+    const el = document.querySelector(item.sel);
+    if(!el) return;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    const t = Math.min(1, Math.max(0, top / max));
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'orbit-node';
+    btn.style.top = (t * h) + 'px';
+    btn.innerHTML = '<i></i>';
+    btn.setAttribute('aria-label', 'Section ' + item.idx);
+    btn.tabIndex = -1;
+    btn._t = t;
+    btn._idx = item.idx;
+    btn.addEventListener('click', () => {
+      el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+    orbitNodes.appendChild(btn);
+  });
+}
+function applyOrbit(){
+  const h = orbitField.clientHeight || 1;
+  const y = orbitNow * h;
+  const stretch = Math.min(78, Math.abs(orbitVel) * 1600);
+  const pct = Math.round(orbitNow * 100);
+  orbit.style.setProperty('--p', (orbitNow * 100).toFixed(2));
+  orbitIdx.textContent = pct + '%';
+  orbit.setAttribute('aria-valuenow', String(pct));
+  if(orbitRing){
+    orbitRing.setAttribute('stroke-dashoffset', String(orbitRingLen * (1 - orbitNow)));
+  }
+  if(!orbitCompact.matches){
+    orbitSeed.style.top = y + 'px';
+    orbitIdx.style.top = y + 'px';
+    orbitBeam.style.height = y + 'px';
+  }
+  orbitWake.style.height = stretch + 'px';
+  orbitWake.style.opacity = String(Math.min(0.75, Math.abs(orbitVel) * 20));
+  orbitWake.style.top = orbitVel >= 0 ? 'calc(50% - ' + stretch + 'px)' : '50%';
+  orbitNodes.querySelectorAll('.orbit-node').forEach(btn => {
+    btn.classList.toggle('is-here', Math.abs(orbitNow - btn._t) < 0.075);
+  });
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+}
+function drawOrbit(){
+  const prev = orbitNow;
+  orbitNow += (orbitP - orbitNow) * (reduceMotion ? 1 : 0.16);
+  orbitVel = orbitNow - prev;
+  applyOrbit();
+  if(Math.abs(orbitP - orbitNow) > 0.00035){
+    orbitRaf = requestAnimationFrame(drawOrbit);
+  } else {
+    orbitNow = orbitP;
+    orbitVel = 0;
+    applyOrbit();
+    orbitRaf = 0;
+  }
+}
+function pulseOrbit(){
+  orbit.classList.add('is-live');
+  clearTimeout(orbitIdle);
+  orbitIdle = setTimeout(() => orbit.classList.remove('is-live'), 1200);
+}
+function onOrbitScroll(){
+  orbit.hidden = scrollMax() <= 4;
+  orbitP = scrollProgress();
+  pulseOrbit();
+  if(!orbitRaf) orbitRaf = requestAnimationFrame(drawOrbit);
+}
+function bindOrbitDrag(){
+  if(!orbitFine.matches) return;
+  const fromY = clientY => {
+    const rect = orbitField.getBoundingClientRect();
+    const t = Math.min(1, Math.max(0, (clientY - rect.top) / Math.max(1, rect.height)));
+    window.scrollTo(0, t * scrollMax());
+  };
+  orbitField.addEventListener('pointerdown', e => {
+    if(e.target.closest('.orbit-node')) return;
+    orbitDrag = true;
+    orbitField.setPointerCapture(e.pointerId);
+    fromY(e.clientY);
+    e.preventDefault();
+  });
+  orbitField.addEventListener('pointermove', e => { if(orbitDrag) fromY(e.clientY); });
+  const end = () => { orbitDrag = false; };
+  orbitField.addEventListener('pointerup', end);
+  orbitField.addEventListener('pointercancel', end);
+}
+placeOrbitNodes();
+bindOrbitDrag();
+onOrbitScroll();
+window.addEventListener('scroll', onOrbitScroll, {passive:true});
+window.addEventListener('resize', () => { placeOrbitNodes(); onOrbitScroll(); });
+window.addEventListener('load', () => { placeOrbitNodes(); onOrbitScroll(); });
+
+const menuBtn = document.getElementById('menuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const langToggle = document.getElementById('langToggle');
+
+const copy = {
+  en: {
+    title: 'OMINO — AI Business OS',
+    'nav.solutions': 'Solutions', 'nav.ai': 'AI', 'nav.pricing': 'Pricing',
+    'cta.start': 'Get started', 'cta.fit': 'Explore OMINO',
+    'menu.open': 'Open menu', 'menu.close': 'Close menu',
+    'menu.kicker': 'Menu / 00',
+    'menu.tag': 'AI Business OS',
+    'menu.connect': 'Connect',
+    'hero.title': 'Your business.<br>One intelligence.',
+    'hero.sub': 'OMINO brings your store, POS, inventory, customers, payments and analytics into one intelligent business system — so you can see what’s happening, understand why, and know what to do next.',
+    'hero.fine': 'Founding pricing for the first 50 businesses.',
+    'problem.title': 'Your business shouldn’t need<br>five systems to run.',
+    'problem.connect': 'OMINO connects them into one source of truth.',
+    'problem.caption': 'One business. One system. One clear picture.',
+    'business.title': 'One system.<br>Built around your business.',
+    'business.sub': 'The dashboard changes with what you sell — not a generic template.',
+    'ai.title': 'Know what happened.<br>Know what to do next.',
+    'ai.sub': 'OMINO turns your business data into decisions — identifying problems, explaining why they happened, and recommending your next move.',
+    'chat.user': 'Why did my profit drop this month?',
+    'chat.ai': 'Revenue grew 8%.<br>Gross profit fell 4%.',
+    'chat.1': 'Product costs increased 7%',
+    'chat.2': 'Two high-volume products lost margin',
+    'chat.3': 'Discounts increased 18%',
+    'chat.rk': 'Next move',
+    'chat.rec': 'Reduce discounting on Product A and increase Product B by 4%.',
+    'ai.note': 'Nothing sends or changes without your approval.',
+    'pricing.title': 'Start with what you need.<br>Grow into everything else.',
+    'bill.month': 'Monthly', 'bill.year': 'Yearly',
+    'bill.per': '/ month', 'bill.perY': '/ month, billed yearly',
+    'plan.s.desc': 'Run your business.', 'plan.s.1': 'Online store & POS', 'plan.s.2': 'Inventory & orders', 'plan.s.3': 'Customers', 'plan.s.4': 'Basic analytics', 'plan.s.cta': 'Start Starter',
+    'plan.p.desc': 'Grow your business.', 'plan.p.1': 'Everything in Starter', 'plan.p.2': 'CRM, loyalty, marketing', 'plan.p.3': 'WhatsApp', 'plan.p.4': 'AI recommendations', 'plan.p.cta': 'Start Pro',
+    'plan.b.desc': 'Scale your business.', 'plan.b.1': 'Everything in Pro', 'plan.b.2': 'Branches & permissions', 'plan.b.3': 'Wholesale & automation', 'plan.b.4': 'Priority support', 'plan.b.cta': 'Start Business',
+    founding: 'The first 50 businesses lock in founding pricing for as long as they stay on OMINO.',
+    fee: 'Platform fee of 0.3%–0.5% on every successful online payment. No hidden charges.',
+    'footer.copy': '© 2026 OMINO. All rights reserved.'
+  },
+  ar: {
+    title: 'OMINO — نظام تشغيل الأعمال',
+    'nav.solutions': 'Solutions', 'nav.ai': 'AI', 'nav.pricing': 'Pricing',
+    'cta.start': 'ابدأ', 'cta.fit': 'استكشف OMINO',
+    'menu.open': 'فتح القائمة', 'menu.close': 'إغلاق القائمة',
+    'menu.kicker': 'Menu / 00',
+    'menu.tag': 'نظام تشغيل الأعمال',
+    'menu.connect': 'تواصل',
+    'hero.title': 'عملك.<br>ذكاء واحد.',
+    'hero.sub': 'OMINO يجمع متجرك، ونقطة البيع، والمخزون، والعملاء، والمدفوعات، والتحليلات في نظام أعمال ذكي واحد — لترى ما يحدث، وتفهم السبب، وتعرف ماذا تفعل بعد ذلك.',
+    'hero.fine': 'تسعير المؤسسين لأول 50 نشاطاً.',
+    'problem.title': 'عملك ما يحتاج<br>خمس أنظمة عشان يشتغل.',
+    'problem.connect': 'OMINO يربطها في مصدر واحد للحقيقة.',
+    'problem.caption': 'عمل واحد. نظام واحد. صورة واضحة.',
+    'business.title': 'نظام واحد.<br>مصمم حول شغلك.',
+    'business.sub': 'اللوحة تتغيّر حسب ما تبيع — لا حسب قالب جاهز.',
+    'ai.title': 'اعرف وش صار.<br>اعرف وش تسوي بعدين.',
+    'ai.sub': 'OMINO يحوّل بيانات نشاطك إلى قرارات — يحدد المشكلة، يشرح ليش صارت، ويقترح خطوتك التالية.',
+    'chat.user': 'ليش الربح نزل هذا الشهر؟',
+    'chat.ai': 'الإيرادات نمت 8%.<br>الربح الإجمالي نزل 4%.',
+    'chat.1': 'تكلفة المنتجات ارتفعت 7%',
+    'chat.2': 'منتجان عاليان الحجم فقدا الهامش',
+    'chat.3': 'الخصومات زادت 18%',
+    'chat.rk': 'الخطوة التالية',
+    'chat.rec': 'قلّل الخصم على المنتج أ، وارفع المنتج ب بنسبة 4%.',
+    'ai.note': 'ما في إرسال أو تغيير بدون موافقتك.',
+    'pricing.title': 'ابدأ بما تحتاجه.<br>ثم كبّر لكل شيء آخر.',
+    'bill.month': 'شهري', 'bill.year': 'سنوي',
+    'bill.per': '/ شهر', 'bill.perY': '/ شهر، سنوياً',
+    'plan.s.desc': 'شغّل نشاطك.', 'plan.s.1': 'متجر ونقطة بيع', 'plan.s.2': 'مخزون وطلبات', 'plan.s.3': 'عملاء', 'plan.s.4': 'تحليلات أساسية', 'plan.s.cta': 'ابدأ Starter',
+    'plan.p.desc': 'كبّر نشاطك.', 'plan.p.1': 'كل ما في Starter', 'plan.p.2': 'عملاء، ولاء، وتسويق', 'plan.p.3': 'واتساب', 'plan.p.4': 'توصيات الذكاء', 'plan.p.cta': 'ابدأ Pro',
+    'plan.b.desc': 'وسّع نشاطك.', 'plan.b.1': 'كل ما في Pro', 'plan.b.2': 'فروع وصلاحيات', 'plan.b.3': 'جملة وأتمتة', 'plan.b.4': 'دعم أولوية', 'plan.b.cta': 'ابدأ Business',
+    founding: 'أول 50 نشاطاً يثبتون تسعير المؤسسين طالما بقوا على OMINO.',
+    fee: 'رسوم المنصة 0.3%–0.5% على كل دفعة إلكترونية ناجحة. بدون رسوم مخفية.',
+    'footer.copy': '© 2026 OMINO. جميع الحقوق محفوظة.'
+  }
+};
+
+const cats = {
+  en: {
+    Retail:[["Today's revenue","$4,280"],["Units sold","312"],["Margin","38%"],["Repeat customers","61%"],["Low stock","9"]],
+    Fashion:[["Today's revenue","$3,910"],["Best seller","Linen shirt"],["Return rate","6.2%"],["Repeat customers","54%"],["Low stock","14"]],
+    Beauty:[["Today's revenue","$2,640"],["Top category","Skincare"],["Margin","44%"],["Loyalty redemptions","28"],["Low stock","5"]],
+    Perfume:[["Best seller","Oud Rose 50ml"],["Stock","82%"],["Margin","51%"],["Repeat customers","47%"],["Pending orders","12"]],
+    Cafés:[["Today's revenue","$1,860"],["Avg. ticket","$6.40"],["Top item","Iced latte"],["Tables turned","5.2x"],["Waste flagged","3"]],
+    Restaurants:[["Today's revenue","$6,120"],["Tables","18 / 24"],["Orders","96"],["Low ingredients","4"],["Popular dish","Grilled kofta"]],
+    Electronics:[["Today's revenue","$9,340"],["Units","54"],["Warranty claims","2"],["Repeat customers","33%"],["Low stock","7"]],
+    Services:[["Bookings today","22"],["Utilization","78%"],["Avg. ticket","$41"],["Repeat clients","66%"],["No-shows","1"]],
+    Wholesale:[["Open orders","31"],["Avg. order","$1,240"],["Fulfillment","1.4d"],["Active accounts","58"],["Backorders","6"]]
+  },
+  ar: {
+    'تجزئة':[['إيراد اليوم','$4,280'],['وحدات مباعة','312'],['الهامش','38%'],['عملاء متكررون','61%'],['نواقص','9']],
+    'أزياء':[['إيراد اليوم','$3,910'],['الأكثر مبيعاً','Linen shirt'],['مرتجعات','6.2%'],['عملاء متكررون','54%'],['نواقص','14']],
+    'جمال':[['إيراد اليوم','$2,640'],['الفئة الأعلى','Skincare'],['الهامش','44%'],['استبدال الولاء','28'],['نواقص','5']],
+    'عطور':[['الأكثر مبيعاً','Oud Rose 50ml'],['المخزون','82%'],['الهامش','51%'],['عملاء متكررون','47%'],['طلبات معلّقة','12']],
+    'مقاهي':[['إيراد اليوم','$1,860'],['متوسط التذكرة','$6.40'],['الأعلى طلباً','Iced latte'],['دوران الطاولات','5.2x'],['هدر','3']],
+    'مطاعم':[['إيراد اليوم','$6,120'],['طاولات','18 / 24'],['طلبات','96'],['نواقص مطبخ','4'],['الأشهر','كفتة مشوية']],
+    'إلكترونيات':[['إيراد اليوم','$9,340'],['وحدات','54'],['ضمانات','2'],['عملاء متكررون','33%'],['نواقص','7']],
+    'خدمات':[['حجوزات اليوم','22'],['الإشغال','78%'],['متوسط التذكرة','$41'],['عملاء متكررون','66%'],['غياب','1']],
+    'جملة':[['طلبات مفتوحة','31'],['متوسط الطلب','$1,240'],['وقت التلبية','1.4d'],['حسابات نشطة','58'],['متأخر','6']]
+  }
+};
+
+let lang = 'en';
+let billing = 'monthly';
+
+function t(key){ return copy[lang][key]; }
+
+function applyCopy(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    el.innerHTML = t(el.dataset.i18nHtml);
+  });
+  document.title = t('title');
+  setBilling(billing);
+}
+
+let menuAnim;
+function setMenu(open){
+  const drawer = mobileMenu.querySelector('.menu-drawer');
+  const scrim = document.getElementById('menuScrim');
+  const items = mobileMenu.querySelectorAll('.menu-drawer-top, .menu-link, .menu-cta, .menu-foot');
+  const offX = document.documentElement.dir === 'rtl' ? '-100%' : '100%';
+  const isOpen = mobileMenu.classList.contains('open');
+
+  menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  menuBtn.setAttribute('aria-label', open ? t('menu.close') : t('menu.open'));
+  scrim.setAttribute('aria-label', t('menu.close'));
+
+  if(open === isOpen && !menuAnim) return;
+  if(menuAnim){ menuAnim.kill(); menuAnim = null; }
+
+  if(open){
+    mobileMenu.classList.add('open');
+    document.documentElement.classList.add('menu-open');
+    mobileMenu.setAttribute('aria-hidden', 'false');
+    mobileMenu.inert = false;
+    document.body.style.overflow = 'hidden';
+    if(reduceMotion){
+      gsap.set(scrim, {opacity:1});
+      gsap.set(drawer, {x:0});
+      gsap.set(items, {opacity:1, y:0});
+      return;
+    }
+    gsap.set(scrim, {opacity:0});
+    gsap.set(drawer, {x:offX});
+    gsap.set(items, {opacity:0, y:16});
+    menuAnim = gsap.timeline({defaults:{ease:fluidEase}, onComplete:()=>{ menuAnim = null; }})
+      .to(scrim, {opacity:1, duration:.45}, 0)
+      .to(drawer, {x:0, duration:.65}, 0)
+      .to(items, {opacity:1, y:0, duration:.5, stagger:.07}, 0.14);
+    return;
+  }
+
+  const finish = ()=>{
+    mobileMenu.classList.remove('open');
+    document.documentElement.classList.remove('menu-open');
+    mobileMenu.setAttribute('aria-hidden', 'true');
+    mobileMenu.inert = true;
+    document.body.style.overflow = '';
+    gsap.set([scrim, drawer, items], {clearProps:'all'});
+    menuAnim = null;
+  };
+
+  if(reduceMotion || !isOpen){
+    finish();
+    return;
+  }
+
+  menuAnim = gsap.timeline({onComplete:finish})
+    .to(items, {opacity:0, y:12, duration:.32, stagger:{each:.045, from:'end'}, ease:'power3.in'}, 0)
+    .to(drawer, {x:offX, duration:.55, ease:'power3.inOut'}, 0.08)
+    .to(scrim, {opacity:0, duration:.4, ease:'power2.in'}, 0.1);
+}
+menuBtn.addEventListener('click', ()=> setMenu(menuBtn.getAttribute('aria-expanded') !== 'true'));
+document.getElementById('menuScrim').addEventListener('click', ()=> setMenu(false));
+mobileMenu.querySelectorAll('.menu-link, .menu-cta a').forEach(a=>a.addEventListener('click', ()=> setMenu(false)));
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && mobileMenu.classList.contains('open')) setMenu(false); });
+
+if(!reduceMotion){
+  const tl = gsap.timeline({defaults:{ease:fluidEase}});
+  tl.from('#heroTitle',{opacity:0,y:22,duration:.9})
+    .from('#heroIndex',{opacity:0,y:10,duration:.6},'-=.45')
+    .from('#heroSub',{opacity:0,y:16,duration:.75},'-=.4')
+    .from('#heroCtas',{opacity:0,y:14,duration:.65},'-=.5')
+    .from('#heroFine',{opacity:0,duration:.55},'-=.4');
+}
+
+if(!reduceMotion){
+  gsap.utils.toArray('.band').forEach(sec=>{
+    const fill = sec.querySelector('.band-fill');
+    if(!fill) return;
+    gsap.fromTo(fill,{opacity:0.45, scale:0.985},{
+      opacity:1, scale:1, duration:.85, ease:fluidEase,
+      scrollTrigger:{trigger:sec, start:'top 88%'}
+    });
+  });
+  gsap.utils.toArray('.reveal').forEach(el=>{
+    gsap.fromTo(el,{opacity:0,y:16},{
+      opacity:1,y:0,duration:.85,ease:fluidEase,
+      scrollTrigger:{trigger:el,start:'top 85%'}
+    });
+  });
+  gsap.utils.toArray('.frag-chip').forEach((chip,i)=>{
+    gsap.fromTo(chip,{opacity:0,y:10},{opacity:1,y:0,duration:.6,delay:i*0.05,ease:fluidEase,
+      scrollTrigger:{trigger:'#fragRow',start:'top 85%'}
+    });
+  });
+  gsap.fromTo('.merge-into .logo-lockup',{opacity:0,y:18},{
+    opacity:1,y:0,duration:.85,ease:fluidEase,
+    scrollTrigger:{trigger:'.merge-into',start:'top 85%'}
+  });
+  gsap.timeline({scrollTrigger:{trigger:'#revealList',start:'top 80%'}})
+    .from('.reveal-item',{opacity:0,y:8,duration:.55,stagger:.16,ease:fluidEase})
+    .from('#recBox',{opacity:0,y:8,duration:.55,ease:fluidEase},'-=.15');
+}
+
+const catTabs = document.getElementById('catTabs');
+const catMetrics = document.getElementById('catMetrics');
+function renderCats(){
+  const map = cats[lang];
+  const names = Object.keys(map);
+  catTabs.innerHTML = '';
+  names.forEach((cat,i)=>{
+    const tab = document.createElement('button');
+    tab.className = 'cat-tab' + (i===0?' active':'');
+    tab.textContent = cat;
+    tab.addEventListener('click', ()=>{
+      catTabs.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      renderMetrics(cat);
+    });
+    catTabs.appendChild(tab);
+  });
+  renderMetrics(names[0]);
+}
+function renderMetrics(cat){
+  catMetrics.innerHTML='';
+  cats[lang][cat].forEach(([k,v])=>{
+    const el = document.createElement('div');
+    el.className='cat-metric';
+    el.innerHTML = `<div class="k">${k}</div><div class="v">${v}</div>`;
+    catMetrics.appendChild(el);
+  });
+}
+
+const toggleMonthly = document.getElementById('toggleMonthly');
+const toggleYearly = document.getElementById('toggleYearly');
+function setBilling(mode){
+  billing = mode;
+  toggleMonthly.classList.toggle('active', mode==='monthly');
+  toggleYearly.classList.toggle('active', mode==='yearly');
+  document.querySelectorAll('.pval').forEach(el=>{
+    el.textContent = mode==='monthly' ? el.dataset.monthly : el.dataset.yearly;
+  });
+  document.querySelectorAll('.plan-price .per').forEach(el=>{
+    el.textContent = mode==='monthly' ? t('bill.per') : t('bill.perY');
+  });
+}
+toggleMonthly.addEventListener('click', ()=>setBilling('monthly'));
+toggleYearly.addEventListener('click', ()=>setBilling('yearly'));
+
+function setLang(next){
+  lang = next;
+  document.documentElement.lang = next;
+  document.documentElement.dir = next === 'ar' ? 'rtl' : 'ltr';
+  langToggle.textContent = next === 'ar' ? 'EN' : 'AR';
+  langToggle.setAttribute('aria-label', next === 'ar' ? 'English' : 'العربية');
+  localStorage.setItem('omino-lang', next);
+  applyCopy();
+  renderCats();
+  setMenu(false);
+  placeOrbitNodes();
+  onOrbitScroll();
+}
+langToggle.addEventListener('click', ()=> setLang(lang === 'en' ? 'ar' : 'en'));
+setLang(localStorage.getItem('omino-lang') === 'ar' ? 'ar' : 'en');
+</script>
+</body>
+</html>

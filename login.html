@@ -8,7 +8,7 @@
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/omino.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <style>
@@ -189,6 +189,13 @@ html[lang="ar"] .field-label{letter-spacing:0;}
 }
 .google svg{width:18px;height:18px;}
 .google:hover:not(:disabled){border-color:var(--ink);transform:none;background:#fff;}
+.auth-legal{
+  margin-top:28px;
+  display:flex;flex-wrap:wrap;gap:8px 14px;
+  font-size:13px;color:var(--stone);
+}
+.auth-legal a{min-height:44px;display:inline-flex;align-items:center;}
+.auth-legal a:hover{color:var(--ink);}
 .auth-switch{
   margin-top:28px;
   font-size:14px;
@@ -278,6 +285,11 @@ html[lang="ar"] .field-label{letter-spacing:0;}
     </div>
     <div class="menu-foot">
       <span class="menu-connect" data-i18n="menu.connect">Connect</span>
+      <div class="socials">
+        <a class="social" data-wa href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.1 4.9A9.9 9.9 0 0 0 12.05 2C6.5 2 2 6.5 2 12.05c0 1.77.46 3.5 1.34 5.02L2 22l5.08-1.33A10 10 0 0 0 12.05 22C17.6 22 22.1 17.5 22.1 12.05c0-2.66-1.04-5.16-3-7.15zM12.05 20.2c-1.52 0-3.01-.4-4.3-1.17l-.31-.18-3.16.83.85-3.08-.2-.32A8.2 8.2 0 0 1 3.8 12.05c0-4.55 3.7-8.25 8.25-8.25 2.2 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.55-3.7 8.15-8.25 8.15z"/></svg>
+        </a>
+      </div>
     </div>
   </aside>
 </div>
@@ -367,10 +379,17 @@ html[lang="ar"] .field-label{letter-spacing:0;}
       <p class="auth-switch only-forgot">
         <button type="button" id="toSignin2" data-i18n="signup.back">Sign in</button>
       </p>
+      <p class="auth-legal">
+        <a href="privacy.html" data-i18n="foot.privacy">Privacy</a>
+        <a href="terms.html" data-i18n="foot.terms">Terms</a>
+        <a href="faq.html" data-i18n="foot.faq">FAQ</a>
+        <a href="contact.html" data-i18n="foot.contact">Contact</a>
+      </p>
     </div>
   </section>
 </main>
 
+<script src="js/config.js"></script>
 <script src="js/auth.js"></script>
 <script src="js/omino-nav.js"></script>
 <script>
@@ -413,7 +432,8 @@ const copy = {
     'ok.reset': 'Password updated. You can sign in.',
     'ok.loading': 'Please wait…',
     showPw: 'Show password',
-    hidePw: 'Hide password'
+    hidePw: 'Hide password',
+    'foot.privacy': 'Privacy', 'foot.terms': 'Terms', 'foot.faq': 'FAQ', 'foot.contact': 'Contact'
   },
   ar: {
     title: 'OMINO — دخول',
@@ -453,7 +473,8 @@ const copy = {
     'ok.reset': 'تم التحديث. يمكنك الدخول.',
     'ok.loading': 'لحظة…',
     showPw: 'إظهار كلمة المرور',
-    hidePw: 'إخفاء كلمة المرور'
+    hidePw: 'إخفاء كلمة المرور',
+    'foot.privacy': 'الخصوصية', 'foot.terms': 'الشروط', 'foot.faq': 'أسئلة', 'foot.contact': 'تواصل'
   }
 };
 

@@ -8,7 +8,7 @@
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
@@ -41,6 +41,7 @@
   --font-serif: 'Instrument Serif', Georgia, serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   --font-ar: 'IBM Plex Sans Arabic', sans-serif;
+  --font-ar-display: 'Zain', sans-serif;
 }
 @media (max-width: 768px) {
   :root {
@@ -88,8 +89,8 @@ h1,h2{
   font-synthesis:none;
 }
 html[lang="ar"] h1,html[lang="ar"] h2{
-  font-family:var(--font-ar);
-  font-weight:600;
+  font-family:var(--font-ar-display);
+  font-weight:700;
   font-stretch:normal;
   letter-spacing:0;
 }
@@ -449,11 +450,16 @@ html[lang="ar"] .btn{
 html[lang="ar"] .btn-sm{font-size:14px;padding:9px 16px;}
 .menu-btn{
   display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;
-  background:none;border:none;padding:10px;width:44px;height:44px;
-  border-radius:var(--radius-sm);
-  transition:background 400ms var(--ease);
+  background:transparent;border:none;padding:10px;width:44px;height:44px;
+  border-radius:0;
+  -webkit-tap-highlight-color:transparent;
+  transition:none;
 }
-.menu-btn:hover{background:rgba(7,8,9,0.05);}
+.menu-btn:hover,
+.menu-btn:active,
+.menu-btn:focus{
+  background:transparent;
+}
 @media(min-width:980px){.menu-btn{display:none;}}
 @media(max-width:979px){
   header.site-nav{top:10px;}
@@ -605,8 +611,13 @@ html.menu-open header.site-nav.scrolled .nav-inner{
   -webkit-backdrop-filter:none;
 }
 html.menu-open .lang-btn{color:var(--paper);}
-html.menu-open .lang-btn:hover,
-html.menu-open .menu-btn:hover{background:rgba(255,255,255,0.08);}
+html.menu-open .lang-btn:hover{background:rgba(255,255,255,0.08);}
+html.menu-open .menu-btn,
+html.menu-open .menu-btn:hover,
+html.menu-open .menu-btn:active,
+html.menu-open .menu-btn:focus{
+  background:transparent;
+}
 html.menu-open .menu-btn span{background:var(--paper);}
 html.menu-open .nav-actions .btn-primary{display:none;}
 
@@ -729,9 +740,9 @@ html[lang="ar"] .hero-top h1{line-height:1.08;max-width:12ch;}
   margin-inline:auto;
 }
 html[lang="ar"] .merge-caption{
-  font-family:var(--font-ar);
+  font-family:var(--font-ar-display);
   font-style:normal;
-  font-weight:500;
+  font-weight:400;
 }
 
 .ai-wrap{
@@ -988,7 +999,7 @@ footer.band-footer{
 .footer-brand{display:flex;align-items:center;gap:14px;}
 .footer-brand .logo-img{height:22px;opacity:1;}
 .footer-bottom{display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:14px;align-items:center;}
-.footer-legal{display:flex;gap:8px;}
+.footer-legal{display:flex;gap:8px;flex-wrap:wrap;}
 .footer-legal a{
   padding:8px 12px;
   border-radius:var(--radius-pill);
@@ -1089,7 +1100,7 @@ footer.band-footer{
     <div class="menu-foot">
       <span class="menu-connect" data-i18n="menu.connect">Connect</span>
       <div class="socials">
-        <a class="social" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <a class="social" href="https://www.instagram.com/omino.ps/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
             <rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/>
             <circle cx="12" cy="12" r="4.1"/>
@@ -1101,7 +1112,7 @@ footer.band-footer{
             <path d="M14.2 8.2H17V4.7h-2.8c-2.9 0-5 2.2-5 5.1v2.5H6.4v3.6h2.8V22h3.7v-6.1h3.1l.6-3.6h-3.7V9.9c0-.9.5-1.7 1.3-1.7z"/>
           </svg>
         </a>
-        <a class="social" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+        <a class="social" data-wa href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M19.1 4.9A9.9 9.9 0 0 0 12.05 2C6.5 2 2 6.5 2 12.05c0 1.77.46 3.5 1.34 5.02L2 22l5.08-1.33A10 10 0 0 0 12.05 22C17.6 22 22.1 17.5 22.1 12.05c0-2.66-1.04-5.16-3-7.15zM12.05 20.2c-1.52 0-3.01-.4-4.3-1.17l-.31-.18-3.16.83.85-3.08-.2-.32A8.2 8.2 0 0 1 3.8 12.05c0-4.55 3.7-8.25 8.25-8.25 2.2 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.55-3.7 8.15-8.25 8.15zm4.52-6.16c-.25-.13-1.48-.73-1.7-.81-.23-.09-.4-.13-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.06-.39-2.02-1.24-.75-.67-1.25-1.48-1.4-1.73-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42h-.47c-.16 0-.43.06-.66.31-.22.25-.86.84-.86 2.05s.88 2.38 1 2.56c.12.17 1.73 2.64 4.2 3.7.59.25 1.05.4 1.4.51.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.2-.58.2-1.07.14-1.17-.06-.12-.22-.18-.47-.3z"/>
           </svg>
@@ -1216,39 +1227,35 @@ footer.band-footer{
         <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="9" data-yearly="7.5">9</span><span class="per">/ month</span></div>
         <div class="plan-desc" data-i18n="plan.s.desc">Run your business.</div>
         <div class="plan-feats">
-          <div data-i18n="plan.s.1">Online store &amp; POS</div>
-          <div data-i18n="plan.s.2">Inventory &amp; orders</div>
-          <div data-i18n="plan.s.3">Customers</div>
-          <div data-i18n="plan.s.4">Basic analytics</div>
+          <div data-i18n="plan.s.1">OMINO Intelligence</div>
+          <div data-i18n="plan.s.2">Basic insights</div>
         </div>
-        <a href="login.html#signup" class="btn btn-ghost" data-i18n="plan.s.cta">Start Starter</a>
+        <a href="checkout.html?plan=starter&billing=monthly" class="btn btn-ghost plan-go" data-plan="starter" data-i18n="plan.s.cta">Start Starter</a>
       </div>
 
       <div class="plan pro">
         <div class="plan-tab en">Most popular</div>
         <div class="plan-name en">Pro</div>
-        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="19" data-yearly="15.8">19</span><span class="per">/ month</span></div>
+        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="24" data-yearly="20">24</span><span class="per">/ month</span></div>
         <div class="plan-desc" data-i18n="plan.p.desc">Grow your business.</div>
         <div class="plan-feats">
-          <div data-i18n="plan.p.1">Everything in Starter</div>
-          <div data-i18n="plan.p.2">CRM, loyalty, marketing</div>
-          <div data-i18n="plan.p.3">WhatsApp</div>
-          <div data-i18n="plan.p.4">AI recommendations</div>
+          <div data-i18n="plan.p.1">Advanced AI insights</div>
+          <div data-i18n="plan.p.2">Recommendations</div>
+          <div data-i18n="plan.p.3">Forecasting</div>
         </div>
-        <a href="login.html#signup" class="btn btn-primary" data-i18n="plan.p.cta">Start Pro</a>
+        <a href="checkout.html?plan=pro&billing=monthly" class="btn btn-primary plan-go" data-plan="pro" data-i18n="plan.p.cta">Start Pro</a>
       </div>
 
       <div class="plan">
         <div class="plan-name en">Business</div>
-        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="39" data-yearly="32.5">39</span><span class="per">/ month</span></div>
+        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="49" data-yearly="40.8">49</span><span class="per">/ month</span></div>
         <div class="plan-desc" data-i18n="plan.b.desc">Scale your business.</div>
         <div class="plan-feats">
-          <div data-i18n="plan.b.1">Everything in Pro</div>
-          <div data-i18n="plan.b.2">Branches &amp; permissions</div>
-          <div data-i18n="plan.b.3">Wholesale &amp; automation</div>
-          <div data-i18n="plan.b.4">Priority support</div>
+          <div data-i18n="plan.b.1">AI Business Agent</div>
+          <div data-i18n="plan.b.2">Automation</div>
+          <div data-i18n="plan.b.3">Advanced intelligence</div>
         </div>
-        <a href="login.html#signup" class="btn btn-ghost" data-i18n="plan.b.cta">Start Business</a>
+        <a href="checkout.html?plan=business&billing=monthly" class="btn btn-ghost plan-go" data-plan="business" data-i18n="plan.b.cta">Start Business</a>
       </div>
     </div>
 
@@ -1260,9 +1267,9 @@ footer.band-footer{
     <div class="fee-note">
       <div>
         <h4 class="en">Payments</h4>
-        <p data-i18n="fee">Platform fee of 0.3%–0.5% on every successful online payment. No hidden charges.</p>
+        <p data-i18n="fee">OMINO platform fee of 0.3%–0.5% on every successful online payment, plus the payment provider’s own fees.</p>
       </div>
-      <div class="pct">0.3–0.5%</div>
+      <div class="pct">0.3%–0.5%</div>
     </div>
   </div>
 </section>
@@ -1276,12 +1283,15 @@ footer.band-footer{
       <span data-i18n="footer.copy">© 2026 OMINO. All rights reserved.</span>
     </div>
     <div class="footer-legal">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
+      <a href="privacy.html" data-i18n="foot.privacy">Privacy</a>
+      <a href="terms.html" data-i18n="foot.terms">Terms</a>
+      <a href="faq.html" data-i18n="foot.faq">FAQ</a>
+      <a href="contact.html" data-i18n="foot.contact">Contact</a>
     </div>
   </div>
 </footer>
 
+<script src="js/config.js"></script>
 <script>
 gsap.registerPlugin(ScrollTrigger, CustomEase);
 CustomEase.create('fluid','0.22, 1, 0.36, 1');
@@ -1452,12 +1462,13 @@ const copy = {
     'pricing.title': 'Start with what you need.<br>Grow into everything else.',
     'bill.month': 'Monthly', 'bill.year': 'Yearly',
     'bill.per': '/ month', 'bill.perY': '/ month, billed yearly',
-    'plan.s.desc': 'Run your business.', 'plan.s.1': 'Online store & POS', 'plan.s.2': 'Inventory & orders', 'plan.s.3': 'Customers', 'plan.s.4': 'Basic analytics', 'plan.s.cta': 'Start Starter',
-    'plan.p.desc': 'Grow your business.', 'plan.p.1': 'Everything in Starter', 'plan.p.2': 'CRM, loyalty, marketing', 'plan.p.3': 'WhatsApp', 'plan.p.4': 'AI recommendations', 'plan.p.cta': 'Start Pro',
-    'plan.b.desc': 'Scale your business.', 'plan.b.1': 'Everything in Pro', 'plan.b.2': 'Branches & permissions', 'plan.b.3': 'Wholesale & automation', 'plan.b.4': 'Priority support', 'plan.b.cta': 'Start Business',
+    'plan.s.desc': 'Run your business.', 'plan.s.1': 'OMINO Intelligence', 'plan.s.2': 'Basic insights', 'plan.s.cta': 'Start Starter',
+    'plan.p.desc': 'Grow your business.', 'plan.p.1': 'Advanced AI insights', 'plan.p.2': 'Recommendations', 'plan.p.3': 'Forecasting', 'plan.p.cta': 'Start Pro',
+    'plan.b.desc': 'Scale your business.', 'plan.b.1': 'AI Business Agent', 'plan.b.2': 'Automation', 'plan.b.3': 'Advanced intelligence', 'plan.b.cta': 'Start Business',
     founding: 'The first 50 businesses lock in founding pricing for as long as they stay on OMINO.',
-    fee: 'Platform fee of 0.3%–0.5% on every successful online payment. No hidden charges.',
-    'footer.copy': '© 2026 OMINO. All rights reserved.'
+    fee: 'OMINO platform fee of 0.3%–0.5% on every successful online payment, plus the payment provider’s own fees.',
+    'footer.copy': '© 2026 OMINO. All rights reserved.',
+    'foot.privacy': 'Privacy', 'foot.terms': 'Terms', 'foot.faq': 'FAQ', 'foot.contact': 'Contact'
   },
   ar: {
     title: 'OMINO — نظام تشغيل الأعمال',
@@ -1488,12 +1499,13 @@ const copy = {
     'pricing.title': 'ابدأ بما تحتاجه.<br>ثم كبّر لكل شيء آخر.',
     'bill.month': 'شهري', 'bill.year': 'سنوي',
     'bill.per': '/ شهر', 'bill.perY': '/ شهر، سنوياً',
-    'plan.s.desc': 'شغّل نشاطك.', 'plan.s.1': 'متجر ونقطة بيع', 'plan.s.2': 'مخزون وطلبات', 'plan.s.3': 'عملاء', 'plan.s.4': 'تحليلات أساسية', 'plan.s.cta': 'ابدأ Starter',
-    'plan.p.desc': 'كبّر نشاطك.', 'plan.p.1': 'كل ما في Starter', 'plan.p.2': 'عملاء، ولاء، وتسويق', 'plan.p.3': 'واتساب', 'plan.p.4': 'توصيات الذكاء', 'plan.p.cta': 'ابدأ Pro',
-    'plan.b.desc': 'وسّع نشاطك.', 'plan.b.1': 'كل ما في Pro', 'plan.b.2': 'فروع وصلاحيات', 'plan.b.3': 'جملة وأتمتة', 'plan.b.4': 'دعم أولوية', 'plan.b.cta': 'ابدأ Business',
+    'plan.s.desc': 'شغّل نشاطك.', 'plan.s.1': 'OMINO Intelligence', 'plan.s.2': 'رؤى أساسية', 'plan.s.cta': 'ابدأ Starter',
+    'plan.p.desc': 'كبّر نشاطك.', 'plan.p.1': 'رؤى ذكاء متقدمة', 'plan.p.2': 'توصيات', 'plan.p.3': 'توقعات', 'plan.p.cta': 'ابدأ Pro',
+    'plan.b.desc': 'وسّع نشاطك.', 'plan.b.1': 'AI Business Agent', 'plan.b.2': 'أتمتة', 'plan.b.3': 'ذكاء متقدم', 'plan.b.cta': 'ابدأ Business',
     founding: 'أول 50 نشاطاً يثبتون تسعير المؤسسين طالما بقوا على OMINO.',
-    fee: 'رسوم المنصة 0.3%–0.5% على كل دفعة إلكترونية ناجحة. بدون رسوم مخفية.',
-    'footer.copy': '© 2026 OMINO. جميع الحقوق محفوظة.'
+    fee: 'رسوم منصة OMINO 0.3%–0.5% على كل دفعة إلكترونية ناجحة، بالإضافة إلى رسوم مزود الدفع نفسه.',
+    'footer.copy': '© 2026 OMINO. جميع الحقوق محفوظة.',
+    'foot.privacy': 'الخصوصية', 'foot.terms': 'الشروط', 'foot.faq': 'أسئلة', 'foot.contact': 'تواصل'
   }
 };
 
@@ -1678,6 +1690,9 @@ function setBilling(mode){
   });
   document.querySelectorAll('.plan-price .per').forEach(el=>{
     el.textContent = mode==='monthly' ? t('bill.per') : t('bill.perY');
+  });
+  document.querySelectorAll('.plan-go').forEach(a=>{
+    a.href = 'checkout.html?plan=' + a.dataset.plan + '&billing=' + mode;
   });
 }
 toggleMonthly.addEventListener('click', ()=>setBilling('monthly'));

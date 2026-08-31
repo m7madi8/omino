@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMINO — Terms</title>
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/omino.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-nav" id="siteNav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <a href="index.html" class="logo-lockup" aria-label="OMINO">
+        <img class="logo-img logo-on-light" src="img/omino-lockup-ink.png" alt="" width="683" height="235">
+        <img class="logo-img logo-on-dark" src="img/omino-lockup-paper.png" alt="" width="685" height="235">
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="en" href="index.html#business" data-i18n="nav.product">Product</a>
+        <a class="en" href="index.html#ai" data-i18n="nav.ai">AI</a>
+        <a class="en" href="index.html#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a class="en" href="about.html" data-i18n="nav.about">About</a>
+        <a class="en" href="login.html" data-i18n="nav.login">Login</a>
+      </nav>
+      <div class="nav-actions">
+        <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
+        <a href="login.html#signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="menu-shell" id="mobileMenu" aria-hidden="true" inert>
+  <button type="button" class="menu-scrim" id="menuScrim" tabindex="-1" aria-label="Close menu"></button>
+  <aside class="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menuKicker">
+    <div class="menu-drawer-top">
+      <p class="idx menu-kicker" id="menuKicker" data-i18n="menu.kicker">Menu / 00</p>
+      <p class="menu-tag" data-i18n="menu.tag">AI Business OS</p>
+    </div>
+    <nav class="menu-nav" aria-label="Mobile">
+      <a class="menu-link" href="index.html#business"><span class="menu-idx">01</span><span class="menu-name" data-i18n="nav.product">Product</span></a>
+      <a class="menu-link" href="index.html#ai"><span class="menu-idx">02</span><span class="menu-name" data-i18n="nav.ai">AI</span></a>
+      <a class="menu-link" href="index.html#pricing"><span class="menu-idx">03</span><span class="menu-name" data-i18n="nav.pricing">Pricing</span></a>
+      <a class="menu-link" href="about.html"><span class="menu-idx">04</span><span class="menu-name" data-i18n="nav.about">About</span></a>
+      <a class="menu-link" href="login.html"><span class="menu-idx">05</span><span class="menu-name" data-i18n="nav.login">Login</span></a>
+    </nav>
+    <div class="menu-cta"><a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a></div>
+    <div class="menu-foot">
+      <span class="menu-connect" data-i18n="menu.connect">Connect</span>
+      <div class="socials">
+        <a class="social" data-wa href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.1 4.9A9.9 9.9 0 0 0 12.05 2C6.5 2 2 6.5 2 12.05c0 1.77.46 3.5 1.34 5.02L2 22l5.08-1.33A10 10 0 0 0 12.05 22C17.6 22 22.1 17.5 22.1 12.05c0-2.66-1.04-5.16-3-7.15zM12.05 20.2c-1.52 0-3.01-.4-4.3-1.17l-.31-.18-3.16.83.85-3.08-.2-.32A8.2 8.2 0 0 1 3.8 12.05c0-4.55 3.7-8.25 8.25-8.25 2.2 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.55-3.7 8.15-8.25 8.15z"/></svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<main id="content">
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="idx" data-i18n="kicker">Terms / 02</p>
+      <h1 data-i18n="hero">Use OMINO as the system behind the business.</h1>
+      <p class="lead" data-i18n="lead">These terms cover the website, founding access, and paid plans. They are written to be readable — not to hide the important parts.</p>
+    </div>
+  </section>
+  <article class="wrap doc">
+    <p class="idx updated" data-i18n="updated">Updated 1 September 2026</p>
+    <h2 data-i18n="s1.t">The service</h2>
+    <p data-i18n="s1.b">OMINO is an AI business operating system: commerce, POS, inventory, customers, payments, and intelligence in one place. It is not a generic website builder, and it is not a promise that every feature is live on day one for every plan.</p>
+    <h2 data-i18n="s2.t">Accounts</h2>
+    <p data-i18n="s2.b">You are responsible for the email, password, and people you let into the account. Keep access limited to your business. If you think the account was used without you, tell us immediately.</p>
+    <h2 data-i18n="s3.t">Founding 50</h2>
+    <p data-i18n="s3.b">The first 50 businesses lock in founding plan prices for as long as they stay on OMINO. Leaving the product ends that lock. Founding seats are limited; when they are full, new businesses join a waitlist.</p>
+    <h2 data-i18n="s4.t">Plans and fees</h2>
+    <p data-i18n="s4.b">Starter, Pro, and Business are billed monthly or yearly at the prices shown at checkout. Online payments processed through OMINO carry a platform fee of 0.3%–0.5% on successful charges, plus the payment provider’s own fees. No extra fee is added in the dark. Taxes may apply where required.</p>
+    <h2 data-i18n="s5.t">Payments</h2>
+    <p data-i18n="s5.b">Card checkout on this site is the plan interface. Live charging connects when billing is live. You can complete a founding request on WhatsApp. Do not send full card numbers over chat.</p>
+    <h2 data-i18n="s6.t">Acceptable use</h2>
+    <p data-i18n="s6.b">Use OMINO for a lawful business you operate. Do not try to break the system, scrape other businesses, or store data you do not have the right to hold.</p>
+    <h2 data-i18n="s7.t">AI</h2>
+    <p data-i18n="s7.b">Recommendations are guidance from your own business context. Nothing sends, charges, or changes without your approval. You remain responsible for the decisions you take.</p>
+    <h2 data-i18n="s8.t">Ending the service</h2>
+    <p data-i18n="s8.b">You can stop using OMINO at any time. We may suspend an account that breaks these terms. After closure, we handle data as described in the privacy policy.</p>
+    <h2 data-i18n="s9.t">Contact</h2>
+    <p data-i18n="s9.b">Questions about these terms:</p>
+    <p><a data-mail data-mail-label>hello@omino.ps</a> · <a data-wa data-wa-display href="https://wa.me/">WhatsApp</a></p>
+  </article>
+</main>
+
+<footer class="band-footer on-dark">
+  <div class="wrap footer-bottom">
+    <div class="footer-brand">
+      <img class="logo-img" src="img/omino-lockup-paper.png" alt="OMINO" width="685" height="235">
+      <span data-i18n="footer.copy">© 2026 OMINO. All rights reserved.</span>
+    </div>
+    <div class="footer-legal">
+      <a href="privacy.html" data-i18n="foot.privacy">Privacy</a>
+      <a href="terms.html" data-i18n="foot.terms">Terms</a>
+      <a href="faq.html" data-i18n="foot.faq">FAQ</a>
+      <a href="contact.html" data-i18n="foot.contact">Contact</a>
+    </div>
+  </div>
+</footer>
+<script src="js/config.js"></script>
+<script src="js/omino-nav.js"></script>
+<script>
+OminoNav.init({ copy: {
+  en: {
+    title: 'OMINO — Terms',
+    'nav.product':'Product','nav.ai':'AI','nav.pricing':'Pricing','nav.about':'About','nav.login':'Login',
+    'cta.start':'Start for free','menu.open':'Open menu','menu.close':'Close menu',
+    'menu.kicker':'Menu / 00','menu.tag':'AI Business OS','menu.connect':'Connect',
+    kicker:'Terms / 02',
+    hero:'Use OMINO as the system behind the business.',
+    lead:'These terms cover the website, founding access, and paid plans. They are written to be readable — not to hide the important parts.',
+    updated:'Updated 1 September 2026',
+    's1.t':'The service','s1.b':'OMINO is an AI business operating system: commerce, POS, inventory, customers, payments, and intelligence in one place. It is not a generic website builder, and it is not a promise that every feature is live on day one for every plan.',
+    's2.t':'Accounts','s2.b':'You are responsible for the email, password, and people you let into the account. Keep access limited to your business. If you think the account was used without you, tell us immediately.',
+    's3.t':'Founding 50','s3.b':'The first 50 businesses lock in founding plan prices for as long as they stay on OMINO. Leaving the product ends that lock. Founding seats are limited; when they are full, new businesses join a waitlist.',
+    's4.t':'Plans and fees','s4.b':'Starter, Pro, and Business are billed monthly or yearly at the prices shown at checkout. Online payments processed through OMINO carry a platform fee of 0.3%–0.5% on successful charges, plus the payment provider’s own fees. No extra fee is added in the dark. Taxes may apply where required.',
+    's5.t':'Payments','s5.b':'Card checkout on this site is the plan interface. Live charging connects when billing is live. You can complete a founding request on WhatsApp. Do not send full card numbers over chat.',
+    's6.t':'Acceptable use','s6.b':'Use OMINO for a lawful business you operate. Do not try to break the system, scrape other businesses, or store data you do not have the right to hold.',
+    's7.t':'AI','s7.b':'Recommendations are guidance from your own business context. Nothing sends, charges, or changes without your approval. You remain responsible for the decisions you take.',
+    's8.t':'Ending the service','s8.b':'You can stop using OMINO at any time. We may suspend an account that breaks these terms. After closure, we handle data as described in the privacy policy.',
+    's9.t':'Contact','s9.b':'Questions about these terms:',
+    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact',
+    'footer.copy':'© 2026 OMINO. All rights reserved.'
+  },
+  ar: {
+    title: 'OMINO — الشروط',
+    'nav.product':'المنتج','nav.ai':'AI','nav.pricing':'التسعير','nav.about':'عن OMINO','nav.login':'دخول',
+    'cta.start':'ابدأ مجاناً','menu.open':'فتح القائمة','menu.close':'إغلاق القائمة',
+    'menu.kicker':'Menu / 00','menu.tag':'نظام تشغيل الأعمال','menu.connect':'تواصل',
+    kicker:'الشروط / 02',
+    hero:'استخدم OMINO كنظام خلف النشاط.',
+    lead:'هالشروط تغطي الموقع، دخول التأسيس، والباقات. مكتوبة عشان تُقرأ — مش عشان تخبي المهم.',
+    updated:'تحديث 1 سبتمبر 2026',
+    's1.t':'الخدمة','s1.b':'OMINO نظام تشغيل أعمال بالذكاء: تجارة، نقطة بيع، مخزون، عملاء، مدفوعات، وذكاء في مكان واحد. مش منشئ مواقع عام، ومش وعد إن كل ميزة شغالة من اليوم الأول لكل باقة.',
+    's2.t':'الحسابات','s2.b':'أنت مسؤول عن الإيميل وكلمة المرور والناس اللي تدخلهم للحساب. خلّي الوصول لنشاطك. إذا شكّيت إن الحساب استُخدم بدونك، خبرنا فوراً.',
+    's3.t':'أول 50','s3.b':'أول 50 نشاطاً يثبتون أسعار باقات التأسيس طالما بقوا على OMINO. الخروج من المنتج ينهي التثبيت. المقاعد محدودة؛ لما تمتلئ، الأنشطة الجديدة تدخل قائمة انتظار.',
+    's4.t':'الباقات والرسوم','s4.b':'Starter و Pro و Business تُفوتر شهرياً أو سنوياً بالأسعار الظاهرة عند الدفع. الدفعات الإلكترونية عبر OMINO عليها رسوم منصة 0.3%–0.5% على العملية الناجحة، بالإضافة إلى رسوم مزود الدفع نفسه. ما في رسوم مخفية. قد تنطبق ضرائب حيث يلزم.',
+    's5.t':'الدفع','s5.b':'واجهة البطاقة على الموقع هي شاشة الباقة. الشحن الفعلي يتصل لما الفوترة تصير شغالة. تقدر تكمّل طلب التأسيس على واتساب. لا تبعت رقم البطاقة الكامل على الشات.',
+    's6.t':'الاستخدام المقبول','s6.b':'استخدم OMINO لنشاط قانوني تشغّله. لا تحاول كسر النظام، ولا تسحب بيانات أنشطة ثانية، ولا تخزّن بيانات ما إلك حق فيها.',
+    's7.t':'الذكاء','s7.b':'التوصيات إرشاد من سياق نشاطك. ما في إرسال أو خصم أو تغيير بدون موافقتك. القرار يبقى قرارك.',
+    's8.t':'إنهاء الخدمة','s8.b':'تقدر توقف استخدام OMINO في أي وقت. ممكن نعلّق حساباً يخالف هالشروط. بعد الإغلاق، نتعامل مع البيانات حسب سياسة الخصوصية.',
+    's9.t':'تواصل','s9.b':'أسئلة عن الشروط:',
+    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل',
+    'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.'
+  }
+}});
+</script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMINO — Checkout</title>
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/omino.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-nav" id="siteNav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <a href="index.html" class="logo-lockup" aria-label="OMINO">
+        <img class="logo-img logo-on-light" src="img/omino-lockup-ink.png" alt="" width="683" height="235">
+        <img class="logo-img logo-on-dark" src="img/omino-lockup-paper.png" alt="" width="685" height="235">
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="en" href="index.html#business" data-i18n="nav.product">Product</a>
+        <a class="en" href="index.html#ai" data-i18n="nav.ai">AI</a>
+        <a class="en is-active" href="index.html#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a class="en" href="about.html" data-i18n="nav.about">About</a>
+        <a class="en" href="login.html" data-i18n="nav.login">Login</a>
+      </nav>
+      <div class="nav-actions">
+        <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
+        <a href="login.html#signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span></button>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="menu-shell" id="mobileMenu" aria-hidden="true" inert>
+  <button type="button" class="menu-scrim" id="menuScrim" tabindex="-1" aria-label="Close menu"></button>
+  <aside class="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menuKicker">
+    <div class="menu-drawer-top">
+      <p class="idx menu-kicker" id="menuKicker" data-i18n="menu.kicker">Menu / 00</p>
+      <p class="menu-tag" data-i18n="menu.tag">AI Business OS</p>
+    </div>
+    <nav class="menu-nav" aria-label="Mobile">
+      <a class="menu-link" href="index.html#business"><span class="menu-idx">01</span><span class="menu-name" data-i18n="nav.product">Product</span></a>
+      <a class="menu-link" href="index.html#ai"><span class="menu-idx">02</span><span class="menu-name" data-i18n="nav.ai">AI</span></a>
+      <a class="menu-link" href="index.html#pricing"><span class="menu-idx">03</span><span class="menu-name" data-i18n="nav.pricing">Pricing</span></a>
+      <a class="menu-link" href="about.html"><span class="menu-idx">04</span><span class="menu-name" data-i18n="nav.about">About</span></a>
+      <a class="menu-link" href="login.html"><span class="menu-idx">05</span><span class="menu-name" data-i18n="nav.login">Login</span></a>
+    </nav>
+    <div class="menu-cta"><a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a></div>
+    <div class="menu-foot">
+      <span class="menu-connect" data-i18n="menu.connect">Connect</span>
+      <div class="socials">
+        <a class="social" data-wa href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.1 4.9A9.9 9.9 0 0 0 12.05 2C6.5 2 2 6.5 2 12.05c0 1.77.46 3.5 1.34 5.02L2 22l5.08-1.33A10 10 0 0 0 12.05 22C17.6 22 22.1 17.5 22.1 12.05c0-2.66-1.04-5.16-3-7.15zM12.05 20.2c-1.52 0-3.01-.4-4.3-1.17l-.31-.18-3.16.83.85-3.08-.2-.32A8.2 8.2 0 0 1 3.8 12.05c0-4.55 3.7-8.25 8.25-8.25 2.2 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.55-3.7 8.15-8.25 8.15z"/></svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<main id="content">
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="idx" data-i18n="kicker">Checkout / 06</p>
+      <h1 data-i18n="hero">Lock the plan. Keep the picture.</h1>
+      <p class="lead" data-i18n="lead">Card or WhatsApp. Then you get the confirmation messages — email and chat — with a reference you can keep.</p>
+    </div>
+  </section>
+  <div class="wrap pay-wrap">
+    <form class="pay-card" id="checkoutForm" novalidate>
+      <h2 data-i18n="pay.title">Payment</h2>
+      <p class="notice" data-i18n-html="pay.note"><strong>Founding checkout.</strong> The card screen is the plan interface. Live charging connects when billing is live. WhatsApp sends the request to OMINO now. Full card numbers are not stored.</p>
+      <input type="hidden" id="planId" name="plan">
+      <input type="hidden" id="billingId" name="billing">
+
+      <p class="idx pay-kicker" data-i18n="f.details">Billing details</p>
+      <div class="pay-fields">
+        <div class="page-field">
+          <label class="field-label" for="fullname" data-i18n="f.name">Full name</label>
+          <input id="fullname" name="fullname" type="text" autocomplete="billing name" required maxlength="80">
+        </div>
+        <div class="page-field">
+          <label class="field-label" for="business" data-i18n="f.business">Business name</label>
+          <input id="business" name="business" type="text" autocomplete="organization" required maxlength="80">
+        </div>
+        <div class="field-row">
+          <div class="page-field">
+            <label class="field-label" for="email" data-i18n="f.email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="page-field">
+            <label class="field-label" for="phone" data-i18n="f.phone">Mobile / WhatsApp</label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required>
+          </div>
+        </div>
+      </div>
+
+      <p class="idx pay-kicker" data-i18n="f.address">Address</p>
+      <div class="pay-fields">
+        <div class="page-field">
+          <label class="field-label" for="address1" data-i18n="f.addr1">Address line 1</label>
+          <input id="address1" name="address1" type="text" autocomplete="billing address-line1" required maxlength="120">
+        </div>
+        <div class="page-field">
+          <label class="field-label" for="address2"><span data-i18n="f.addr2">Address line 2</span> <span class="opt" data-i18n="f.optional">(optional)</span></label>
+          <input id="address2" name="address2" type="text" autocomplete="billing address-line2" maxlength="120">
+        </div>
+        <div class="field-row">
+          <div class="page-field">
+            <label class="field-label" for="country" data-i18n="f.country">Country</label>
+            <select id="country" name="country" autocomplete="billing country" required>
+              <option value="ps">Palestine</option>
+              <option value="il">Israel</option>
+            </select>
+          </div>
+          <div class="page-field">
+            <label class="field-label" for="city" data-i18n="f.city">City</label>
+            <select id="city" name="city" autocomplete="billing address-level2" required>
+              <option value="" disabled selected>Select city</option>
+            </select>
+          </div>
+        </div>
+        <div class="page-field">
+          <label class="field-label" for="postal" data-i18n="f.postal">Postal code</label>
+          <input id="postal" name="postal" type="text" autocomplete="billing postal-code" inputmode="text" required maxlength="12">
+        </div>
+      </div>
+
+      <p class="idx pay-kicker" data-i18n="f.method">Method</p>
+      <div class="pay-methods">
+        <label class="is-on">
+          <input type="radio" name="method" value="card" checked>
+          <span data-i18n="f.card">Card</span>
+        </label>
+        <label>
+          <input type="radio" name="method" value="whatsapp">
+          <span data-i18n="f.wa">WhatsApp</span>
+        </label>
+      </div>
+      <div class="card-ui" id="cardBlock">
+        <div class="card-face" aria-hidden="true">
+          <small>OMINO</small>
+          <div class="pan" id="cardFaceNum">•••• •••• •••• ••••</div>
+        </div>
+        <div class="page-field">
+          <label class="field-label" for="cardNumber" data-i18n="f.number">Card number</label>
+          <input id="cardNumber" name="cardNumber" inputmode="numeric" autocomplete="cc-number" maxlength="19" placeholder="ACCT-000015">
+        </div>
+        <div class="field-row">
+          <div class="page-field">
+            <label class="field-label" for="cardExp" data-i18n="f.exp">Expiry</label>
+            <input id="cardExp" name="exp" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="MM/YY">
+          </div>
+          <div class="page-field">
+            <label class="field-label" for="cvc" data-i18n="f.cvc">CVC</label>
+            <input id="cvc" name="cvc" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123">
+          </div>
+        </div>
+      </div>
+      <p class="err" id="payError" role="alert"></p>
+      <div class="page-actions">
+        <button type="submit" class="btn btn-primary" data-i18n="f.submit">Confirm request</button>
+        <a href="index.html#pricing" class="btn btn-ghost" data-i18n="f.back">Back to plans</a>
+      </div>
+    </form>
+    <aside class="pay-summary">
+      <h2 data-i18n="sum.title">Your plan</h2>
+      <div class="price-line"><span data-i18n="sum.plan">Plan</span><strong id="sumPlan">Pro</strong></div>
+      <div class="price-line"><span data-i18n="sum.bill">Billing</span><strong id="sumBilling">Monthly</strong></div>
+      <div class="price-line" id="sumAnnualRow" hidden><span data-i18n="sum.year">Billed yearly</span><strong id="sumAnnual">$189.6</strong></div>
+      <div class="price-line total"><span data-i18n="sum.due">Due monthly</span><strong id="sumMonthly">$24</strong></div>
+      <p class="notice" style="margin-top:16px"><span data-i18n="sum.left">Founding seats left</span> <strong id="foundingLeft">50</strong> / 50</p>
+      <p class="notice" style="margin-top:10px" data-i18n="sum.fee">Online payments later carry a 0.3%–0.5% OMINO platform fee, plus the payment provider’s own fees. Not added on this plan request.</p>
+    </aside>
+  </div>
+</main>
+
+<footer class="band-footer on-dark">
+  <div class="wrap footer-bottom">
+    <div class="footer-brand">
+      <img class="logo-img" src="img/omino-lockup-paper.png" alt="OMINO" width="685" height="235">
+      <span data-i18n="footer.copy">© 2026 OMINO. All rights reserved.</span>
+    </div>
+    <div class="footer-legal">
+      <a href="privacy.html" data-i18n="foot.privacy">Privacy</a>
+      <a href="terms.html" data-i18n="foot.terms">Terms</a>
+      <a href="faq.html" data-i18n="foot.faq">FAQ</a>
+      <a href="contact.html" data-i18n="foot.contact">Contact</a>
+    </div>
+  </div>
+</footer>
+<script src="js/config.js"></script>
+<script src="js/places.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/omino-nav.js"></script>
+<script src="js/order.js"></script>
+<script>
+OminoNav.init({ copy: {
+  en: {
+    title: 'OMINO — Checkout',
+    'nav.product':'Product','nav.ai':'AI','nav.pricing':'Pricing','nav.about':'About','nav.login':'Login',
+    'cta.start':'Start for free','menu.open':'Open menu','menu.close':'Close menu',
+    'menu.kicker':'Menu / 00','menu.tag':'AI Business OS','menu.connect':'Connect',
+    kicker:'Checkout / 06',
+    hero:'Lock the plan. Keep the picture.',
+    lead:'Card or WhatsApp. Then you get the confirmation messages — email and chat — with a reference you can keep.',
+    'pay.title':'Payment',
+    'pay.note':'<strong>Founding checkout.</strong> The card screen is the plan interface. Live charging connects when billing is live. WhatsApp sends the request to OMINO now. Full card numbers are not stored.',
+    'f.details':'Billing details','f.address':'Address',
+    'f.name':'Full name','f.business':'Business name','f.email':'Email','f.phone':'Mobile / WhatsApp',
+    'f.addr1':'Address line 1','f.addr2':'Address line 2','f.optional':'(optional)','f.country':'Country','f.city':'City','f.postal':'Postal code',
+    'f.method':'Method',
+    'f.card':'Card','f.wa':'WhatsApp','f.number':'Card number','f.exp':'Expiry','f.cvc':'CVC',
+    'f.submit':'Confirm request','f.back':'Back to plans',
+    'sum.title':'Your plan','sum.plan':'Plan','sum.bill':'Billing','sum.year':'Billed yearly','sum.due':'Due monthly',
+    'sum.left':'Founding seats left','sum.fee':'Online payments later carry a 0.3%–0.5% OMINO platform fee, plus the payment provider’s own fees. Not added on this plan request.',
+    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact',
+    'footer.copy':'© 2026 OMINO. All rights reserved.'
+  },
+  ar: {
+    title: 'OMINO — الدفع',
+    'nav.product':'المنتج','nav.ai':'AI','nav.pricing':'التسعير','nav.about':'عن OMINO','nav.login':'دخول',
+    'cta.start':'ابدأ مجاناً','menu.open':'فتح القائمة','menu.close':'إغلاق القائمة',
+    'menu.kicker':'Menu / 00','menu.tag':'نظام تشغيل الأعمال','menu.connect':'تواصل',
+    kicker:'الدفع / 06',
+    hero:'ثبّت الباقة. احتفظ بالصورة.',
+    lead:'بطاقة أو واتساب. بعدين توصلك رسائل التأكيد — إيميل وشات — مع مرجع تحتفظ فيه.',
+    'pay.title':'الدفع',
+    'pay.note':'<strong>دفع التأسيس.</strong> شاشة البطاقة هي واجهة الباقة. الشحن الفعلي يتصل لما الفوترة تصير شغالة. واتساب يبعت الطلب لـ OMINO الآن. رقم البطاقة الكامل ما بيتخزّن.',
+    'f.details':'بيانات الفوترة','f.address':'العنوان',
+    'f.name':'الاسم الكامل','f.business':'اسم النشاط','f.email':'الإيميل','f.phone':'الجوال / واتساب',
+    'f.addr1':'العنوان 1','f.addr2':'العنوان 2','f.optional':'(اختياري)','f.country':'الدولة','f.city':'المدينة','f.postal':'الرمز البريدي',
+    'f.method':'الطريقة',
+    'f.card':'بطاقة','f.wa':'واتساب','f.number':'رقم البطاقة','f.exp':'الانتهاء','f.cvc':'CVC',
+    'f.submit':'تأكيد الطلب','f.back':'رجوع للباقات',
+    'sum.title':'باقتك','sum.plan':'الباقة','sum.bill':'الفوترة','sum.year':'يُفوتر سنوياً','sum.due':'المستحق شهرياً',
+    'sum.left':'مقاعد التأسيس المتبقية','sum.fee':'الدفعات الإلكترونية لاحقاً عليها رسوم منصة OMINO 0.3%–0.5%، بالإضافة إلى رسوم مزود الدفع. مش مضافة على طلب الباقة هذا.',
+    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل',
+    'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.'
+  }
+}});
+</script>
+</body>
+</html>

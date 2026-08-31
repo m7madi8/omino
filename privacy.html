@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OMINO — Privacy</title>
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/omino.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-nav" id="siteNav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <a href="index.html" class="logo-lockup" aria-label="OMINO">
+        <img class="logo-img logo-on-light" src="img/omino-lockup-ink.png" alt="" width="683" height="235">
+        <img class="logo-img logo-on-dark" src="img/omino-lockup-paper.png" alt="" width="685" height="235">
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="en" href="index.html#business" data-i18n="nav.product">Product</a>
+        <a class="en" href="index.html#ai" data-i18n="nav.ai">AI</a>
+        <a class="en" href="index.html#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a class="en" href="about.html" data-i18n="nav.about">About</a>
+        <a class="en" href="login.html" data-i18n="nav.login">Login</a>
+      </nav>
+      <div class="nav-actions">
+        <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
+        <a href="login.html#signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="menu-shell" id="mobileMenu" aria-hidden="true" inert>
+  <button type="button" class="menu-scrim" id="menuScrim" tabindex="-1" aria-label="Close menu"></button>
+  <aside class="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menuKicker">
+    <div class="menu-drawer-top">
+      <p class="idx menu-kicker" id="menuKicker" data-i18n="menu.kicker">Menu / 00</p>
+      <p class="menu-tag" data-i18n="menu.tag">AI Business OS</p>
+    </div>
+    <nav class="menu-nav" aria-label="Mobile">
+      <a class="menu-link" href="index.html#business"><span class="menu-idx">01</span><span class="menu-name" data-i18n="nav.product">Product</span></a>
+      <a class="menu-link" href="index.html#ai"><span class="menu-idx">02</span><span class="menu-name" data-i18n="nav.ai">AI</span></a>
+      <a class="menu-link" href="index.html#pricing"><span class="menu-idx">03</span><span class="menu-name" data-i18n="nav.pricing">Pricing</span></a>
+      <a class="menu-link" href="about.html"><span class="menu-idx">04</span><span class="menu-name" data-i18n="nav.about">About</span></a>
+      <a class="menu-link" href="login.html"><span class="menu-idx">05</span><span class="menu-name" data-i18n="nav.login">Login</span></a>
+    </nav>
+    <div class="menu-cta"><a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a></div>
+    <div class="menu-foot">
+      <span class="menu-connect" data-i18n="menu.connect">Connect</span>
+      <div class="socials">
+        <a class="social" data-wa href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.1 4.9A9.9 9.9 0 0 0 12.05 2C6.5 2 2 6.5 2 12.05c0 1.77.46 3.5 1.34 5.02L2 22l5.08-1.33A10 10 0 0 0 12.05 22C17.6 22 22.1 17.5 22.1 12.05c0-2.66-1.04-5.16-3-7.15zM12.05 20.2c-1.52 0-3.01-.4-4.3-1.17l-.31-.18-3.16.83.85-3.08-.2-.32A8.2 8.2 0 0 1 3.8 12.05c0-4.55 3.7-8.25 8.25-8.25 2.2 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.55-3.7 8.15-8.25 8.15z"/></svg>
+        </a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<main id="content">
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="idx" data-i18n="kicker">Privacy / 01</p>
+      <h1 data-i18n="hero">Your business data stays yours.</h1>
+      <p class="lead" data-i18n="lead">OMINO is built so a business can see itself clearly — without turning that picture into a product we sell.</p>
+    </div>
+  </section>
+  <article class="wrap doc">
+    <p class="idx updated" data-i18n="updated">Updated 1 September 2026</p>
+    <h2 data-i18n="s1.t">Who this covers</h2>
+    <p data-i18n="s1.b">This policy applies to the OMINO website, founding accounts, and the business operating system when it is in use. OMINO starts in Palestine and is designed to grow across MENA.</p>
+    <p><a data-mail data-mail-label>hello@omino.ps</a></p>
+    <h2 data-i18n="s2.t">What we collect</h2>
+    <p data-i18n="s2.b">Only what the product needs to run a business:</p>
+    <ul>
+      <li data-i18n="s2.1">Account details: name, email, business name, and a password you choose.</li>
+      <li data-i18n="s2.2">Operational data you enter: products, inventory, orders, customers, payments, and expenses.</li>
+      <li data-i18n="s2.3">Messages you send us on email or WhatsApp when you ask for help.</li>
+      <li data-i18n="s2.4">Basic site logs such as pages visited, so we can keep the product stable.</li>
+    </ul>
+    <h2 data-i18n="s3.t">How it is used</h2>
+    <p data-i18n="s3.b">To create your account, run the system you asked for, send order and plan confirmations, and — with your data inside your own business — power AI that explains what happened and what to do next. AI recommendations do not send, charge, or change anything without your approval.</p>
+    <h2 data-i18n="s4.t">What we do not do</h2>
+    <p data-i18n="s4.b">We do not sell your customer lists. We do not train public models on your private business as a default. We do not ask for card details on this site to charge a live processor until billing is connected — and we do not store full card numbers in the browser.</p>
+    <h2 data-i18n="s5.t">Sharing</h2>
+    <p data-i18n="s5.b">Payment providers, hosting, and messaging tools may process data needed to complete a payment or a confirmation you requested. We share what those tools require, not a copy of your whole business.</p>
+    <h2 data-i18n="s6.t">Retention</h2>
+    <p data-i18n="s6.b">Account and business data stays while the account is active. You can ask us to export or delete it. Some records may be kept where the law requires it.</p>
+    <h2 data-i18n="s7.t">Your choices</h2>
+    <p data-i18n="s7.b">You can update your account, close it, or contact us to access, correct, or delete data we hold. Founding businesses keep their locked pricing only while they remain on OMINO.</p>
+    <h2 data-i18n="s8.t">Contact</h2>
+    <p data-i18n="s8.b">Write to us by email or WhatsApp.</p>
+    <p><a data-mail data-mail-label>hello@omino.ps</a> · <a data-wa data-wa-display href="https://wa.me/">WhatsApp</a></p>
+  </article>
+</main>
+
+<footer class="band-footer on-dark">
+  <div class="wrap footer-bottom">
+    <div class="footer-brand">
+      <img class="logo-img" src="img/omino-lockup-paper.png" alt="OMINO" width="685" height="235">
+      <span data-i18n="footer.copy">© 2026 OMINO. All rights reserved.</span>
+    </div>
+    <div class="footer-legal">
+      <a href="privacy.html" data-i18n="foot.privacy">Privacy</a>
+      <a href="terms.html" data-i18n="foot.terms">Terms</a>
+      <a href="faq.html" data-i18n="foot.faq">FAQ</a>
+      <a href="contact.html" data-i18n="foot.contact">Contact</a>
+    </div>
+  </div>
+</footer>
+<script src="js/config.js"></script>
+<script src="js/omino-nav.js"></script>
+<script>
+OminoNav.init({ copy: {
+  en: {
+    title: 'OMINO — Privacy',
+    'nav.product':'Product','nav.ai':'AI','nav.pricing':'Pricing','nav.about':'About','nav.login':'Login',
+    'cta.start':'Start for free','menu.open':'Open menu','menu.close':'Close menu',
+    'menu.kicker':'Menu / 00','menu.tag':'AI Business OS','menu.connect':'Connect',
+    kicker:'Privacy / 01',
+    hero:'Your business data stays yours.',
+    lead:'OMINO is built so a business can see itself clearly — without turning that picture into a product we sell.',
+    updated:'Updated 1 September 2026',
+    's1.t':'Who this covers','s1.b':'This policy applies to the OMINO website, founding accounts, and the business operating system when it is in use. OMINO starts in Palestine and is designed to grow across MENA.',
+    's2.t':'What we collect','s2.b':'Only what the product needs to run a business:',
+    's2.1':'Account details: name, email, business name, and a password you choose.',
+    's2.2':'Operational data you enter: products, inventory, orders, customers, payments, and expenses.',
+    's2.3':'Messages you send us on email or WhatsApp when you ask for help.',
+    's2.4':'Basic site logs such as pages visited, so we can keep the product stable.',
+    's3.t':'How it is used','s3.b':'To create your account, run the system you asked for, send order and plan confirmations, and — with your data inside your own business — power AI that explains what happened and what to do next. AI recommendations do not send, charge, or change anything without your approval.',
+    's4.t':'What we do not do','s4.b':'We do not sell your customer lists. We do not train public models on your private business as a default. We do not ask for card details on this site to charge a live processor until billing is connected — and we do not store full card numbers in the browser.',
+    's5.t':'Sharing','s5.b':'Payment providers, hosting, and messaging tools may process data needed to complete a payment or a confirmation you requested. We share what those tools require, not a copy of your whole business.',
+    's6.t':'Retention','s6.b':'Account and business data stays while the account is active. You can ask us to export or delete it. Some records may be kept where the law requires it.',
+    's7.t':'Your choices','s7.b':'You can update your account, close it, or contact us to access, correct, or delete data we hold. Founding businesses keep their locked pricing only while they remain on OMINO.',
+    's8.t':'Contact','s8.b':'Write to us by email or WhatsApp.',
+    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact',
+    'footer.copy':'© 2026 OMINO. All rights reserved.'
+  },
+  ar: {
+    title: 'OMINO — الخصوصية',
+    'nav.product':'المنتج','nav.ai':'AI','nav.pricing':'التسعير','nav.about':'عن OMINO','nav.login':'دخول',
+    'cta.start':'ابدأ مجاناً','menu.open':'فتح القائمة','menu.close':'إغلاق القائمة',
+    'menu.kicker':'Menu / 00','menu.tag':'نظام تشغيل الأعمال','menu.connect':'تواصل',
+    kicker:'الخصوصية / 01',
+    hero:'بيانات نشاطك تبقى لك.',
+    lead:'OMINO مبني عشان النشاط يشوف نفسه بوضوح — من غير ما نبيع هالصورة كمنتج.',
+    updated:'تحديث 1 سبتمبر 2026',
+    's1.t':'على مين تنطبق','s1.b':'هالسياسة تغطي موقع OMINO، حسابات التأسيس، ونظام تشغيل الأعمال وقت استخدامه. OMINO يبدأ من فلسطين ومصمم يتوسع في المنطقة.',
+    's2.t':'شو بنجمع','s2.b':'بس اللي المنتج يحتاجه لتشغيل النشاط:',
+    's2.1':'بيانات الحساب: الاسم، الإيميل، اسم النشاط، وكلمة مرور تختارها.',
+    's2.2':'بيانات التشغيل اللي تدخلها: منتجات، مخزون، طلبات، عملاء، مدفوعات، ومصاريف.',
+    's2.3':'رسائل بتبعثها على الإيميل أو واتساب لما تطلب مساعدة.',
+    's2.4':'سجلات أساسية للصفحات عشان المنتج يبقى ثابت.',
+    's3.t':'كيف بنستخدمها','s3.b':'لإنشاء حسابك، تشغيل النظام اللي طلبته، إرسال تأكيدات الطلب والباقة، و—داخل نشاطك—تشغيل الذكاء اللي يشرح شو صار وشو تعمل بعدين. توصيات الذكاء ما بتبعت ولا بتدفع ولا بتغيّر شيء بدون موافقتك.',
+    's4.t':'شو ما بنعمل','s4.b':'ما بنبيع قوائم عملائك. ما بندرب نماذج عامة على نشاطك الخاص كإعداد افتراضي. وما منخزّن رقم البطاقة الكامل في المتصفح.',
+    's5.t':'المشاركة','s5.b':'مزودو الدفع والاستضافة والرسائل ممكن يعالجوا البيانات اللازمة لإتمام دفعة أو تأكيد طلبته. بنشارك اللي الأداة تحتاجه، مش نسخة من كل نشاطك.',
+    's6.t':'الاحتفاظ','s6.b':'بيانات الحساب والنشاط تبقى طول ما الحساب شغّال. تقدر تطلب تصديرها أو حذفها. بعض السجلات ممكن تُحفظ إذا القانون يطلب.',
+    's7.t':'خياراتك','s7.b':'تقدر تعدّل حسابك أو تغلقه، أو تتواصل معنا للوصول أو التصحيح أو الحذف. أنشطة التأسيس تحتفظ بالتسعير المقفول طالما بقوا على OMINO.',
+    's8.t':'تواصل','s8.b':'راسلنا على الإيميل أو واتساب.',
+    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل',
+    'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.'
+  }
+}});
+</script>
+</body>
+</html>

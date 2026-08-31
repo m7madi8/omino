@@ -37,6 +37,7 @@
       applyCopy(copy, lang);
       setMenu(false);
       if (options.afterLang) options.afterLang(lang);
+      document.dispatchEvent(new CustomEvent('omino-lang', { detail: lang }));
     }
 
     function setMenu(open) {

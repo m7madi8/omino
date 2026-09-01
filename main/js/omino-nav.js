@@ -1,5 +1,16 @@
 (function (global) {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const defaults = {
+    en: { skip: 'Skip to content', skipAuth: 'Skip to sign in' },
+    ar: { skip: 'تخطي إلى المحتوى', skipAuth: 'تخطي إلى تسجيل الدخول' }
+  };
+
+  function withDefaults(copy) {
+    return {
+      en: Object.assign({}, defaults.en, copy.en || {}),
+      ar: Object.assign({}, defaults.ar, copy.ar || {})
+    };
+  }
 
   function applyCopy(copy, lang) {
     document.querySelectorAll('[data-i18n]').forEach((el) => {
@@ -15,7 +26,7 @@
   }
 
   function init(options) {
-    const copy = options.copy;
+    const copy = withDefaults(options.copy);
     let lang = localStorage.getItem('omino-lang') === 'ar' ? 'ar' : 'en';
     const nav = document.getElementById('siteNav');
     const menuBtn = document.getElementById('menuBtn');
@@ -40,6 +51,37 @@
       document.dispatchEvent(new CustomEvent('omino-lang', { detail: lang }));
     }
 
+    let lockY = 0;
+    function lockPage() {
+      lockY = window.scrollY || document.documentElement.scrollTop || 0;
+      document.documentElement.classList.add('menu-open');
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.top = '-' + lockY + 'px';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.width = '100%';
+    }
+    function unlockPage() {
+      document.documentElement.classList.remove('menu-open');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      window.scrollTo(0, lockY);
+    }
+    function trapScroll(e) {
+      if (!document.documentElement.classList.contains('menu-open')) return;
+      if (e.target.closest && e.target.closest('.menu-nav')) return;
+      e.preventDefault();
+    }
+    document.addEventListener('touchmove', trapScroll, { passive: false });
+    document.addEventListener('wheel', trapScroll, { passive: false });
+
     function setMenu(open) {
       if (!mobileMenu || !menuBtn) return;
       const drawer = mobileMenu.querySelector('.menu-drawer');
@@ -55,10 +97,9 @@
 
       if (open) {
         mobileMenu.classList.add('open');
-        document.documentElement.classList.add('menu-open');
+        lockPage();
         mobileMenu.setAttribute('aria-hidden', 'false');
         mobileMenu.inert = false;
-        document.body.style.overflow = 'hidden';
         if (reduceMotion || !global.gsap) {
           if (scrim) scrim.style.opacity = '1';
           if (drawer) drawer.style.transform = 'translateX(0)';
@@ -76,10 +117,9 @@
 
       const finish = () => {
         mobileMenu.classList.remove('open');
-        document.documentElement.classList.remove('menu-open');
+        unlockPage();
         mobileMenu.setAttribute('aria-hidden', 'true');
         mobileMenu.inert = true;
-        document.body.style.overflow = '';
         if (global.gsap) gsap.set([scrim, drawer, items], { clearProps: 'all' });
         menuAnim = null;
       };

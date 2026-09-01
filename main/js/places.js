@@ -512,7 +512,6 @@
     root = document.createElement('div');
     root.id = 'placePick';
     root.className = 'place-pick';
-    root.hidden = true;
     root.innerHTML =
       '<div class="place-pick-scrim" data-pick-close="1"></div>' +
       '<div class="place-pick-panel" role="dialog" aria-modal="true">' +
@@ -525,25 +524,157 @@
         '<div class="place-pick-list" id="placePickList" role="listbox"></div>' +
       '</div>';
     document.body.appendChild(root);
+    if (global.gsap) root.classList.add('is-gsap');
+    root.setAttribute('aria-hidden', 'true');
+    root.inert = true;
     return root;
   }
 
   let activePick = null;
+  let pickAnim = null;
+  let pickClosing = false;
+  let pickAfterClose = null;
 
-  function closePick() {
-    const root = document.getElementById('placePick');
-    if (!root) return;
-    root.classList.remove('is-open');
-    root.hidden = true;
+  function reducePick() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function isDesktopPick() {
+    return window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function killPickAnim() {
+    if (pickAnim) {
+      pickAnim.kill();
+      pickAnim = null;
+    }
+  }
+
+  function introBits(root) {
+    const head = root.querySelector('.place-pick-head');
+    const searchWrap = root.querySelector('.place-pick-search');
+    const rows = Array.from(root.querySelectorAll('#placePickList > *')).slice(0, 14);
+    const bits = [head];
+    if (searchWrap && !searchWrap.hidden) bits.push(searchWrap);
+    return bits.concat(rows);
+  }
+
+  function finishClose(root, restoreFocus) {
+    const panel = root.querySelector('.place-pick-panel');
+    const scrim = root.querySelector('.place-pick-scrim');
+    const bits = introBits(root);
+    root.classList.remove('is-open', 'is-searchable', 'is-leaving');
+    root.setAttribute('aria-hidden', 'true');
+    root.inert = true;
     document.documentElement.classList.remove('pick-open');
+    if (global.gsap) gsap.set([panel, scrim].concat(bits), { clearProps: 'transform,opacity,filter,visibility' });
+    const btn = activePick && activePick.button;
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    if (btn && restoreFocus) btn.focus();
+    activePick = null;
+    pickClosing = false;
+  }
+
+  function closePick(after) {
+    const root = document.getElementById('placePick');
+    const next = typeof after === 'function' ? after : null;
+    if (!root || !root.classList.contains('is-open')) {
+      if (next) next();
+      return;
+    }
+    if (pickClosing) {
+      if (next) pickAfterClose = next;
+      return;
+    }
+    pickClosing = true;
+    pickAfterClose = next;
     if (activePick && activePick.button) {
       activePick.button.setAttribute('aria-expanded', 'false');
-      activePick.button.focus();
     }
-    activePick = null;
+    killPickAnim();
+    const panel = root.querySelector('.place-pick-panel');
+    const scrim = root.querySelector('.place-pick-scrim');
+    const done = () => {
+      const cb = pickAfterClose;
+      pickAfterClose = null;
+      finishClose(root, !cb);
+      if (cb) cb();
+    };
+
+    if (reducePick()) {
+      done();
+      return;
+    }
+    if (!global.gsap) {
+      root.classList.add('is-leaving');
+      root.classList.remove('is-open');
+      setTimeout(done, 420);
+      return;
+    }
+
+    const desktop = isDesktopPick();
+    pickAnim = gsap.timeline({
+      onComplete() { pickAnim = null; done(); }
+    })
+      .to(panel, {
+        y: desktop ? 10 : '108%',
+        opacity: desktop ? 0 : 1,
+        scale: desktop ? 0.96 : 1,
+        duration: desktop ? 0.34 : 0.44,
+        ease: 'power3.in',
+        force3D: true
+      }, 0)
+      .to(scrim, { opacity: 0, duration: 0.3, ease: 'power2.in' }, 0);
+  }
+
+  function playOpen(root, searchable, search) {
+    const panel = root.querySelector('.place-pick-panel');
+    const scrim = root.querySelector('.place-pick-scrim');
+    const bits = introBits(root);
+    killPickAnim();
+    pickClosing = false;
+
+    if (reducePick() || !global.gsap) {
+      if (searchable) search.focus();
+      return;
+    }
+
+    const desktop = isDesktopPick();
+    pickAnim = gsap.timeline({
+      defaults: { ease: 'power4.out' },
+      onComplete() {
+        pickAnim = null;
+        if (bits.length) gsap.set(bits, { clearProps: 'transform,opacity' });
+        if (searchable) search.focus();
+      }
+    })
+      .to(scrim, { opacity: 1, duration: 0.42, ease: 'power2.out' }, 0)
+      .to(panel, {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        duration: desktop ? 0.52 : 0.58,
+        force3D: true
+      }, 0.04);
+
+    if (bits.length) {
+      pickAnim.to(bits, {
+        opacity: 1,
+        y: 0,
+        duration: 0.42,
+        stagger: 0.032,
+        ease: 'power3.out'
+      }, desktop ? 0.16 : 0.22);
+    }
   }
 
   function openPick(select, button, searchable) {
+    const existing = document.getElementById('placePick');
+    if (existing && existing.classList.contains('is-open')) {
+      closePick(() => openPick(select, button, searchable));
+      return;
+    }
+
     const lang = document.documentElement.lang === 'ar' ? 'ar' : 'en';
     const t = copy(lang);
     const root = ensureShell();
@@ -619,10 +750,23 @@
       panel.style.removeProperty('--pick-l');
     }
 
-    root.hidden = false;
+    root.classList.toggle('is-searchable', searchable);
+    if (global.gsap && !reducePick()) {
+      const origin = document.documentElement.dir === 'rtl' ? 'top right' : 'top left';
+      const scrim = root.querySelector('.place-pick-scrim');
+      const bits = introBits(root);
+      gsap.set(scrim, { opacity: 0 });
+      gsap.set(panel, desktop
+        ? { opacity: 0, y: 18, scale: 0.94, transformOrigin: origin }
+        : { opacity: 1, y: '110%', scale: 1 }
+      );
+      if (bits.length) gsap.set(bits, { opacity: 0, y: desktop ? 8 : 14 });
+    }
+    root.removeAttribute('aria-hidden');
+    root.inert = false;
     root.classList.add('is-open');
     document.documentElement.classList.add('pick-open');
-    if (searchable) search.focus();
+    requestAnimationFrame(() => playOpen(root, searchable, search));
   }
 
   function enhanceSelect(select, searchable) {
@@ -652,7 +796,7 @@
       btn.classList.toggle('is-empty', empty);
     }
     btn.addEventListener('click', () => {
-      if (activePick && activePick.select === select) closePick();
+      if (activePick && activePick.select === select && !pickClosing) closePick();
       else openPick(select, btn, searchable);
     });
     wrap.appendChild(btn);

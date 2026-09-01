@@ -11,11 +11,172 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/omino.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="js/omino-loader.js"></script>
 <script src="js/omino-cookies.js"></script>
+<style>
+body{
+  background:
+    radial-gradient(ellipse 80% 42% at 70% -8%, rgba(91,124,255,0.07), transparent 58%),
+    var(--paper);
+}
+.faq-hero{padding:168px 0 72px;}
+.faq-hero h1{
+  font-size:clamp(2.6rem,7vw,5.4rem);
+  line-height:1.02;
+  max-width:12ch;
+}
+.faq-hero .lead{
+  margin-top:28px;
+  max-width:38ch;
+  font-size:18px;
+  color:var(--stone-2);
+}
+.faq-hero .serif{
+  margin-top:22px;
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:clamp(1.15rem,2vw,1.4rem);
+  color:var(--stone-2);
+}
+html[lang="ar"] .faq-hero h1{max-width:14ch;line-height:1.15;}
+html[lang="ar"] .faq-hero .serif{
+  font-family:var(--font-ar-display);
+  font-style:normal;
+}
+.faq-board{padding:0 0 40px;}
+.faq-group{max-width:860px;margin-bottom:72px;}
+.faq-group .idx{color:var(--stone);margin-bottom:20px;}
+.qa{
+  border-top:1px solid var(--hairline);
+}
+.qa:last-child{border-bottom:1px solid var(--hairline);}
+.qa-btn{
+  width:100%;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:18px;
+  align-items:center;
+  text-align:start;
+  background:none;
+  border:0;
+  padding:22px 0;
+  min-height:72px;
+  color:inherit;
+  font:inherit;
+  cursor:pointer;
+}
+.qa-num{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.12em;
+  color:var(--stone);
+  direction:ltr;
+  unicode-bidi:isolate;
+}
+.qa-label{
+  font-family:var(--font-display);
+  font-stretch:125%;
+  font-weight:500;
+  font-size:clamp(1.15rem,2.2vw,1.55rem);
+  line-height:1.25;
+  letter-spacing:-0.02em;
+}
+html[lang="ar"] .qa-label{
+  font-family:var(--font-ar-display);
+  font-stretch:normal;
+  font-weight:400;
+  letter-spacing:0;
+}
+.qa-icon{
+  position:relative;
+  width:22px;height:22px;
+  flex:none;
+}
+.qa-icon::before,
+.qa-icon::after{
+  content:"";
+  position:absolute;
+  background:var(--ink);
+  border-radius:var(--radius-pill);
+  transition:transform 420ms var(--ease), opacity 320ms var(--ease);
+}
+.qa-icon::before{inset:10px 0 auto;height:1.5px;}
+.qa-icon::after{inset-inline-start:10px;top:0;width:1.5px;height:22px;}
+.qa.is-open .qa-icon::after{transform:rotate(90deg);opacity:0;}
+.qa-panel{
+  display:grid;
+  grid-template-rows:0fr;
+  transition:grid-template-rows 480ms var(--ease);
+}
+.qa.is-open .qa-panel{grid-template-rows:1fr;}
+.qa-panel-inner{
+  overflow:hidden;
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:18px;
+}
+.qa-panel-inner::before{
+  content:"08";
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.12em;
+  visibility:hidden;
+  pointer-events:none;
+}
+.qa-panel-inner::after{content:"";width:22px;}
+.qa-panel p{
+  grid-column:2;
+  max-width:52ch;
+  padding:0 0 28px;
+  margin:0;
+  color:var(--stone-2);
+  font-size:16px;
+  line-height:1.75;
+}
+.qa-btn:hover .qa-num{color:var(--ink);}
+.qa-btn:focus-visible{outline:none;box-shadow:var(--ring);border-radius:8px;}
+.faq-end{
+  background:var(--ink);
+  color:var(--paper);
+  margin:40px 20px 0;
+  padding:100px 0;
+  border-radius:var(--radius-2xl);
+}
+@media(max-width:768px){.faq-end{margin:24px 12px 0;padding:72px 0;}}
+.faq-end .idx{color:#8A9096;}
+.faq-end h2{
+  font-size:clamp(2.2rem,5.5vw,4.2rem);
+  line-height:1.06;
+  max-width:14ch;
+  color:var(--paper);
+}
+html[lang="ar"] .faq-end h2{max-width:16ch;line-height:1.15;}
+.faq-end .lead{margin-top:20px;max-width:36ch;color:#A8ADB3;}
+.faq-end .end-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px;}
+.faq-end .btn-primary{
+  background:var(--paper);color:var(--ink);
+}
+.faq-end .btn-primary:hover{background:#fff;}
+.faq-end .btn-ghost{border-color:rgba(41,45,49,0.95);color:var(--paper);}
+.faq-end .btn-ghost:hover{border-color:var(--paper);background:rgba(255,255,255,0.04);}
+@media(max-width:800px){
+  .faq-hero{padding:128px 0 48px;}
+  .faq-hero h1,.faq-end h2{max-width:none;}
+  .qa-btn{grid-template-columns:auto 1fr auto;gap:12px;padding:18px 0;}
+  .qa-label{font-size:1.12rem;}
+  .qa-panel-inner{grid-template-columns:auto 1fr auto;gap:12px;}
+  .qa-panel p{padding-bottom:22px;}
+  .faq-end .end-ctas .btn{height:auto;}
+}
+@media (prefers-reduced-motion: reduce){
+  .qa-panel,.qa-icon::before,.qa-icon::after{transition:none;}
+}
+</style>
 </head>
 <body>
-<a class="skip" href="#content">Skip to content</a>
+<a class="skip" href="#content" data-i18n="skip">Skip to content</a>
 <header class="site-nav" id="siteNav">
   <div class="wrap">
     <div class="nav-inner">
@@ -65,47 +226,122 @@
 </div>
 
 <main id="content">
-  <section class="page-hero">
+  <section class="faq-hero">
     <div class="wrap">
       <p class="idx" data-i18n="kicker">FAQ / 03</p>
       <h1 data-i18n="hero">Straight answers.</h1>
       <p class="lead" data-i18n="lead">Pricing, fees, WhatsApp, and what the first 50 actually get.</p>
+      <p class="serif" data-i18n="caption">One system. Clear questions.</p>
     </div>
   </section>
-  <div class="wrap faq-list">
-    <details class="faq-item" open>
-      <summary data-i18n="q1">What is OMINO?</summary>
-      <p data-i18n="a1">An AI business operating system — store, POS, inventory, customers, payments, and intelligence in one system. Not another disconnected dashboard.</p>
-    </details>
-    <details class="faq-item">
-      <summary data-i18n="q2">What do the first 50 businesses get?</summary>
-      <p data-i18n="a2">Founding pricing on Starter, Pro, or Business for as long as they stay on OMINO. They also help shape the product.</p>
-    </details>
-    <details class="faq-item">
-      <summary data-i18n="q3">How much are the plans?</summary>
-      <p data-i18n="a3">Starter $9, Pro $24, Business $49 per month. Yearly billing is $7.5, $20, and $40.8 per month. Open a plan to see the payment screen.</p>
-    </details>
-    <details class="faq-item">
-      <summary data-i18n="q4">What is the 0.3%–0.5% fee?</summary>
-      <p data-i18n="a4">The OMINO platform fee on each successful online payment. It is separate from the payment provider’s own fees, and it is not a surprise subscription on top of the plan.</p>
-    </details>
-    <details class="faq-item">
-      <summary data-i18n="q5">Do I need an app?</summary>
-      <p data-i18n="a5">No separate mobile app is required to start. OMINO is built for the browser on phone and desktop. WhatsApp stays in the flow because that is how businesses already talk.</p>
-    </details>
-    <details class="faq-item">
-      <summary data-i18n="q6">Does AI change anything on its own?</summary>
-      <p data-i18n="a6">No. It explains what happened and recommends a next move. Nothing sends or charges without your approval.</p>
-    </details>
-    <details class="faq-item">
-      <summary data-i18n="q7">Who is it for?</summary>
-      <p data-i18n="a7">Real businesses — perfume, fashion, beauty, retail, electronics, cafés, restaurants, services, wholesale. Same system. Different numbers.</p>
-    </details>
-    <details class="faq-item">
-      <summary data-i18n="q8">How do I pay or get help?</summary>
-      <p data-i18n="a8">Choose a plan, then pay by card interface or WhatsApp. Confirmations arrive as email and WhatsApp messages. For anything else, use the contact page.</p>
-    </details>
-  </div>
+
+  <section class="faq-board">
+    <div class="wrap">
+      <div class="faq-group" id="faqProduct">
+        <p class="idx" data-i18n="g1">Product / 01</p>
+        <div class="qa is-open">
+          <button class="qa-btn" type="button" aria-expanded="true" aria-controls="a1" id="q1">
+            <span class="qa-num">01</span>
+            <span class="qa-label" data-i18n="q1">What is OMINO?</span>
+            <span class="qa-icon" aria-hidden="true"></span>
+          </button>
+          <div class="qa-panel" id="a1" role="region" aria-labelledby="q1">
+            <div class="qa-panel-inner"><p data-i18n="a1">An AI business operating system — store, POS, inventory, customers, payments, and intelligence in one system. Not another disconnected dashboard.</p></div>
+          </div>
+        </div>
+        <div class="qa">
+          <button class="qa-btn" type="button" aria-expanded="false" aria-controls="a5" id="q5">
+            <span class="qa-num">02</span>
+            <span class="qa-label" data-i18n="q5">Do I need an app?</span>
+            <span class="qa-icon" aria-hidden="true"></span>
+          </button>
+          <div class="qa-panel" id="a5" role="region" aria-labelledby="q5">
+            <div class="qa-panel-inner"><p data-i18n="a5">No separate mobile app is required to start. OMINO is built for the browser on phone and desktop. WhatsApp stays in the flow because that is how businesses already talk.</p></div>
+          </div>
+        </div>
+        <div class="qa">
+          <button class="qa-btn" type="button" aria-expanded="false" aria-controls="a6" id="q6">
+            <span class="qa-num">03</span>
+            <span class="qa-label" data-i18n="q6">Does AI change anything on its own?</span>
+            <span class="qa-icon" aria-hidden="true"></span>
+          </button>
+          <div class="qa-panel" id="a6" role="region" aria-labelledby="q6">
+            <div class="qa-panel-inner"><p data-i18n="a6">No. It explains what happened and recommends a next move. Nothing sends or charges without your approval.</p></div>
+          </div>
+        </div>
+        <div class="qa">
+          <button class="qa-btn" type="button" aria-expanded="false" aria-controls="a7" id="q7">
+            <span class="qa-num">04</span>
+            <span class="qa-label" data-i18n="q7">Who is it for?</span>
+            <span class="qa-icon" aria-hidden="true"></span>
+          </button>
+          <div class="qa-panel" id="a7" role="region" aria-labelledby="q7">
+            <div class="qa-panel-inner"><p data-i18n="a7">Real businesses — perfume, fashion, beauty, retail, electronics, cafés, restaurants, services, wholesale. Same system. Different numbers.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-group reveal">
+        <p class="idx" data-i18n="g2">Pricing / 02</p>
+        <div class="qa">
+          <button class="qa-btn" type="button" aria-expanded="false" aria-controls="a2" id="q2">
+            <span class="qa-num">05</span>
+            <span class="qa-label" data-i18n="q2">What do the first 50 businesses get?</span>
+            <span class="qa-icon" aria-hidden="true"></span>
+          </button>
+          <div class="qa-panel" id="a2" role="region" aria-labelledby="q2">
+            <div class="qa-panel-inner"><p data-i18n="a2">Founding pricing on Starter, Pro, or Business for as long as they stay on OMINO. They also help shape the product.</p></div>
+          </div>
+        </div>
+        <div class="qa">
+          <button class="qa-btn" type="button" aria-expanded="false" aria-controls="a3" id="q3">
+            <span class="qa-num">06</span>
+            <span class="qa-label" data-i18n="q3">How much are the plans?</span>
+            <span class="qa-icon" aria-hidden="true"></span>
+          </button>
+          <div class="qa-panel" id="a3" role="region" aria-labelledby="q3">
+            <div class="qa-panel-inner"><p data-i18n="a3">Starter $9, Pro $24, Business $49 per month. Yearly billing is $7.5, $20, and $40.8 per month. Open a plan to see the payment screen.</p></div>
+          </div>
+        </div>
+        <div class="qa">
+          <button class="qa-btn" type="button" aria-expanded="false" aria-controls="a4" id="q4">
+            <span class="qa-num">07</span>
+            <span class="qa-label" data-i18n="q4">What is the 0.3%–0.5% fee?</span>
+            <span class="qa-icon" aria-hidden="true"></span>
+          </button>
+          <div class="qa-panel" id="a4" role="region" aria-labelledby="q4">
+            <div class="qa-panel-inner"><p data-i18n="a4">The OMINO platform fee on each successful online payment. It is separate from the payment provider’s own fees, and it is not a surprise subscription on top of the plan.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="faq-group reveal">
+        <p class="idx" data-i18n="g3">Start / 03</p>
+        <div class="qa">
+          <button class="qa-btn" type="button" aria-expanded="false" aria-controls="a8" id="q8">
+            <span class="qa-num">08</span>
+            <span class="qa-label" data-i18n="q8">How do I pay or get help?</span>
+            <span class="qa-icon" aria-hidden="true"></span>
+          </button>
+          <div class="qa-panel" id="a8" role="region" aria-labelledby="q8">
+            <div class="qa-panel-inner"><p data-i18n="a8">Choose a plan, then pay by card interface or WhatsApp. Confirmations arrive as email and WhatsApp messages. For anything else, use the contact page.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-end on-dark reveal">
+    <div class="wrap">
+      <p class="idx" data-i18n="end.kicker">Still looking / 04</p>
+      <h2 data-i18n="end.title">A question that isn’t here yet.</h2>
+      <p class="lead" data-i18n="end.lead">WhatsApp for a fast reply. Or start and see the system itself.</p>
+      <div class="end-ctas">
+        <a class="btn btn-primary" data-wa data-wa-msg="Hello OMINO — I have a question." href="https://wa.me/" data-i18n="end.wa">WhatsApp</a>
+        <a class="btn btn-ghost" href="login.html#signup" data-i18n="cta.start">Start for free</a>
+      </div>
+    </div>
+  </section>
 </main>
 
 <footer class="band-footer on-dark">
@@ -119,6 +355,7 @@
       <a href="terms.html" data-i18n="foot.terms">Terms</a>
       <a href="faq.html" data-i18n="foot.faq">FAQ</a>
       <a href="contact.html" data-i18n="foot.contact">Contact</a>
+      <a href="#cookies" data-cookie-settings data-i18n="foot.cookies">Cookies</a>
     </div>
   </div>
 </footer>
@@ -133,6 +370,8 @@ OminoNav.init({ copy: {
     'menu.kicker':'Menu / 00','menu.tag':'AI Business OS','menu.connect':'Connect',
     kicker:'FAQ / 03', hero:'Straight answers.',
     lead:'Pricing, fees, WhatsApp, and what the first 50 actually get.',
+    caption:'One system. Clear questions.',
+    g1:'Product / 01', g2:'Pricing / 02', g3:'Start / 03',
     q1:'What is OMINO?', a1:'An AI business operating system — store, POS, inventory, customers, payments, and intelligence in one system. Not another disconnected dashboard.',
     q2:'What do the first 50 businesses get?', a2:'Founding pricing on Starter, Pro, or Business for as long as they stay on OMINO. They also help shape the product.',
     q3:'How much are the plans?', a3:'Starter $9, Pro $24, Business $49 per month. Yearly billing is $7.5, $20, and $40.8 per month. Open a plan to see the payment screen.',
@@ -141,7 +380,11 @@ OminoNav.init({ copy: {
     q6:'Does AI change anything on its own?', a6:'No. It explains what happened and recommends a next move. Nothing sends or charges without your approval.',
     q7:'Who is it for?', a7:'Real businesses — perfume, fashion, beauty, retail, electronics, cafés, restaurants, services, wholesale. Same system. Different numbers.',
     q8:'How do I pay or get help?', a8:'Choose a plan, then pay by card interface or WhatsApp. Confirmations arrive as email and WhatsApp messages. For anything else, use the contact page.',
-    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact',
+    'end.kicker':'Still looking / 04',
+    'end.title':'A question that isn’t here yet.',
+    'end.lead':'WhatsApp for a fast reply. Or start and see the system itself.',
+    'end.wa':'WhatsApp',
+    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact','foot.cookies':'Cookies',
     'footer.copy':'© 2026 OMINO. All rights reserved.'
   },
   ar: {
@@ -151,6 +394,8 @@ OminoNav.init({ copy: {
     'menu.kicker':'Menu / 00','menu.tag':'نظام تشغيل الأعمال','menu.connect':'تواصل',
     kicker:'أسئلة / 03', hero:'إجابات مباشرة.',
     lead:'التسعير، الرسوم، واتساب، وشو يعني أول 50.',
+    caption:'نظام واحد. أسئلة واضحة.',
+    g1:'المنتج / 01', g2:'التسعير / 02', g3:'البداية / 03',
     q1:'شو هو OMINO؟', a1:'نظام تشغيل أعمال بالذكاء — متجر، نقطة بيع، مخزون، عملاء، مدفوعات، وذكاء في نظام واحد. مش لوحة ثانية منفصلة.',
     q2:'شو بستفيد أول 50 نشاط؟', a2:'تسعير التأسيس على Starter أو Pro أو Business طالما بقوا على OMINO. وكمان بيساعدوا في تشكيل المنتج.',
     q3:'قدّيش الباقات؟', a3:'Starter 9$، Pro 24$، Business 49$ شهرياً. السنوي 7.5$ و 20$ و 40.8$ للشهر. افتح الباقة لتشوف شاشة الدفع.',
@@ -159,10 +404,48 @@ OminoNav.init({ copy: {
     q6:'الذكاء بغيّر لحاله؟', a6:'لا. يشرح شو صار ويقترح الخطوة التالية. ما في إرسال أو خصم بدون موافقتك.',
     q7:'لمن؟', a7:'أنشطة حقيقية — عطور، أزياء، جمال، تجزئة، إلكترونيات، مقاهي، مطاعم، خدمات، جملة. نفس النظام. أرقام مختلفة.',
     q8:'كيف أدفع أو أطلب مساعدة؟', a8:'اختر باقة، بعدين ادفع من واجهة البطاقة أو واتساب. التأكيد يوصل إيميل وواتساب. لأي شيء ثاني، صفحة التواصل.',
-    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل',
+    'end.kicker':'لسا بتدور / 04',
+    'end.title':'سؤال مش هون بعد.',
+    'end.lead':'واتساب لجواب سريع. أو ابدأ وشوف النظام بنفسه.',
+    'end.wa':'واتساب',
+    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل','foot.cookies':'الكوكيز',
     'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.'
   }
 }});
+
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const items = Array.from(document.querySelectorAll('.qa'));
+function setOpen(item, open){
+  const btn = item.querySelector('.qa-btn');
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  item.classList.toggle('is-open', open);
+}
+items.forEach((item)=>{
+  item.querySelector('.qa-btn').addEventListener('click', ()=>{
+    const willOpen = !item.classList.contains('is-open');
+    items.forEach((other)=> setOpen(other, other === item && willOpen));
+  });
+});
+
+function playFaq(){
+  if(reduce || !window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger);
+  const tl = gsap.timeline({defaults:{ease:'power4.out'}});
+  tl.from('.faq-hero .idx',{opacity:0,y:10,duration:.55},0)
+    .from('.faq-hero h1',{opacity:0,y:22,filter:'blur(8px)',duration:.9,clearProps:'filter'},.08)
+    .from('.faq-hero .lead',{opacity:0,y:14,duration:.65},.28)
+    .from('.faq-hero .serif',{opacity:0,y:10,duration:.55},.42)
+    .from('#faqProduct .idx',{opacity:0,y:10,duration:.5},.48)
+    .from('#faqProduct .qa',{opacity:0,y:14,stagger:.07,duration:.6},.55);
+  gsap.utils.toArray('.reveal').forEach((el)=>{
+    gsap.fromTo(el,{opacity:0,y:18},{
+      opacity:1,y:0,duration:.85,ease:'power4.out',
+      scrollTrigger:{trigger:el,start:'top 88%'}
+    });
+  });
+}
+if(window.OminoLoader) OminoLoader.onReady(playFaq);
+else playFaq();
 </script>
 </body>
 </html>

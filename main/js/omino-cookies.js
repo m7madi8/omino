@@ -18,7 +18,6 @@
       marketing: 'Marketing',
       marketingD: 'Used to measure and improve OMINO’s own campaigns.',
       save: 'Save preferences',
-      reopen: 'Cookie settings',
       essentialAria: 'Essential cookies, always on',
       analyticsAria: 'Toggle analytics cookies',
       marketingAria: 'Toggle marketing cookies',
@@ -38,7 +37,6 @@
       marketing: 'تسويق',
       marketingD: 'لقياس وتحسين حملات OMINO نفسها.',
       save: 'حفظ التفضيلات',
-      reopen: 'إعدادات الكوكيز',
       essentialAria: 'كوكيز ضرورية، دائماً شغّالة',
       analyticsAria: 'تفعيل كوكيز التحليلات',
       marketingAria: 'تفعيل كوكيز التسويق',
@@ -82,12 +80,9 @@
     '#cookieConsent .cc-toggle.on .knob{inset-inline-start:19px;background:#fff}',
     '#cookieConsent .cc-toggle[disabled]{opacity:.55;cursor:default}',
     '#cookieConsent .cc-save{margin-top:4px}',
-    '#cookieReopen{position:fixed;inset-inline-start:24px;bottom:24px;z-index:190;display:none;align-items:center;gap:8px;background:var(--ink,#0A0A0A);color:var(--paper,#F2F3F5);border-radius:999px;padding:10px 16px;font-size:12.5px;font-weight:500;border:1px solid var(--hairline-dark,#2c2b28);box-shadow:0 20px 40px -18px rgba(0,0,0,.4);cursor:pointer;font-family:inherit;min-height:44px}',
-    '#cookieReopen.show{display:inline-flex}',
-    '#cookieReopen svg{width:16px;height:16px;flex:none}',
-    '#cookieConsent:focus-visible,#cookieConsent button:focus-visible,#cookieReopen:focus-visible{outline:none;box-shadow:var(--ring,0 0 0 4px rgba(91,124,255,.22))}',
-    '@media(max-width:480px){#cookieConsent,#cookieReopen{inset-inline:16px;width:auto;bottom:16px}}',
-    '@media (prefers-reduced-motion:reduce){#cookieConsent,#cookieConsent *,#cookieReopen{transition-duration:.01ms!important}}'
+    '#cookieConsent:focus-visible,#cookieConsent button:focus-visible{outline:none;box-shadow:var(--ring,0 0 0 4px rgba(91,124,255,.22))}',
+    '@media(max-width:480px){#cookieConsent{inset-inline:16px;width:auto;bottom:16px}}',
+    '@media (prefers-reduced-motion:reduce){#cookieConsent,#cookieConsent *{transition-duration:.01ms!important}}'
   ].join('');
 
   function lang() {
@@ -124,9 +119,7 @@
       if (v != null) el.textContent = v;
     });
     const dialog = document.getElementById('cookieConsent');
-    const reopen = document.getElementById('cookieReopen');
     if (dialog) dialog.setAttribute('aria-label', t('dialog'));
-    if (reopen) reopen.setAttribute('aria-label', t('reopen'));
     const ess = root.querySelector('#ccEssential');
     const an = root.querySelector('#toggleAnalytics');
     const mk = root.querySelector('#toggleMarketing');
@@ -135,14 +128,11 @@
     if (mk) mk.setAttribute('aria-label', t('marketingAria'));
   }
 
+  let openPrefs = function () {};
+
   function mount() {
     injectStyle();
     if (document.getElementById('cookieConsent')) return;
-    const reopen = document.createElement('button');
-    reopen.id = 'cookieReopen';
-    reopen.type = 'button';
-    reopen.setAttribute('aria-label', t('reopen'));
-    reopen.innerHTML = markSvg + '<span data-cc="reopen">Cookie settings</span>';
 
     const banner = document.createElement('div');
     banner.id = 'cookieConsent';
@@ -168,13 +158,12 @@
         '<button type="button" class="cc-btn cc-btn-primary cc-save" id="ccSave" data-cc="save">Save preferences</button>' +
       '</div>';
 
-    document.body.appendChild(reopen);
     document.body.appendChild(banner);
     applyCopy(document);
-    bind(banner, reopen);
+    bind(banner);
   }
 
-  function bind(banner, reopenBtn) {
+  function bind(banner) {
     const reduce = global.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const acceptBtn = document.getElementById('ccAccept');
     const rejectBtn = document.getElementById('ccReject');
@@ -187,12 +176,10 @@
     function showBanner() {
       banner.hidden = false;
       requestAnimationFrame(() => banner.classList.add('show'));
-      reopenBtn.classList.remove('show');
     }
     function hideBanner() {
       banner.classList.remove('show');
       setTimeout(() => { banner.hidden = true; }, reduce ? 0 : 500);
-      reopenBtn.classList.add('show');
     }
     function applyToggles(prefs) {
       toggleAnalytics.classList.toggle('on', !!prefs.analytics);
@@ -201,13 +188,22 @@
       toggleMarketing.setAttribute('aria-pressed', String(!!prefs.marketing));
     }
 
-    const existing = getConsent();
-    if (existing) {
-      applyToggles(existing);
-      reopenBtn.classList.add('show');
-    } else {
+    openPrefs = function () {
+      const saved = getConsent();
+      if (saved) {
+        applyToggles(saved);
+        prefsPanel.classList.add('open');
+        manageToggle.setAttribute('aria-expanded', 'true');
+      }
       showBanner();
-    }
+      acceptBtn.focus();
+    };
+
+    const existing = getConsent();
+    if (existing) applyToggles(existing);
+    else showBanner();
+
+    if (location.hash === '#cookies') openPrefs();
 
     acceptBtn.addEventListener('click', () => {
       const prefs = { essential: true, analytics: true, marketing: true, ts: Date.now() };
@@ -241,14 +237,17 @@
       setConsent(prefs);
       hideBanner();
     });
-    reopenBtn.addEventListener('click', () => {
-      const saved = getConsent();
-      if (saved) {
-        applyToggles(saved);
-        prefsPanel.classList.add('open');
-        manageToggle.setAttribute('aria-expanded', 'true');
-      }
-      showBanner();
+
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('[data-cookie-settings]');
+      if (!trigger) return;
+      e.preventDefault();
+      openPrefs();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (!getConsent() || banner.hidden) return;
+      hideBanner();
     });
 
     document.addEventListener('omino-lang', () => applyCopy(document));
@@ -272,5 +271,5 @@
 
   boot();
 
-  global.OminoCookies = { get: getConsent };
+  global.OminoCookies = { get: getConsent, open: function () { openPrefs(); } };
 })(window);

@@ -14,47 +14,50 @@
 <script src="js/omino-loader.js"></script>
 <script src="js/omino-cookies.js"></script>
 <style>
+html,body{height:100svh;overflow:hidden;}
 body{background:var(--paper);}
 .auth-shell{
-  min-height:100svh;
+  height:100svh;
+  max-height:100svh;
   display:grid;
-  grid-template-columns:minmax(0,1.15fr) minmax(320px,0.85fr);
+  grid-template-columns:minmax(0,1.15fr) minmax(300px,0.9fr);
+  grid-template-rows:minmax(0,1fr);
 }
+.auth-shell > *{min-width:0;min-height:0;}
 .auth-stage{
   background:var(--ink);
   color:var(--paper);
   position:relative;
   overflow:hidden;
-  padding:120px 64px 64px;
+  padding:clamp(76px,11vh,112px) clamp(36px,4.5vw,64px) clamp(24px,4vh,48px);
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  min-height:100svh;
 }
 .auth-stage-copy{max-width:440px;position:relative;z-index:1;}
-.auth-kicker{color:#8A9096;margin-bottom:28px;}
+.auth-kicker{color:#8A9096;margin-bottom:clamp(12px,2.4vh,24px);}
 .auth-stage h1{
-  font-size:clamp(2.4rem,5vw,3.6rem);
+  font-size:clamp(2rem,4.2vw,3.4rem);
   line-height:1.05;
   color:var(--paper);
 }
 .auth-stage .lede{
-  margin-top:20px;
+  margin-top:clamp(10px,1.8vh,18px);
   color:#C5C9CE;
   max-width:32ch;
-  font-size:17px;
+  font-size:clamp(15px,1.6vh,17px);
 }
 .auth-viz{
   position:relative;
   z-index:1;
-  margin-top:48px;
+  margin-top:clamp(16px,3vh,40px);
   max-width:520px;
 }
 .auth-nodes{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
-  margin-bottom:28px;
+  margin-bottom:clamp(12px,2.2vh,24px);
 }
 .auth-node{
   border:1px solid var(--hairline-dark);
@@ -64,6 +67,21 @@ body{background:var(--paper);}
   font-size:11px;
   letter-spacing:0.12em;
   text-transform:uppercase;
+}
+.auth-node-you{
+  display:none;
+  background:var(--paper);
+  color:var(--ink);
+  border-color:var(--paper);
+  font-weight:500;
+  letter-spacing:0.08em;
+}
+.auth-node-you.is-on{display:inline-flex;align-items:center;}
+html[lang="ar"] .auth-node-you{
+  letter-spacing:0;
+  text-transform:none;
+  font-family:var(--font-ar);
+  font-size:13px;
 }
 .auth-converge{
   display:flex;
@@ -76,12 +94,13 @@ body{background:var(--paper);}
   background:linear-gradient(90deg, transparent, rgba(255,255,255,.35));
 }
 html[dir="rtl"] .auth-line{background:linear-gradient(270deg, transparent, rgba(255,255,255,.35));}
-.auth-mark{width:52px;height:52px;flex:none;}
+.auth-mark{width:48px;height:48px;flex:none;}
 .auth-mark img{width:100%;height:100%;object-fit:contain;}
 .auth-glow{
   position:absolute;
   width:70%;height:50%;
-  right:-10%;bottom:10%;
+  inset-inline-end:-10%;
+  bottom:10%;
   background:radial-gradient(ellipse, rgba(91,124,255,0.22), transparent 68%);
   filter:blur(40px);
   pointer-events:none;
@@ -90,23 +109,51 @@ html[dir="rtl"] .auth-line{background:linear-gradient(270deg, transparent, rgba(
   display:flex;
   flex-direction:column;
   justify-content:center;
-  padding:120px 56px 64px;
+  padding:clamp(76px,11vh,112px) clamp(28px,4vw,48px) clamp(16px,3vh,32px);
   background:var(--paper);
-  overflow:auto;
-  min-height:0;
+  overflow:visible;
 }
-.auth-card{max-width:400px;width:100%;margin:0 auto;}
+.auth-card{
+  max-width:420px;
+  width:100%;
+  margin:0 auto;
+}
 .auth-card h2{
-  font-size:clamp(1.8rem,3vw,2.35rem);
+  font-size:clamp(1.45rem,2.4vw,2.1rem);
   line-height:1.1;
 }
 .auth-card .sub{
-  margin-top:10px;
+  margin-top:6px;
   color:var(--stone-2);
-  font-size:15px;
+  font-size:14px;
 }
-.auth-form{margin-top:36px;display:flex;flex-direction:column;gap:16px;}
-.field{display:flex;flex-direction:column;gap:8px;}
+.auth-form{margin-top:clamp(14px,2.4vh,28px);display:flex;flex-direction:column;gap:0;}
+.auth-form > * + *{margin-top:10px;}
+.field-slot{
+  display:grid;
+  grid-template-rows:0fr;
+  transition:grid-template-rows 480ms var(--ease);
+}
+.field-slot-inner{
+  overflow:hidden;
+  min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px 12px;
+}
+.field-slot-inner .field{
+  opacity:0;
+  transform:translateY(6px);
+  transition:opacity 380ms var(--ease), transform 480ms var(--ease);
+}
+.auth-panel[data-mode="signup"] .field-slot{grid-template-rows:1fr;}
+.auth-panel[data-mode="signup"] .field-slot-inner .field{
+  opacity:1;
+  transform:none;
+}
+.auth-panel[data-mode="signup"] #businessField{grid-column:1 / -1;}
+.auth-panel:not([data-mode="signup"]) .field-slot + *{margin-top:0;}
+.field{display:flex;flex-direction:column;gap:5px;}
 .field-label{
   font-size:12px;
   font-weight:500;
@@ -114,6 +161,8 @@ html[dir="rtl"] .auth-line{background:linear-gradient(270deg, transparent, rgba(
   letter-spacing:0.06em;
 }
 html[lang="ar"] .field-label{letter-spacing:0;}
+html[lang="ar"] .auth-stage h1,
+html[lang="ar"] .auth-card h2{line-height:1.18;}
 .field-control{
   position:relative;
   display:flex;
@@ -121,10 +170,11 @@ html[lang="ar"] .field-label{letter-spacing:0;}
 }
 .field input{
   width:100%;
-  min-height:52px;
+  min-height:44px;
+  height:44px;
   border:1px solid var(--hairline);
-  border-radius:14px;
-  padding:0 16px;
+  border-radius:12px;
+  padding:0 14px;
   background:#fff;
   color:var(--ink);
   font-size:16px;
@@ -133,16 +183,18 @@ html[lang="ar"] .field-label{letter-spacing:0;}
 .field input::placeholder{color:#B4B8BC;}
 .field input:hover{border-color:#c5c9ce;}
 .field input:focus{border-color:var(--ink);box-shadow:var(--ring);}
+.field input[type="tel"]{direction:ltr;unicode-bidi:isolate;}
 .field.is-error input{border-color:var(--danger);}
 .field-error{
-  font-size:13px;
+  font-size:12px;
   color:var(--danger);
-  min-height:1.15em;
+  min-height:0;
 }
+.field.is-error .field-error{min-height:1.1em;}
 .eye{
   position:absolute;
-  inset-inline-end:6px;
-  width:44px;height:44px;
+  inset-inline-end:4px;
+  width:40px;height:40px;
   border:0;background:none;
   color:var(--stone);
   border-radius:10px;
@@ -153,25 +205,32 @@ html[lang="ar"] .field-label{letter-spacing:0;}
   justify-content:flex-end;
 }
 .auth-row button,.text-btn{
-  background:none;border:0;padding:8px 0;
+  background:none;border:0;padding:4px 0;
   color:var(--stone-2);
   font-size:13px;
-  min-height:44px;
+  min-height:32px;
 }
 .auth-row button:hover,.text-btn:hover{color:var(--ink);}
-.auth-submit{width:100%;margin-top:4px;min-height:52px;border-radius:var(--radius-pill);}
+.auth-submit{width:100%;margin-top:2px;min-height:44px;height:44px;border-radius:var(--radius-pill);}
 .auth-status{
-  font-size:13px;
-  min-height:1.2em;
+  font-size:12px;
+  min-height:0;
   color:var(--danger);
 }
+.auth-status:not(:empty){min-height:1.2em;}
 .auth-status.is-ok{color:var(--stone-2);}
 .or{
   display:flex;align-items:center;gap:14px;
   color:var(--stone);
   font-size:11px;
   letter-spacing:0.16em;
-  margin:8px 0;
+  margin:2px 0;
+}
+html[lang="ar"] .or{
+  letter-spacing:0;
+  text-transform:none;
+  font-family:var(--font-ar);
+  font-size:14px;
 }
 .or::before,.or::after{
   content:"";
@@ -181,8 +240,9 @@ html[lang="ar"] .field-label{letter-spacing:0;}
 }
 .google{
   width:100%;
-  min-height:52px;
-  border-radius:16px;
+  min-height:44px;
+  height:44px;
+  border-radius:14px;
   background:#fff;
   border:1px solid var(--hairline);
   color:var(--ink);
@@ -190,18 +250,22 @@ html[lang="ar"] .field-label{letter-spacing:0;}
   letter-spacing:0;
   text-transform:none;
   font-weight:500;
+  white-space:normal;
+  line-height:1.3;
 }
 .google svg{width:18px;height:18px;}
 .google:hover:not(:disabled){border-color:var(--ink);transform:none;background:#fff;}
+html[lang="ar"] .auth-submit,
+html[lang="ar"] .google{height:auto;}
 .auth-legal{
-  margin-top:28px;
-  display:flex;flex-wrap:wrap;gap:8px 14px;
-  font-size:13px;color:var(--stone);
+  margin-top:14px;
+  display:flex;flex-wrap:wrap;gap:4px 12px;
+  font-size:12px;color:var(--stone);
 }
-.auth-legal a{min-height:44px;display:inline-flex;align-items:center;}
+.auth-legal a{min-height:32px;display:inline-flex;align-items:center;}
 .auth-legal a:hover{color:var(--ink);}
 .auth-switch{
-  margin-top:28px;
+  margin-top:14px;
   font-size:14px;
   color:var(--stone-2);
 }
@@ -219,7 +283,8 @@ html[lang="ar"] .field-label{letter-spacing:0;}
 .auth-panel[data-mode="forgot"] .only-signup{display:none;}
 .auth-panel[data-mode="signin"] .only-forgot,
 .auth-panel[data-mode="signup"] .only-forgot{display:none;}
-.auth-panel[data-mode="forgot"] .or{display:none;}
+.auth-panel[data-mode="forgot"] .or,
+.auth-panel[data-mode="forgot"] #googleBtn{display:none;}
 .spinner{
   width:16px;height:16px;
   border:1.5px solid rgba(255,255,255,.3);
@@ -228,23 +293,49 @@ html[lang="ar"] .field-label{letter-spacing:0;}
   animation:spin .7s linear infinite;
 }
 @keyframes spin{to{transform:rotate(360deg);}}
+@media (min-width:981px) and (max-height:760px){
+  .auth-converge{display:none;}
+  .auth-stage h1{font-size:1.85rem;}
+  .field input,.auth-submit,.google{min-height:40px;height:40px;}
+}
 @media (max-width:980px){
-  .auth-shell{grid-template-columns:1fr;}
+  html,body{height:auto;overflow:auto;}
+  .auth-shell{
+    grid-template-columns:1fr;
+    height:auto;
+    max-height:none;
+  }
   .auth-stage{
     min-height:auto;
-    padding:108px 24px 36px;
+    padding:108px 24px 28px;
   }
-  .auth-viz{display:none;}
-  .auth-panel{padding:40px 24px 80px;}
+  .auth-viz{margin-top:20px;}
+  .auth-nodes{margin-bottom:0;}
+  .auth-converge{display:none;}
+  .auth-panel{
+    padding:32px 24px max(64px, env(safe-area-inset-bottom));
+    overflow:visible;
+  }
+  .auth-card{max-height:none;}
   .auth-stage h1{font-size:2rem;}
+  .field-slot-inner{grid-template-columns:1fr;}
+  .auth-panel[data-mode="signup"] #businessField{grid-column:auto;}
+  .field input,.auth-submit,.google{min-height:48px;height:48px;}
+  .auth-legal a{min-height:44px;}
+}
+@media (max-width:420px){
+  .auth-stage{padding:96px 16px 24px;}
+  .auth-panel{padding:24px 16px max(56px, env(safe-area-inset-bottom));}
+  .auth-stage h1{font-size:1.75rem;}
 }
 @media (prefers-reduced-motion: reduce){
   .spinner{animation:none;border-color:currentColor;}
+  .field-slot,.field-slot-inner .field{transition:none;}
 }
 </style>
 </head>
 <body class="page-login">
-<a class="skip" href="#authMain">Skip to sign in</a>
+<a class="skip" href="#authMain" data-i18n="skipAuth">Skip to sign in</a>
 
 <header class="site-nav" id="siteNav">
   <div class="wrap">
@@ -299,13 +390,13 @@ html[lang="ar"] .field-label{letter-spacing:0;}
   </aside>
 </div>
 
-<main class="auth-shell" id="authMain">
+<main class="auth-shell" id="authMain" data-mode="signin">
   <section class="auth-stage" aria-hidden="false">
     <div class="auth-glow" aria-hidden="true"></div>
     <div class="auth-stage-copy">
       <p class="idx auth-kicker">AI Business OS</p>
       <h1 data-i18n="stage.title">Your business, in one intelligent system.</h1>
-      <p class="lede" data-i18n="stage.lede">Commerce, operations, and intelligence — connected before you sign in.</p>
+      <p class="lede" data-i18n="stage.lede.signin">Commerce, operations, and intelligence — connected before you sign in.</p>
     </div>
     <div class="auth-viz" aria-hidden="true">
       <div class="auth-nodes">
@@ -314,6 +405,7 @@ html[lang="ar"] .field-label{letter-spacing:0;}
         <span class="auth-node en">Inventory</span>
         <span class="auth-node en">Customers</span>
         <span class="auth-node en">Payments</span>
+        <span class="auth-node auth-node-you" id="businessNode" data-i18n="node.business">Your Business</span>
       </div>
       <div class="auth-converge">
         <div class="auth-line"></div>
@@ -330,12 +422,30 @@ html[lang="ar"] .field-label{letter-spacing:0;}
       <p class="sub" id="authSub" data-i18n="signin.sub">Your business is ready.</p>
 
       <form class="auth-form" id="authForm" novalidate>
-        <div class="field only-signup" id="businessField">
-          <label class="field-label" for="business" data-i18n="field.business">Business name</label>
-          <div class="field-control">
-            <input id="business" name="business" type="text" autocomplete="organization" maxlength="80" aria-describedby="businessError">
+        <div class="field-slot" id="signupSlot" inert>
+          <div class="field-slot-inner">
+            <div class="field" id="fullnameField">
+              <label class="field-label" for="fullname" data-i18n="field.fullname">Full name</label>
+              <div class="field-control">
+                <input id="fullname" name="fullname" type="text" autocomplete="name" maxlength="80" tabindex="-1" aria-describedby="fullnameError">
+              </div>
+              <p class="field-error" id="fullnameError" role="alert"></p>
+            </div>
+            <div class="field" id="phoneField">
+              <label class="field-label" for="phone" data-i18n="field.phone">Mobile / WhatsApp</label>
+              <div class="field-control">
+                <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" tabindex="-1" aria-describedby="phoneError">
+              </div>
+              <p class="field-error" id="phoneError" role="alert"></p>
+            </div>
+            <div class="field" id="businessField">
+              <label class="field-label" for="business" data-i18n="field.business">Business name</label>
+              <div class="field-control">
+                <input id="business" name="business" type="text" autocomplete="organization" maxlength="80" tabindex="-1" aria-describedby="businessError">
+              </div>
+              <p class="field-error" id="businessError" role="alert"></p>
+            </div>
           </div>
-          <p class="field-error" id="businessError" role="alert"></p>
         </div>
 
         <div class="field" id="emailField">
@@ -388,6 +498,7 @@ html[lang="ar"] .field-label{letter-spacing:0;}
         <a href="terms.html" data-i18n="foot.terms">Terms</a>
         <a href="faq.html" data-i18n="foot.faq">FAQ</a>
         <a href="contact.html" data-i18n="foot.contact">Contact</a>
+        <a href="#cookies" data-cookie-settings data-i18n="foot.cookies">Cookies</a>
       </p>
     </div>
   </section>
@@ -405,7 +516,9 @@ const copy = {
     'menu.open': 'Open menu', 'menu.close': 'Close menu',
     'menu.kicker': 'Menu / 00', 'menu.tag': 'AI Business OS', 'menu.connect': 'Connect',
     'stage.title': 'Your business, in one intelligent system.',
-    'stage.lede': 'Commerce, operations, and intelligence — connected before you sign in.',
+    'stage.lede.signin': 'Commerce, operations, and intelligence — connected before you sign in.',
+    'stage.lede.signup': 'Every node you connect starts here — one business, one system.',
+    'node.business': 'Your Business',
     'signin.title': 'Welcome back.',
     'signin.sub': 'Your business is ready.',
     'signin.forgot': 'Forgot password?',
@@ -422,11 +535,15 @@ const copy = {
     'forgot.submit': 'Update password',
     'field.email': 'Email',
     'field.password': 'Password',
+    'field.fullname': 'Full name',
+    'field.phone': 'Mobile / WhatsApp',
     'field.business': 'Business name',
     or: 'or',
     google: 'Continue with Google',
     'err.email': 'Enter a valid email.',
     'err.password': 'Use at least 8 characters.',
+    'err.fullname': 'Enter your full name.',
+    'err.phone': 'Enter a valid mobile number.',
     'err.business': 'Enter your business name.',
     'err.invalid': 'Email or password is incorrect.',
     'err.exists': 'An account already exists for this email.',
@@ -437,7 +554,7 @@ const copy = {
     'ok.loading': 'Please wait…',
     showPw: 'Show password',
     hidePw: 'Hide password',
-    'foot.privacy': 'Privacy', 'foot.terms': 'Terms', 'foot.faq': 'FAQ', 'foot.contact': 'Contact'
+    'foot.privacy': 'Privacy', 'foot.terms': 'Terms', 'foot.faq': 'FAQ', 'foot.contact': 'Contact', 'foot.cookies': 'Cookies'
   },
   ar: {
     title: 'OMINO — دخول',
@@ -446,7 +563,9 @@ const copy = {
     'menu.open': 'فتح القائمة', 'menu.close': 'إغلاق القائمة',
     'menu.kicker': 'Menu / 00', 'menu.tag': 'نظام تشغيل الأعمال', 'menu.connect': 'تواصل',
     'stage.title': 'عملك، في نظام ذكي واحد.',
-    'stage.lede': 'التجارة، التشغيل، والذكاء — متصلة قبل ما تدخل.',
+    'stage.lede.signin': 'التجارة، التشغيل، والذكاء — متصلة قبل ما تدخل.',
+    'stage.lede.signup': 'كل عقدة تربطها تبدأ من هنا — نشاط واحد، نظام واحد.',
+    'node.business': 'نشاطك',
     'signin.title': 'مرحباً بعودتك.',
     'signin.sub': 'نشاطك جاهز.',
     'signin.forgot': 'نسيت كلمة المرور؟',
@@ -463,11 +582,15 @@ const copy = {
     'forgot.submit': 'تحديث كلمة المرور',
     'field.email': 'البريد',
     'field.password': 'كلمة المرور',
+    'field.fullname': 'الاسم الكامل',
+    'field.phone': 'الجوال / واتساب',
     'field.business': 'اسم النشاط',
     or: 'أو',
     google: 'المتابعة عبر Google',
     'err.email': 'أدخل بريداً صحيحاً.',
     'err.password': 'استخدم 8 أحرف على الأقل.',
+    'err.fullname': 'أدخل اسمك الكامل.',
+    'err.phone': 'أدخل رقم جوال صحيح.',
     'err.business': 'أدخل اسم النشاط.',
     'err.invalid': 'البريد أو كلمة المرور غير صحيحة.',
     'err.exists': 'يوجد حساب لهذا البريد.',
@@ -478,7 +601,7 @@ const copy = {
     'ok.loading': 'لحظة…',
     showPw: 'إظهار كلمة المرور',
     hidePw: 'إخفاء كلمة المرور',
-    'foot.privacy': 'الخصوصية', 'foot.terms': 'الشروط', 'foot.faq': 'أسئلة', 'foot.contact': 'تواصل'
+    'foot.privacy': 'الخصوصية', 'foot.terms': 'الشروط', 'foot.faq': 'أسئلة', 'foot.contact': 'تواصل', 'foot.cookies': 'الكوكيز'
   }
 };
 
@@ -503,25 +626,161 @@ function modeFromHash(){
   return 'signin';
 }
 
-function setMode(mode){
+const shell = document.getElementById('authMain');
+const ledeEl = document.querySelector('.auth-stage .lede');
+const nodeChip = document.getElementById('businessNode');
+const businessInput = document.getElementById('business');
+const fullnameInput = document.getElementById('fullname');
+const phoneInput = document.getElementById('phone');
+const signupSlot = document.getElementById('signupSlot');
+const signupFields = ['fullname','phone','business'];
+let authInitialized = false;
+let modeBusy = false;
+let pendingMode = null;
+let authIntroTl = null;
+let introReveal = null;
+
+function ledeKey(mode){
+  return mode === 'signup' ? 'stage.lede.signup' : 'stage.lede.signin';
+}
+
+function syncNode(show, animate){
+  if(!nodeChip) return;
+  nodeChip.textContent = t('node.business');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!animate || reduce || !window.gsap){
+    nodeChip.classList.toggle('is-on', show);
+    if(window.gsap) gsap.set(nodeChip, { clearProps:'opacity,visibility,transform,filter' });
+    return;
+  }
+  const rtl = document.documentElement.dir === 'rtl';
+  const line = shown('.auth-line');
+  const mark = shown('.auth-mark');
+  gsap.killTweensOf(nodeChip);
+  if(show){
+    nodeChip.classList.add('is-on');
+    gsap.fromTo(nodeChip,
+      { autoAlpha:0, y:8, scale:.96 },
+      { autoAlpha:1, y:0, scale:1, duration:.5, ease:'power4.out', clearProps:'transform' }
+    );
+    if(line.length){
+      gsap.fromTo(line,
+        { scaleX:.55 },
+        { scaleX:1, duration:.55, ease:'sine.inOut', transformOrigin: rtl ? 'right center' : 'left center' }
+      );
+    }
+    if(mark.length){
+      gsap.fromTo(mark, { scale:.96 }, { scale:1, duration:.45, ease:'power4.out' });
+    }
+  } else {
+    gsap.to(nodeChip, {
+      autoAlpha:0, y:4, duration:.28, ease:'power2.in',
+      onComplete(){
+        nodeChip.classList.remove('is-on');
+        gsap.set(nodeChip, { clearProps:'opacity,visibility,transform' });
+      }
+    });
+  }
+}
+
+function applyMode(mode, opts){
+  opts = opts || {};
   panel.dataset.mode = mode;
+  if(shell) shell.dataset.mode = mode;
   if(mode === 'signup') history.replaceState(null,'','#signup');
   else if(mode === 'forgot') history.replaceState(null,'','#forgot');
   else history.replaceState(null,'', location.pathname);
 
   title.textContent = t(mode + '.title');
   sub.textContent = t(mode + '.sub');
-  submitBtn.textContent = t(mode + '.submit');
+  if(!opts.busySubmit) submitBtn.textContent = t(mode + '.submit');
   document.title = t('title');
   pw.autocomplete = mode === 'signin' ? 'current-password' : 'new-password';
-  document.getElementById('business').required = mode === 'signup';
-  clearErrors();
-  statusEl.textContent = '';
-  statusEl.classList.remove('is-ok');
+  const signup = mode === 'signup';
+  signupFields.forEach((id) => {
+    const input = document.getElementById(id);
+    input.required = signup;
+    input.tabIndex = signup ? 0 : -1;
+  });
+  if(signupSlot) signupSlot.inert = !signup;
+  if(ledeEl) ledeEl.textContent = t(ledeKey(mode));
+  if(nodeChip) nodeChip.textContent = t('node.business');
+
+  if(!opts.keepStatus){
+    clearErrors();
+    statusEl.textContent = '';
+    statusEl.classList.remove('is-ok');
+  }
+}
+
+function setMode(mode, opts){
+  opts = opts || {};
+  const prev = panel.dataset.mode;
+  if(!authInitialized){
+    authInitialized = true;
+    applyMode(mode, opts);
+    syncNode(mode === 'signup', false);
+    return;
+  }
+  if(prev === mode){
+    pendingMode = null;
+    return;
+  }
+  if(modeBusy){
+    pendingMode = mode;
+    return;
+  }
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const showBiz = mode === 'signup';
+  const nodeChange = showBiz !== (prev === 'signup');
+  const ledeChange = ledeKey(prev) !== ledeKey(mode);
+
+  if(reduce || !window.gsap){
+    applyMode(mode, opts);
+    syncNode(showBiz, false);
+    return;
+  }
+
+  if(authIntroTl){
+    authIntroTl.kill();
+    authIntroTl = null;
+    if(introReveal) introReveal();
+  }
+
+  modeBusy = true;
+  const heads = [title, sub];
+  gsap.killTweensOf(heads);
+  if(ledeEl) gsap.killTweensOf(ledeEl);
+
+  const tl = gsap.timeline({
+    defaults:{ ease:'power2.out' },
+    onComplete(){
+      modeBusy = false;
+      const queued = pendingMode;
+      pendingMode = null;
+      if(queued && queued !== panel.dataset.mode) setMode(queued);
+    }
+  });
+
+  tl.to(heads, { autoAlpha:0, y:-8, duration:.2 }, 0);
+  if(ledeChange && ledeEl) tl.to(ledeEl, { autoAlpha:0, y:-6, duration:.2 }, 0);
+
+  tl.add(() => {
+    applyMode(mode, opts);
+    if(nodeChange) syncNode(showBiz, true);
+    gsap.fromTo(heads,
+      { autoAlpha:0, y:8 },
+      { autoAlpha:1, y:0, duration:.42, stagger:.04, ease:'power4.out', clearProps:'opacity,visibility,transform' }
+    );
+    if(ledeChange && ledeEl){
+      gsap.fromTo(ledeEl, { autoAlpha:0, y:6 }, { autoAlpha:1, y:0, duration:.4, ease:'power4.out', clearProps:'opacity,visibility,transform' });
+    }
+  });
 }
 
 function clearErrors(){
-  ['email','password','business'].forEach(id => {
+  ['email','password','fullname','phone','business'].forEach(id => {
     document.getElementById(id + 'Field').classList.remove('is-error');
     document.getElementById(id + 'Error').textContent = '';
     document.getElementById(id).removeAttribute('aria-invalid');
@@ -535,6 +794,20 @@ function setError(id, msg){
 }
 
 function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+function digits(v){
+  return (window.OMINO && OMINO.digits) ? OMINO.digits(v) : String(v || '').replace(/\D/g, '');
+}
+function cleanPhone(v){
+  let d = digits(v);
+  if(d.startsWith('00')) d = d.slice(2);
+  if(d.startsWith('0') && d.length === 10) d = '970' + d.slice(1);
+  return d;
+}
+function validPhone(v){
+  const d = cleanPhone(v);
+  return d.length >= 10 && d.length <= 15;
+}
 
 function setBusy(on){
   submitBtn.disabled = on;
@@ -577,23 +850,29 @@ form.addEventListener('submit', async (e)=>{
   const mode = panel.dataset.mode;
   const email = document.getElementById('email').value.trim();
   const password = pw.value;
-  const business = document.getElementById('business').value.trim();
+  const fullname = fullnameInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const business = businessInput.value.trim();
   let bad = false;
   if(!validEmail(email)){ setError('email', t('err.email')); bad = true; }
   if(password.length < 8){ setError('password', t('err.password')); bad = true; }
-  if(mode === 'signup' && business.length < 2){ setError('business', t('err.business')); bad = true; }
+  if(mode === 'signup'){
+    if(fullname.length < 2){ setError('fullname', t('err.fullname')); bad = true; }
+    if(!validPhone(phone)){ setError('phone', t('err.phone')); bad = true; }
+    if(business.length < 2){ setError('business', t('err.business')); bad = true; }
+  }
   if(bad) return;
 
   setBusy(true);
   try {
     if(mode === 'signin') await OminoAuth.signIn(email, password);
-    else if(mode === 'signup') await OminoAuth.signUp({ email, password, business });
+    else if(mode === 'signup') await OminoAuth.signUp({ email, password, business, fullname, phone: cleanPhone(phone) });
     else {
       await OminoAuth.resetPassword(email, password);
+      setBusy(false);
+      setMode('signin', { keepStatus: true });
       statusEl.textContent = t('ok.reset');
       statusEl.classList.add('is-ok');
-      setBusy(false);
-      setMode('signin');
       return;
     }
     location.href = 'app.html';
@@ -607,7 +886,7 @@ form.addEventListener('submit', async (e)=>{
 if(OminoAuth.session()) location.replace('app.html');
 nav = OminoNav.init({
   copy,
-  afterLang(){ setMode(panel.dataset.mode); }
+  afterLang(){ applyMode(panel.dataset.mode, { keepStatus: true }); }
 });
 setMode(modeFromHash());
 
@@ -626,10 +905,13 @@ function playAuth(){
   authPlayed = true;
 
   const rtl = document.documentElement.dir === 'rtl';
-  const nodes = shown('.auth-node');
+  const nodes = shown('.auth-node').filter((el) => el.id !== 'businessNode' || panel.dataset.mode === 'signup');
   const line = shown('.auth-line');
   const mark = shown('.auth-mark');
-  const fields = shown('.field');
+  const fields = shown('.auth-form .field').filter((el) => {
+    const signupOnly = el.id === 'fullnameField' || el.id === 'phoneField' || el.id === 'businessField';
+    return !signupOnly || panel.dataset.mode === 'signup';
+  });
   const row = shown('.auth-row.only-signin');
   const ors = shown('.or');
   const google = shown('#googleBtn');
@@ -638,35 +920,39 @@ function playAuth(){
   const glow = shown('.auth-glow');
   const clearTargets = '#siteNav, .auth-glow, .auth-kicker, .auth-stage h1, .auth-stage .lede, .auth-node, .auth-line, .auth-mark, .auth-card h2, .auth-card .sub, .field, .auth-row, #submitBtn, .or, #googleBtn, .auth-switch, .auth-legal a';
   const reveal = () => gsap.set(clearTargets, { clearProps:'opacity,visibility,transform,filter' });
+  introReveal = reveal;
 
-  const tl = gsap.timeline({
+  authIntroTl = gsap.timeline({
     defaults:{ ease:'power4.out' },
-    onComplete: reveal
+    onComplete(){
+      reveal();
+      authIntroTl = null;
+    }
   });
 
-  tl.from('#siteNav', { autoAlpha:0, y:-10, duration:.6 }, 0);
-  if(glow.length) tl.from(glow, { autoAlpha:0, duration:1.7, ease:'sine.out' }, .1);
-  tl.from('.auth-kicker', { autoAlpha:0, y:12, filter:'blur(6px)', duration:.65 }, .18);
-  tl.from('.auth-stage h1', { autoAlpha:0, y:22, filter:'blur(8px)', duration:.85, ease:'power3.out' }, .3);
-  tl.from('.auth-stage .lede', { autoAlpha:0, y:14, filter:'blur(5px)', duration:.7 }, .52);
-  if(nodes.length) tl.from(nodes, { autoAlpha:0, y:8, filter:'blur(4px)', duration:.5, stagger:.06 }, .68);
+  authIntroTl.from('#siteNav', { autoAlpha:0, y:-8, duration:.38 }, 0);
+  if(glow.length) authIntroTl.from(glow, { autoAlpha:0, duration:1, ease:'sine.out' }, .04);
+  authIntroTl.from('.auth-kicker', { autoAlpha:0, y:8, filter:'blur(5px)', duration:.38 }, .06);
+  authIntroTl.from('.auth-stage h1', { autoAlpha:0, y:14, filter:'blur(6px)', duration:.5, ease:'power3.out' }, .12);
+  authIntroTl.from('.auth-stage .lede', { autoAlpha:0, y:10, filter:'blur(4px)', duration:.4 }, .24);
+  if(nodes.length) authIntroTl.from(nodes, { autoAlpha:0, y:6, filter:'blur(3px)', duration:.32, stagger:.04 }, .32);
   if(line.length){
-    tl.fromTo(line,
+    authIntroTl.fromTo(line,
       { scaleX:0, transformOrigin: rtl ? 'right center' : 'left center' },
-      { scaleX:1, duration:.95, ease:'sine.inOut' }, .88);
+      { scaleX:1, duration:.5, ease:'sine.inOut' }, .42);
   }
-  if(mark.length) tl.from(mark, { autoAlpha:0, scale:.85, filter:'blur(6px)', duration:.7, ease:'power3.out' }, 1.1);
-  tl.from('.auth-card h2', { autoAlpha:0, y:20, filter:'blur(7px)', duration:.8, ease:'power3.out' }, .58);
-  tl.from('.auth-card .sub', { autoAlpha:0, y:12, filter:'blur(5px)', duration:.65 }, .76);
-  if(fields.length) tl.from(fields, { autoAlpha:0, y:14, filter:'blur(5px)', duration:.6, stagger:.09 }, .92);
-  if(row.length) tl.from(row, { autoAlpha:0, duration:.5 }, 1.18);
-  tl.from('#submitBtn', { autoAlpha:0, y:12, duration:.6 }, 1.24);
-  if(ors.length) tl.from(ors, { autoAlpha:0, duration:.5 }, 1.4);
-  if(google.length) tl.from(google, { autoAlpha:0, y:10, duration:.55 }, 1.48);
-  if(switches.length) tl.from(switches, { autoAlpha:0, duration:.5 }, 1.62);
-  if(legal.length) tl.from(legal, { autoAlpha:0, y:6, duration:.4, stagger:.05 }, 1.7);
+  if(mark.length) authIntroTl.from(mark, { autoAlpha:0, scale:.9, filter:'blur(5px)', duration:.4, ease:'power3.out' }, .52);
+  authIntroTl.from('.auth-card h2', { autoAlpha:0, y:12, filter:'blur(5px)', duration:.46, ease:'power3.out' }, .18);
+  authIntroTl.from('.auth-card .sub', { autoAlpha:0, y:8, filter:'blur(4px)', duration:.36 }, .3);
+  if(fields.length) authIntroTl.from(fields, { autoAlpha:0, y:10, filter:'blur(4px)', duration:.34, stagger:.05 }, .38);
+  if(row.length) authIntroTl.from(row, { autoAlpha:0, duration:.28 }, .52);
+  authIntroTl.from('#submitBtn', { autoAlpha:0, y:8, duration:.34 }, .56);
+  if(ors.length) authIntroTl.from(ors, { autoAlpha:0, duration:.26 }, .66);
+  if(google.length) authIntroTl.from(google, { autoAlpha:0, y:8, duration:.32 }, .7);
+  if(switches.length) authIntroTl.from(switches, { autoAlpha:0, duration:.26 }, .78);
+  if(legal.length) authIntroTl.from(legal, { autoAlpha:0, y:4, duration:.24, stagger:.03 }, .84);
 
-  gsap.delayedCall(2.8, reveal);
+  gsap.delayedCall(1.45, reveal);
 }
 if(window.OminoLoader) OminoLoader.onReady(playAuth);
 else playAuth();

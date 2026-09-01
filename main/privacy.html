@@ -15,7 +15,7 @@
 <script src="js/omino-cookies.js"></script>
 </head>
 <body>
-<a class="skip" href="#content">Skip to content</a>
+<a class="skip" href="#content" data-i18n="skip">Skip to content</a>
 <header class="site-nav" id="siteNav">
   <div class="wrap">
     <div class="nav-inner">
@@ -98,7 +98,8 @@
     <h2 data-i18n="s7.t">Your choices</h2>
     <p data-i18n="s7.b">You can update your account, close it, or contact us to access, correct, or delete data we hold. Founding businesses keep their locked pricing only while they remain on OMINO.</p>
     <h2 data-i18n="s8.t">Cookies</h2>
-    <p data-i18n="s8.b">Essential cookies keep sign-in and the site working. Analytics and marketing cookies stay off until you accept them. You can change this anytime from Cookie settings.</p>
+    <p data-i18n="s8.b">Essential cookies keep sign-in and the site working. Analytics and marketing cookies stay off until you accept them.</p>
+    <p><a href="#cookies" data-cookie-settings data-i18n="s8.open">Change cookie settings</a></p>
     <h2 data-i18n="s9.t">Contact</h2>
     <p data-i18n="s9.b">Write to us by email or WhatsApp.</p>
     <p><a data-mail data-mail-label>hello@omino.ps</a> · <a data-wa data-wa-display href="https://wa.me/">WhatsApp</a></p>
@@ -116,6 +117,7 @@
       <a href="terms.html" data-i18n="foot.terms">Terms</a>
       <a href="faq.html" data-i18n="foot.faq">FAQ</a>
       <a href="contact.html" data-i18n="foot.contact">Contact</a>
+      <a href="#cookies" data-cookie-settings data-i18n="foot.cookies">Cookies</a>
     </div>
   </div>
 </footer>
@@ -143,9 +145,9 @@ OminoNav.init({ copy: {
     's5.t':'Sharing','s5.b':'Payment providers, hosting, and messaging tools may process data needed to complete a payment or a confirmation you requested. We share what those tools require, not a copy of your whole business.',
     's6.t':'Retention','s6.b':'Account and business data stays while the account is active. You can ask us to export or delete it. Some records may be kept where the law requires it.',
     's7.t':'Your choices','s7.b':'You can update your account, close it, or contact us to access, correct, or delete data we hold. Founding businesses keep their locked pricing only while they remain on OMINO.',
-    's8.t':'Cookies','s8.b':'Essential cookies keep sign-in and the site working. Analytics and marketing cookies stay off until you accept them. You can change this anytime from Cookie settings.',
+    's8.t':'Cookies','s8.b':'Essential cookies keep sign-in and the site working. Analytics and marketing cookies stay off until you accept them.','s8.open':'Change cookie settings',
     's9.t':'Contact','s9.b':'Write to us by email or WhatsApp.',
-    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact',
+    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact','foot.cookies':'Cookies',
     'footer.copy':'© 2026 OMINO. All rights reserved.'
   },
   ar: {
@@ -168,9 +170,9 @@ OminoNav.init({ copy: {
     's5.t':'المشاركة','s5.b':'مزودو الدفع والاستضافة والرسائل ممكن يعالجوا البيانات اللازمة لإتمام دفعة أو تأكيد طلبته. بنشارك اللي الأداة تحتاجه، مش نسخة من كل نشاطك.',
     's6.t':'الاحتفاظ','s6.b':'بيانات الحساب والنشاط تبقى طول ما الحساب شغّال. تقدر تطلب تصديرها أو حذفها. بعض السجلات ممكن تُحفظ إذا القانون يطلب.',
     's7.t':'خياراتك','s7.b':'تقدر تعدّل حسابك أو تغلقه، أو تتواصل معنا للوصول أو التصحيح أو الحذف. أنشطة التأسيس تحتفظ بالتسعير المقفول طالما بقوا على OMINO.',
-    's8.t':'الكوكيز','s8.b':'الكوكيز الضرورية تبقي تسجيل الدخول والموقع شغّالين. كوكيز التحليلات والتسويق تبقى مطفية إلى أن توافق عليها. تقدر تغيّر هذا من إعدادات الكوكيز في أي وقت.',
+    's8.t':'الكوكيز','s8.b':'الكوكيز الضرورية تبقي تسجيل الدخول والموقع شغّالين. كوكيز التحليلات والتسويق تبقى مطفية إلى أن توافق عليها.','s8.open':'تغيير إعدادات الكوكيز',
     's9.t':'تواصل','s9.b':'راسلنا على الإيميل أو واتساب.',
-    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل',
+    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل','foot.cookies':'الكوكيز',
     'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.'
   }
 }});

@@ -10,12 +10,47 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/omino.css">
+<style>
+/* ===== Contact page polish additions ===== */
+.contact-card{
+  transition: transform .4s var(--ease,cubic-bezier(.22,1,.36,1)), box-shadow .4s var(--ease,cubic-bezier(.22,1,.36,1));
+}
+.contact-card:hover{ transform:translateY(-3px); box-shadow:0 24px 50px -28px rgba(0,0,0,.25); }
+
+.big{ display:inline-flex; align-items:center; gap:10px; align-self:start; }
+.big svg{ width:20px; height:20px; flex:none; opacity:.85; }
+
+.copy-btn{
+  display:inline-flex; align-items:center; gap:6px; align-self:start;
+  margin-top:10px; background:none; border:1px solid var(--hairline,#DCDBD6);
+  border-radius:100px; padding:7px 14px; font-size:12.5px; color:var(--stone-2,#6b675e);
+  cursor:pointer; transition:border-color .25s, color .25s;
+}
+.copy-btn:hover{ border-color:var(--ink,#0A0A0A); color:var(--ink,#0A0A0A); }
+.copy-btn.copied{ color:var(--good,#4C6B4F); border-color:var(--good,#4C6B4F); }
+.copy-btn svg{ width:13px; height:13px; }
+
+.page-field.is-error input,
+.page-field.is-error textarea{ border-color:var(--danger,#B23A3A); }
+.page-field.is-error{ animation:fieldShake .4s; }
+@keyframes fieldShake{
+  0%,100%{ transform:translateX(0); } 25%{ transform:translateX(-4px); } 75%{ transform:translateX(4px); }
+}
+.field-hint{ font-size:11.5px; color:var(--stone,#8C887D); text-align:end; margin-top:-6px; }
+.field-hint.is-near{ color:var(--accent,#C9541F); }
+
+#contactForm button[type="submit"][aria-busy="true"]{ opacity:.7; pointer-events:none; }
+
+@media (prefers-reduced-motion: reduce){
+  .contact-card, .page-field.is-error{ animation:none !important; transition:none !important; }
+}
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="js/omino-loader.js"></script>
 <script src="js/omino-cookies.js"></script>
 </head>
 <body>
-<a class="skip" href="#content">Skip to content</a>
+<a class="skip" href="#content" data-i18n="skip">Skip to content</a>
 <header class="site-nav" id="siteNav">
   <div class="wrap">
     <div class="nav-inner">
@@ -92,7 +127,7 @@
       <p class="idx" data-i18n="form.kicker">Message / 05</p>
       <h2 data-i18n="form.title">Send a note</h2>
       <p data-i18n="form.body">This opens WhatsApp with your words. Nothing is posted to a silent form.</p>
-      <form id="contactForm" style="display:grid;gap:14px;margin-top:8px">
+      <form id="contactForm" novalidate style="display:grid;gap:14px;margin-top:8px">
         <div class="field-row">
           <div class="page-field">
             <label class="field-label" for="cname" data-i18n="form.name">Name</label>
@@ -132,6 +167,7 @@
       <a href="terms.html" data-i18n="foot.terms">Terms</a>
       <a href="faq.html" data-i18n="foot.faq">FAQ</a>
       <a href="contact.html" data-i18n="foot.contact">Contact</a>
+      <a href="#cookies" data-cookie-settings data-i18n="foot.cookies">Cookies</a>
     </div>
   </div>
 </footer>
@@ -154,7 +190,7 @@ OminoNav.init({ copy: {
     'form.body':'This opens WhatsApp with your words. Nothing is posted to a silent form.',
     'form.name':'Name','form.business':'Business','form.email':'Email','form.msg':'Message',
     'form.send':'Send on WhatsApp','form.emailcta':'Email instead',
-    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact',
+    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact','foot.cookies':'Cookies',
     'footer.copy':'© 2026 OMINO. All rights reserved.'
   },
   ar: {
@@ -172,7 +208,7 @@ OminoNav.init({ copy: {
     'form.body':'يفتح واتساب بكلامك. ما في نموذج بيصير في الفراغ.',
     'form.name':'الاسم','form.business':'النشاط','form.email':'الإيميل','form.msg':'الرسالة',
     'form.send':'أرسل على واتساب','form.emailcta':'إيميل بدل ذلك',
-    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل',
+    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل','foot.cookies':'الكوكيز',
     'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.'
   }
 }});
@@ -187,12 +223,136 @@ document.getElementById('contactForm').addEventListener('submit', (e) => {
     err.textContent = document.documentElement.lang === 'ar' ? 'عبّي كل الحقول.' : 'Fill every field.';
     return;
   }
+  err.textContent = '';
   const ar = document.documentElement.lang === 'ar';
   const text = ar
     ? ('تواصل مع OMINO\n\nالاسم: ' + name + '\nالنشاط: ' + business + '\nالإيميل: ' + email + '\n\n' + message)
     : ('OMINO contact\n\nName: ' + name + '\nBusiness: ' + business + '\nEmail: ' + email + '\n\n' + message);
   location.href = OMINO.waLink(text);
 });
+
+(function(){
+  const isAr = () => document.documentElement.lang === 'ar';
+  const waIcon = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.1 4.9A9.9 9.9 0 0 0 12.05 2C6.5 2 2 6.5 2 12.05c0 1.77.46 3.5 1.34 5.02L2 22l5.08-1.33A10 10 0 0 0 12.05 22C17.6 22 22.1 17.5 22.1 12.05c0-2.66-1.04-5.16-3-7.15zM12.05 20.2c-1.52 0-3.01-.4-4.3-1.17l-.31-.18-3.16.83.85-3.08-.2-.32A8.2 8.2 0 0 1 3.8 12.05c0-4.55 3.7-8.25 8.25-8.25 2.2 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.55-3.7 8.15-8.25 8.15z"/></svg>';
+  const mailIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>';
+
+  function enhance(){
+    document.querySelectorAll('.big[data-wa]').forEach(el => {
+      if (!el.querySelector('svg')) el.insertAdjacentHTML('afterbegin', waIcon);
+    });
+    const mailBig = document.querySelector('.big[data-mail]');
+    if (mailBig){
+      if (!mailBig.querySelector('svg')) mailBig.insertAdjacentHTML('afterbegin', mailIcon);
+      let copyBtn = mailBig.nextElementSibling;
+      if (!copyBtn || !copyBtn.classList.contains('copy-btn')){
+        copyBtn = document.createElement('button');
+        copyBtn.type = 'button';
+        copyBtn.className = 'copy-btn';
+        copyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span></span>';
+        mailBig.insertAdjacentElement('afterend', copyBtn);
+        copyBtn.addEventListener('click', async ()=>{
+          const email = (window.OMINO && OMINO.contact && OMINO.contact.email) || mailBig.textContent.trim();
+          try{
+            await navigator.clipboard.writeText(email);
+            copyBtn.classList.add('copied');
+            labelCopy(copyBtn, true);
+            setTimeout(()=>{
+              copyBtn.classList.remove('copied');
+              labelCopy(copyBtn, false);
+            }, 1800);
+          }catch(e){ /* clipboard unsupported — link itself still works */ }
+        });
+      }
+      labelCopy(copyBtn, copyBtn.classList.contains('copied'));
+    }
+
+    const cmsg = document.getElementById('cmsg');
+    if (cmsg){
+      const field = cmsg.closest('.page-field');
+      let hint = field.querySelector('.field-hint');
+      if (!hint){
+        hint = document.createElement('div');
+        hint.className = 'field-hint';
+        field.appendChild(hint);
+      }
+      const updateHint = ()=>{
+        const left = 1000 - cmsg.value.length;
+        hint.textContent = isAr() ? (left + ' حرف متبقي') : (left + ' characters left');
+        hint.classList.toggle('is-near', left < 80);
+      };
+      cmsg.addEventListener('input', updateHint);
+      updateHint();
+      document.addEventListener('omino-lang', updateHint);
+    }
+  }
+
+  function labelCopy(btn, copied){
+    const span = btn.querySelector('span');
+    span.textContent = copied ? (isAr() ? 'تم النسخ' : 'Copied') : (isAr() ? 'نسخ' : 'Copy');
+    btn.setAttribute('aria-label', copied
+      ? (isAr() ? 'تم نسخ الإيميل' : 'Email copied')
+      : (isAr() ? 'نسخ الإيميل' : 'Copy email'));
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', enhance);
+  else enhance();
+  document.addEventListener('omino-lang', ()=>{
+    const btn = document.querySelector('.copy-btn');
+    if (btn) labelCopy(btn, btn.classList.contains('copied'));
+  });
+
+  const contactForm = document.getElementById('contactForm');
+  const validEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  contactForm.addEventListener('submit', (e)=>{
+    const fields = [
+      { el: document.getElementById('cname'), ok: v => v.trim().length > 0 },
+      { el: document.getElementById('cbusiness'), ok: v => v.trim().length > 0 },
+      { el: document.getElementById('cemail'), ok: validEmail },
+      { el: document.getElementById('cmsg'), ok: v => v.trim().length > 0 },
+    ];
+    let firstInvalid = null;
+    fields.forEach(f=>{
+      const field = f.el.closest('.page-field');
+      const invalid = !f.ok(f.el.value);
+      field.classList.remove('is-error');
+      if (invalid) void field.offsetWidth;
+      field.classList.toggle('is-error', invalid);
+      if (invalid && !firstInvalid) firstInvalid = f.el;
+    });
+    if (firstInvalid){
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      firstInvalid.focus();
+      firstInvalid.closest('.page-field').scrollIntoView({behavior:'smooth', block:'center'});
+      return;
+    }
+    const btn = contactForm.querySelector('button[type="submit"]');
+    btn.setAttribute('aria-busy','true');
+    const original = btn.textContent;
+    btn.textContent = isAr() ? 'جارِ الفتح…' : 'Opening…';
+    setTimeout(()=>{ btn.textContent = original; btn.removeAttribute('aria-busy'); }, 1200);
+  }, true);
+
+  contactForm.addEventListener('input', (e)=>{
+    e.target.closest('.page-field')?.classList.remove('is-error');
+  });
+
+  function playContact(){
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !window.gsap) return;
+    const targets = '#siteNav, .page-hero .idx, .page-hero h1, .page-hero .lead, .contact-card';
+    const tl = gsap.timeline({
+      defaults:{ ease:'power4.out' },
+      onComplete(){ gsap.set(targets, { clearProps:'opacity,visibility,transform,filter' }); }
+    });
+    tl.from('#siteNav', { opacity:0, y:-10, duration:.6 }, 0)
+      .from('.page-hero .idx', { opacity:0, y:10, duration:.5 }, .15)
+      .from('.page-hero h1', { opacity:0, y:20, filter:'blur(7px)', duration:.8 }, .28)
+      .from('.page-hero .lead', { opacity:0, y:12, duration:.65 }, .5)
+      .from('.contact-card', { opacity:0, y:18, duration:.7, stagger:.12 }, .7);
+  }
+  if (window.OminoLoader) OminoLoader.onReady(playContact);
+  else playContact();
+})();
 </script>
 </body>
 </html>

@@ -10,12 +10,48 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/omino.css">
+<style>
+/* ===== Checkout polish additions ===== */
+.pay-wrap{ align-items:start; }
+.pay-summary{ position:sticky; top:104px; }
+
+.card-face{ transition:box-shadow .4s var(--ease,cubic-bezier(.22,1,.36,1)), transform .4s var(--ease,cubic-bezier(.22,1,.36,1)); }
+.card-face.is-live{ box-shadow:0 26px 60px -22px rgba(0,0,0,.45); transform:translateY(-2px); }
+.card-face .pan{ transition:letter-spacing .3s; }
+.card-face .cf-name{
+  margin-top:14px; font-size:13px; letter-spacing:.06em; text-transform:uppercase;
+  opacity:.75; min-height:1em;
+}
+
+.pay-methods label{ position:relative; overflow:hidden; transition:border-color .3s, background .3s; }
+#cardBlock{ overflow:hidden; }
+
+.page-field input:focus, .page-field select:focus, .page-field .pick-trigger:focus{
+  outline:none; box-shadow:var(--ring, 0 0 0 4px rgba(91,124,255,.22)); border-color:var(--ink,#0A0A0A);
+}
+.page-field.is-error input,
+.page-field.is-error select,
+.page-field.is-error .pick-trigger{ border-color:var(--danger,#C45B5B); }
+.page-field.is-error{ animation:fieldShake .4s; }
+@keyframes fieldShake{
+  0%,100%{ transform:translateX(0); }
+  25%{ transform:translateX(-4px); }
+  75%{ transform:translateX(4px); }
+}
+
+@media (max-width:900px){
+  .pay-summary{ position:static; top:auto; }
+}
+@media (prefers-reduced-motion: reduce){
+  .card-face, #cardBlock, .page-field.is-error{ animation:none !important; transition:none !important; }
+}
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="js/omino-loader.js"></script>
 <script src="js/omino-cookies.js"></script>
 </head>
 <body>
-<a class="skip" href="#content">Skip to content</a>
+<a class="skip" href="#content" data-i18n="skip">Skip to content</a>
 <header class="site-nav" id="siteNav">
   <div class="wrap">
     <div class="nav-inner">
@@ -192,6 +228,7 @@
       <a href="terms.html" data-i18n="foot.terms">Terms</a>
       <a href="faq.html" data-i18n="foot.faq">FAQ</a>
       <a href="contact.html" data-i18n="foot.contact">Contact</a>
+      <a href="#cookies" data-cookie-settings data-i18n="foot.cookies">Cookies</a>
     </div>
   </div>
 </footer>
@@ -220,7 +257,7 @@ OminoNav.init({ copy: {
     'f.submit':'Confirm request','f.back':'Back to plans',
     'sum.title':'Your plan','sum.plan':'Plan','sum.bill':'Billing','sum.year':'Billed yearly','sum.due':'Due monthly',
     'sum.left':'Founding seats left','sum.fee':'Online payments later carry a 0.3%–0.5% OMINO platform fee, plus the payment provider’s own fees. Not added on this plan request.',
-    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact',
+    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact','foot.cookies':'Cookies',
     'footer.copy':'© 2026 OMINO. All rights reserved.'
   },
   ar: {
@@ -241,10 +278,186 @@ OminoNav.init({ copy: {
     'f.submit':'تأكيد الطلب','f.back':'رجوع للباقات',
     'sum.title':'باقتك','sum.plan':'الباقة','sum.bill':'الفوترة','sum.year':'يُفوتر سنوياً','sum.due':'المستحق شهرياً',
     'sum.left':'مقاعد التأسيس المتبقية','sum.fee':'الدفعات الإلكترونية لاحقاً عليها رسوم منصة OMINO 0.3%–0.5%، بالإضافة إلى رسوم مزود الدفع. مش مضافة على طلب الباقة هذا.',
-    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل',
+    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل','foot.cookies':'الكوكيز',
     'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.'
   }
 }});
+</script>
+<script>
+/* ===== Checkout polish: live card, method switch, entrance, validation UX ===== */
+(function(){
+  const cardNumber = document.getElementById('cardNumber');
+  const cardExp = document.getElementById('cardExp');
+  const cvc = document.getElementById('cvc');
+  const fullname = document.getElementById('fullname');
+  const cardFaceNum = document.getElementById('cardFaceNum');
+  const cardFace = document.querySelector('.card-face');
+  const cardBlock = document.getElementById('cardBlock');
+  const methodRadios = document.querySelectorAll('input[name="method"]');
+  const submitBtn = document.querySelector('#checkoutForm button[type="submit"]');
+  const checkoutForm = document.getElementById('checkoutForm');
+  if (!checkoutForm || !cardFace || !cardBlock || !submitBtn) return;
+
+  function ar(){ return document.documentElement.lang === 'ar'; }
+
+  let cfName = cardFace.querySelector('.cf-name');
+  if (!cfName) {
+    cfName = document.createElement('div');
+    cfName.className = 'cf-name';
+    cardFace.appendChild(cfName);
+  }
+
+  function caretAfterDigits(formatted, digitCount) {
+    if (digitCount <= 0) return 0;
+    let seen = 0;
+    for (let i = 0; i < formatted.length; i++) {
+      if (/\d/.test(formatted[i])) seen++;
+      if (seen >= digitCount) return i + 1;
+    }
+    return formatted.length;
+  }
+
+  function panMask(digits) {
+    const chars = [];
+    for (let i = 0; i < 16; i++) chars.push(digits[i] || '•');
+    return chars.join('').replace(/(.{4})/g, '$1 ').trim();
+  }
+
+  cardNumber.addEventListener('input', () => {
+    const digitsBefore = cardNumber.value.slice(0, cardNumber.selectionStart).replace(/\D/g, '').length;
+    const digits = cardNumber.value.replace(/\D/g, '').slice(0, 16);
+    const grouped = digits.replace(/(.{4})/g, '$1 ').trim();
+    cardNumber.value = grouped;
+    cardNumber.setSelectionRange(caretAfterDigits(grouped, digitsBefore), caretAfterDigits(grouped, digitsBefore));
+    cardFaceNum.textContent = digits.length ? panMask(digits) : '•••• •••• •••• ••••';
+    cardFace.classList.add('is-live');
+  });
+
+  cardExp.addEventListener('input', () => {
+    const digitsBefore = cardExp.value.slice(0, cardExp.selectionStart).replace(/\D/g, '').length;
+    let v = cardExp.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
+    cardExp.value = v;
+    cardExp.setSelectionRange(caretAfterDigits(v, digitsBefore), caretAfterDigits(v, digitsBefore));
+    cardFace.classList.add('is-live');
+  });
+
+  cvc.addEventListener('input', () => {
+    cvc.value = cvc.value.replace(/\D/g, '').slice(0, 4);
+  });
+
+  fullname.addEventListener('input', () => {
+    cfName.textContent = fullname.value.trim().toUpperCase();
+    if (fullname.value.trim()) cardFace.classList.add('is-live');
+  });
+
+  function applyMethod(method) {
+    const showCard = method === 'card';
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (window.gsap) gsap.killTweensOf(cardBlock);
+    if (window.gsap && !reduce) {
+      if (showCard) {
+        cardBlock.style.display = '';
+        gsap.fromTo(cardBlock,
+          { height: 0, opacity: 0 },
+          { height: 'auto', opacity: 1, duration: .45, ease: 'power2.inOut' }
+        );
+      } else {
+        gsap.to(cardBlock, {
+          height: 0,
+          opacity: 0,
+          duration: .45,
+          ease: 'power2.inOut',
+          onComplete() {
+            if (checkoutForm.method.value === 'whatsapp') cardBlock.style.display = 'none';
+          }
+        });
+      }
+    } else {
+      cardBlock.style.display = showCard ? '' : 'none';
+    }
+    submitBtn.textContent = showCard
+      ? (ar() ? 'تأكيد الطلب' : 'Confirm request')
+      : (ar() ? 'إرسال عبر واتساب' : 'Send via WhatsApp');
+  }
+
+  methodRadios.forEach((r) => r.addEventListener('change', () => applyMethod(r.value)));
+  document.addEventListener('omino-lang', () => {
+    const checked = checkoutForm.querySelector('input[name="method"]:checked');
+    if (checked) applyMethod(checked.value);
+  });
+
+  function fieldInvalid(el) {
+    const value = el.value.trim();
+    if (!value) return true;
+    if (el.id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return true;
+    if (el.id === 'cardNumber' && value.replace(/\D/g, '').length < 13) return true;
+    if (el.id === 'cardExp' && value.replace(/\D/g, '').length !== 4) return true;
+    if (el.id === 'cvc' && value.replace(/\D/g, '').length < 3) return true;
+    return false;
+  }
+
+  checkoutForm.addEventListener('submit', (e) => {
+    const method = (checkoutForm.querySelector('input[name="method"]:checked') || {}).value;
+    const required = [...checkoutForm.querySelectorAll('[required]')].filter((el) => {
+      if (el.closest('#cardBlock') && method !== 'card') return false;
+      return true;
+    });
+    let firstInvalid = null;
+    required.forEach((el) => {
+      const field = el.closest('.page-field');
+      const invalid = fieldInvalid(el);
+      if (field) {
+        field.classList.remove('is-error');
+        if (invalid) void field.offsetWidth;
+        field.classList.toggle('is-error', invalid);
+      }
+      if (invalid && !firstInvalid) firstInvalid = el;
+    });
+    if (firstInvalid) {
+      e.preventDefault();
+      const focusEl = firstInvalid.closest('.page-field')?.querySelector('.pick-trigger') || firstInvalid;
+      focusEl.focus();
+      (firstInvalid.closest('.page-field') || firstInvalid).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, true);
+
+  checkoutForm.addEventListener('input', (e) => {
+    e.target.closest('.page-field')?.classList.remove('is-error');
+  });
+  checkoutForm.addEventListener('change', (e) => {
+    e.target.closest('.page-field')?.classList.remove('is-error');
+  });
+
+  function playCheckout() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !window.gsap) return;
+    const targets = '#siteNav, .page-hero .idx, .page-hero h1, .page-hero .lead, .pay-kicker, .page-field, .pay-methods label, .pay-summary';
+    const tl = gsap.timeline({
+      defaults: { ease: 'power4.out' },
+      onComplete() { gsap.set(targets, { clearProps: 'opacity,visibility,transform,filter' }); }
+    });
+    tl.from('#siteNav', { autoAlpha: 0, y: -10, duration: .6 }, 0)
+      .from('.page-hero .idx', { autoAlpha: 0, y: 10, duration: .5 }, .15)
+      .from('.page-hero h1', { autoAlpha: 0, y: 20, filter: 'blur(7px)', duration: .8 }, .28)
+      .from('.page-hero .lead', { autoAlpha: 0, y: 12, duration: .65 }, .5)
+      .from('.pay-kicker', { autoAlpha: 0, y: 8, duration: .5, stagger: .25 }, .7)
+      .from('.page-field', { autoAlpha: 0, y: 12, duration: .5, stagger: .05 }, .8)
+      .from('.pay-methods label', { autoAlpha: 0, y: 10, duration: .5, stagger: .08 }, 1.15)
+      .from('.pay-summary', { autoAlpha: 0, y: 16, duration: .7 }, .95);
+  }
+  if (window.OminoLoader) OminoLoader.onReady(playCheckout);
+  else playCheckout();
+
+  const seatsEl = document.getElementById('foundingLeft');
+  if (seatsEl && window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const target = parseInt(seatsEl.textContent, 10) || 0;
+    const obj = { v: 0 };
+    gsap.to(obj, {
+      v: target, duration: 1.1, delay: 1.4, ease: 'power2.out',
+      onUpdate() { seatsEl.textContent = Math.round(obj.v); }
+    });
+  }
+})();
 </script>
 </body>
 </html>

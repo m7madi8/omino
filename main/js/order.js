@@ -90,7 +90,6 @@
     const err = document.getElementById('payError');
     const cardNum = document.getElementById('cardNumber');
     const cardExp = document.getElementById('cardExp');
-    const cardFace = document.getElementById('cardFaceNum');
     let planId = (params.get('plan') || 'pro').toLowerCase();
     if (!O.plans[planId]) planId = 'pro';
     let billing = params.get('billing') === 'yearly' ? 'yearly' : 'monthly';
@@ -114,26 +113,11 @@
     document.querySelectorAll('input[name="method"]').forEach((input) => {
       input.addEventListener('change', () => {
         const wa = checkoutForm.method.value === 'whatsapp';
-        cardBlock.hidden = wa;
         cardBlock.querySelectorAll('input').forEach((el) => { el.required = !wa; });
         document.querySelectorAll('.pay-methods label').forEach((l) => l.classList.toggle('is-on', l.querySelector('input').checked));
       });
     });
     document.querySelectorAll('.pay-methods label').forEach((l) => l.classList.toggle('is-on', l.querySelector('input').checked));
-
-    if (cardNum) {
-      cardNum.addEventListener('input', () => {
-        const d = O.digits(cardNum.value).slice(0, 16);
-        cardNum.value = d.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
-        if (cardFace) cardFace.textContent = cardNum.value || '•••• •••• •••• ••••';
-      });
-    }
-    if (cardExp) {
-      cardExp.addEventListener('input', () => {
-        const d = O.digits(cardExp.value).slice(0, 4);
-        cardExp.value = d.length > 2 ? d.slice(0, 2) + '/' + d.slice(2) : d;
-      });
-    }
 
     checkoutForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -150,6 +134,10 @@
       const postal = checkoutForm.postal.value.trim();
       if (!fullname || !business || !email || !phone) {
         err.textContent = lang() === 'ar' ? 'أدخل الاسم، اسم النشاط، الإيميل، والجوال.' : 'Enter name, business, email, and mobile.';
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        err.textContent = lang() === 'ar' ? 'أدخل إيميلاً صحيحاً.' : 'Enter a valid email.';
         return;
       }
       if (!address1 || !country || !city || !postal) {
@@ -202,7 +190,10 @@
 
     document.addEventListener('omino-lang', () => {
       fillSummary(planId, billing);
-      if (countryEl && cityEl && O.fillCitySelect) refreshPlaces(true);
+      if (countryEl && cityEl && O.fillCitySelect) {
+        refreshPlaces(true);
+        if (O.enhancePlaceSelects) O.enhancePlaceSelects(countryEl, cityEl);
+      }
     });
   }
 

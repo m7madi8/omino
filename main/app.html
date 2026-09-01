@@ -18,26 +18,32 @@
   display:flex;
   flex-direction:column;
   justify-content:center;
-  padding:120px 24px 64px;
+  padding:120px max(24px, env(safe-area-inset-right)) max(64px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
 }
-.app-inner{max-width:520px;margin:0 auto;}
+.app-inner{max-width:520px;width:100%;margin:0 auto;min-width:0;}
 .app-mark{width:56px;height:56px;margin-bottom:32px;}
 .app-mark img{width:100%;height:100%;object-fit:contain;}
-.app h1{font-size:clamp(2rem,4vw,3rem);line-height:1.1;color:var(--paper);}
-.app .meta{margin-top:16px;color:#A8ADB3;}
+.app h1{font-size:clamp(1.85rem,6vw,3rem);line-height:1.15;color:var(--paper);overflow-wrap:break-word;}
+.app .meta{margin-top:16px;color:#A8ADB3;overflow-wrap:anywhere;}
 .app-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px;}
+.app-actions .btn{height:auto;}
 .on-dark .btn-ghost{border-color:var(--hairline-dark);}
+@media(max-width:480px){
+  .app{padding-top:96px;}
+  .app-actions .btn{flex:1 1 100%;}
+}
 </style>
 </head>
 <body class="on-dark">
+<a class="skip" href="#hello" id="skipLink">Skip to content</a>
 <main class="app">
   <div class="app-inner">
     <div class="app-mark"><img src="img/omino-mark-paper.png" alt="" width="240" height="244"></div>
-    <p class="idx">AI Business OS</p>
+    <p class="idx" id="kicker">AI Business OS</p>
     <h1 id="hello">You are inside OMINO.</h1>
     <p class="meta" id="meta"></p>
     <div class="app-actions">
-      <a class="btn btn-primary" href="index.html">Back to OMINO</a>
+      <a class="btn btn-primary" href="index.html" id="backBtn">Back to OMINO</a>
       <button type="button" class="btn btn-ghost" id="signOut">Sign out</button>
     </div>
   </div>
@@ -50,8 +56,12 @@ else {
   const ar = localStorage.getItem('omino-lang') === 'ar';
   document.documentElement.lang = ar ? 'ar' : 'en';
   document.documentElement.dir = ar ? 'rtl' : 'ltr';
+  document.title = ar ? 'OMINO — حسابك' : 'OMINO';
+  document.getElementById('skipLink').textContent = ar ? 'تخطي إلى المحتوى' : 'Skip to content';
+  document.getElementById('kicker').textContent = ar ? 'نظام تشغيل الأعمال' : 'AI Business OS';
   document.getElementById('hello').textContent = ar ? 'أنت داخل OMINO.' : 'You are inside OMINO.';
-  document.getElementById('meta').textContent = (s.business ? s.business + ' · ' : '') + s.email;
+  document.getElementById('meta').textContent = [s.fullname, s.business, s.email].filter(Boolean).join(' · ');
+  document.getElementById('backBtn').textContent = ar ? 'العودة إلى OMINO' : 'Back to OMINO';
   document.getElementById('signOut').textContent = ar ? 'خروج' : 'Sign out';
 }
 document.getElementById('signOut').addEventListener('click', ()=>{

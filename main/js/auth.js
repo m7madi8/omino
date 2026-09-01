@@ -22,7 +22,13 @@
     catch { return null; }
   }
   function setSession(user) {
-    const next = { email: user.email, business: user.business, at: Date.now() };
+    const next = {
+      email: user.email,
+      business: user.business,
+      fullname: user.fullname || '',
+      phone: user.phone || '',
+      at: Date.now()
+    };
     localStorage.setItem(SESSION_KEY, JSON.stringify(next));
     return next;
   }
@@ -47,13 +53,13 @@
     return setSession(user);
   }
 
-  async function signUp({ email, password, business }) {
+  async function signUp({ email, password, business, fullname, phone }) {
     const endpoint = global.OMINO_AUTH_ENDPOINT;
     if (endpoint) {
       const res = await fetch(endpoint + '/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, business })
+        body: JSON.stringify({ email, password, business, fullname, phone })
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.message || 'SIGNUP_FAILED');
@@ -66,7 +72,9 @@
     const salt = crypto.randomUUID();
     const user = {
       email: clean,
-      business: business.trim(),
+      business: String(business || '').trim(),
+      fullname: String(fullname || '').trim(),
+      phone: String(phone || '').trim(),
       salt,
       hash: await sha256(salt + password),
       created: Date.now()

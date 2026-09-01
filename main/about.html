@@ -54,6 +54,14 @@ body{
   font-stretch:normal;
 }
 html[lang="ar"] .serif{font-family:var(--font-ar-display);font-style:normal;font-weight:400;}
+html[lang="ar"] .about-hero h1,
+html[lang="ar"] .end h2,
+html[lang="ar"] .future h2,
+html[lang="ar"] .founding h2,
+html[lang="ar"] .story h2{
+  max-width:18ch;
+  line-height:1.15;
+}
 .story{padding:40px 0 120px;}
 .story h2{font-size:clamp(2rem,4.5vw,3.4rem);max-width:16ch;line-height:1.08;}
 .story-body{margin-top:28px;max-width:46ch;color:var(--stone-2);font-size:18px;}
@@ -185,13 +193,16 @@ html[lang="ar"] .bubble span{letter-spacing:0;text-transform:none;}
 .end-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px;}
 .end-foot{margin-top:80px;color:var(--stone);}
 @media(max-width:800px){
+  .about-hero{padding:128px 0 72px;}
   .about-hero .second,.diff-grid,.home-grid{grid-template-columns:1fr;}
+  .about-hero h1,.end h2,.future h2,.founding h2,.story h2{max-width:none;}
   .bubble.owner{justify-self:stretch;}
+  .end-ctas .btn{height:auto;}
 }
 </style>
 </head>
 <body>
-<a class="skip" href="#content">Skip to content</a>
+<a class="skip" href="#content" data-i18n="skip">Skip to content</a>
 
 <header class="site-nav" id="siteNav">
   <div class="wrap">
@@ -416,6 +427,7 @@ html[lang="ar"] .bubble span{letter-spacing:0;text-transform:none;}
       <a href="terms.html" data-i18n="foot.terms">Terms</a>
       <a href="faq.html" data-i18n="foot.faq">FAQ</a>
       <a href="contact.html" data-i18n="foot.contact">Contact</a>
+      <a href="#cookies" data-cookie-settings data-i18n="foot.cookies">Cookies</a>
     </div>
   </div>
 </footer>
@@ -462,7 +474,7 @@ const copy = {
     'end.explore':'Explore OMINO',
     'end.line':'One intelligent system for your business.',
     'footer.copy':'© 2026 OMINO. All rights reserved.',
-    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact'
+    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact','foot.cookies':'Cookies'
   },
   ar: {
     title: 'OMINO — الفكرة',
@@ -502,7 +514,7 @@ const copy = {
     'end.explore':'استكشف OMINO',
     'end.line':'نظام ذكي واحد لنشاطك.',
     'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.',
-    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل'
+    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل','foot.cookies':'الكوكيز'
   }
 };
 OminoNav.init({ copy });

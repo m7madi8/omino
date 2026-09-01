@@ -99,12 +99,25 @@ html[lang="ar"] h1,html[lang="ar"] h2{
   font-weight:700;
   font-stretch:normal;
   letter-spacing:0;
+  line-height:1.15;
+  overflow-wrap:break-word;
 }
 h3,h4{font-family:inherit;font-weight:500;margin:0;}
 p{margin:0;}
 a{color:inherit;text-decoration:none;}
 button{font-family:inherit;cursor:pointer;touch-action:manipulation;}
 img,svg{display:block;max-width:100%;}
+.skip{
+  position:absolute;
+  inset-inline-start:-999px;
+  top:8px;
+  background:var(--ink);
+  color:var(--paper);
+  padding:10px 16px;
+  border-radius:var(--radius-pill);
+  z-index:400;
+}
+.skip:focus{inset-inline-start:16px;}
 .wrap{
   max-width:1180px;
   margin:0 auto;
@@ -374,6 +387,12 @@ header.site-nav.scrolled .nav-inner{
 }
 .nav-links{display:none;align-items:center;gap:4px;}
 @media(min-width:980px){.nav-links{display:flex;}}
+html[lang="ar"] .nav-links a.en{
+  font-family:var(--font-ar);
+  letter-spacing:0;
+  text-transform:none;
+  direction:rtl;
+}
 .nav-links a{
   font-size:12px;color:var(--ink-2);
   padding:8px 14px;
@@ -393,9 +412,14 @@ header.site-nav.scrolled .nav-inner{
   min-width:44px;min-height:44px;
   padding:8px 12px;
   border-radius:var(--radius-pill);
-  transition:background 400ms var(--ease), color 400ms var(--ease);
+  transition:color 400ms var(--ease);
+  -webkit-tap-highlight-color:transparent;
 }
-.lang-btn:hover{background:rgba(7,8,9,0.05);}
+.lang-btn:hover,
+.lang-btn:active,
+.lang-btn:focus{
+  background:none;
+}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:12px 20px;font-size:12px;font-weight:500;
@@ -419,6 +443,9 @@ html[lang="ar"] .btn{
   letter-spacing:0;
   text-transform:none;
   padding:12px 22px;
+  white-space:normal;
+  line-height:1.3;
+  height:auto;
 }
 .btn-primary{
   background:var(--ink);color:var(--paper);
@@ -477,6 +504,10 @@ html[lang="ar"] .btn-sm{font-size:14px;padding:9px 16px;}
   background:transparent;
 }
 @media(min-width:980px){.menu-btn{display:none;}}
+@media (min-width:980px) and (max-width:1180px){
+  html[lang="ar"] .nav-links{display:none;}
+  html[lang="ar"] .menu-btn{display:flex;}
+}
 @media(max-width:979px){
   header.site-nav{top:10px;}
   header.site-nav .wrap{
@@ -617,6 +648,16 @@ html[lang="ar"] .menu-connect{
 }
 .social:focus-visible{box-shadow:var(--ring);}
 
+html.menu-open,
+html.menu-open body{
+  overflow:hidden !important;
+  overscroll-behavior:none;
+}
+html.menu-open .menu-scrim{touch-action:none;}
+html.menu-open .menu-nav{
+  touch-action:pan-y;
+  overscroll-behavior:contain;
+}
 html.menu-open header.site-nav{z-index:220;}
 html.menu-open header.site-nav .nav-inner,
 html.menu-open header.site-nav.scrolled .nav-inner{
@@ -627,7 +668,9 @@ html.menu-open header.site-nav.scrolled .nav-inner{
   -webkit-backdrop-filter:none;
 }
 html.menu-open .lang-btn{color:var(--paper);}
-html.menu-open .lang-btn:hover{background:rgba(255,255,255,0.08);}
+html.menu-open .lang-btn:hover,
+html.menu-open .lang-btn:active,
+html.menu-open .lang-btn:focus{background:none;}
 html.menu-open .menu-btn,
 html.menu-open .menu-btn:hover,
 html.menu-open .menu-btn:active,
@@ -677,7 +720,11 @@ h2.section-head{
   line-height:0.96;
   max-width:22ch;
 }
-html[lang="ar"] h2.section-head{line-height:1.12;}
+html[lang="ar"] h2.section-head{line-height:1.12;max-width:18ch;}
+@media(max-width:768px){
+  html[lang="ar"] h2.section-head,
+  html[lang="ar"] .hero-top h1{max-width:none;}
+}
 p.section-sub{
   font-size:17px;
   font-weight:400;
@@ -878,6 +925,7 @@ html[lang="ar"] .merge-caption{
 }
 .chat-top{padding:16px 22px 8px;display:flex;align-items:center;gap:10px;}
 .chat-top span{font-size:12px;color:#8A9096;}
+html[lang="ar"] .chat-top span{font-family:var(--font-ar);letter-spacing:0;}
 .ai-dot{width:7px;height:7px;border-radius:var(--radius-pill);background:var(--accent);flex:none;}
 .chat-body{padding:18px 22px 26px;display:flex;flex-direction:column;gap:20px;}
 .msg{max-width:82%;}
@@ -1110,6 +1158,7 @@ footer.band-footer{
 </style>
 </head>
 <body>
+<a class="skip" href="#hero" data-i18n="skip">Skip to content</a>
 
 <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
   <defs>
@@ -1301,7 +1350,7 @@ footer.band-footer{
     <div class="ai-wrap">
       <div class="ai-glow" aria-hidden="true"></div>
       <div class="chat-shell">
-        <div class="chat-top"><span class="ai-dot"></span><span class="en">Profit analysis</span></div>
+        <div class="chat-top"><span class="ai-dot"></span><span data-i18n="chat.top">Profit analysis</span></div>
         <div class="chat-body">
           <div class="msg user"><div class="bubble" data-i18n="chat.user">Why did my profit drop this month?</div></div>
           <div class="msg ai">
@@ -1379,7 +1428,7 @@ footer.band-footer{
 
     <div class="fee-note">
       <div>
-        <h4 class="en">Payments</h4>
+        <h4 data-i18n="fee.title">Payments</h4>
         <p data-i18n="fee">OMINO platform fee of 0.3%–0.5% on every successful online payment, plus the payment provider’s own fees.</p>
       </div>
       <div class="pct">0.3%–0.5%</div>
@@ -1400,6 +1449,7 @@ footer.band-footer{
       <a href="terms.html" data-i18n="foot.terms">Terms</a>
       <a href="faq.html" data-i18n="foot.faq">FAQ</a>
       <a href="contact.html" data-i18n="foot.contact">Contact</a>
+      <a href="#cookies" data-cookie-settings data-i18n="foot.cookies">Cookies</a>
     </div>
   </div>
 </footer>
@@ -1556,6 +1606,7 @@ const copy = {
     'menu.kicker': 'Menu / 00',
     'menu.tag': 'AI Business OS',
     'menu.connect': 'Connect',
+    skip: 'Skip to content',
     'hero.line1': 'Your business.',
     'hero.line2': 'One intelligence.',
     'hero.sub': 'OMINO brings your store, POS, inventory, customers, payments and analytics into one intelligent business system — so you can see what’s happening, understand why, and know what to do next.',
@@ -1567,7 +1618,9 @@ const copy = {
     'business.sub': 'The dashboard changes with what you sell — not a generic template.',
     'ai.title': 'Know what happened.<br>Know what to do next.',
     'ai.sub': 'OMINO turns your business data into decisions — identifying problems, explaining why they happened, and recommending your next move.',
+    'chat.top': 'Profit analysis',
     'chat.user': 'Why did my profit drop this month?',
+    'chat.ai': 'Revenue grew 8%.<br>Gross profit fell 4%.',
     'chat.ai': 'Revenue grew 8%.<br>Gross profit fell 4%.',
     'chat.1': 'Product costs increased 7%',
     'chat.2': 'Two high-volume products lost margin',
@@ -1582,9 +1635,10 @@ const copy = {
     'plan.p.desc': 'Grow your business.', 'plan.p.1': 'Advanced AI insights', 'plan.p.2': 'Recommendations', 'plan.p.3': 'Forecasting', 'plan.p.cta': 'Start Pro',
     'plan.b.desc': 'Scale your business.', 'plan.b.1': 'AI Business Agent', 'plan.b.2': 'Automation', 'plan.b.3': 'Advanced intelligence', 'plan.b.cta': 'Start Business',
     founding: 'The first 50 businesses lock in founding pricing for as long as they stay on OMINO.',
+    'fee.title': 'Payments',
     fee: 'OMINO platform fee of 0.3%–0.5% on every successful online payment, plus the payment provider’s own fees.',
     'footer.copy': '© 2026 OMINO. All rights reserved.',
-    'foot.privacy': 'Privacy', 'foot.terms': 'Terms', 'foot.faq': 'FAQ', 'foot.contact': 'Contact'
+    'foot.privacy': 'Privacy', 'foot.terms': 'Terms', 'foot.faq': 'FAQ', 'foot.contact': 'Contact', 'foot.cookies': 'Cookies'
   },
   ar: {
     title: 'OMINO — نظام تشغيل الأعمال',
@@ -1594,6 +1648,7 @@ const copy = {
     'menu.kicker': 'Menu / 00',
     'menu.tag': 'نظام تشغيل الأعمال',
     'menu.connect': 'تواصل',
+    skip: 'تخطي إلى المحتوى',
     'hero.line1': 'عملك.',
     'hero.line2': 'ذكاء واحد.',
     'hero.sub': 'OMINO يجمع متجرك، ونقطة البيع، والمخزون، والعملاء، والمدفوعات، والتحليلات في نظام أعمال ذكي واحد — لترى ما يحدث، وتفهم السبب، وتعرف ماذا تفعل بعد ذلك.',
@@ -1605,6 +1660,7 @@ const copy = {
     'business.sub': 'اللوحة تتغيّر حسب ما تبيع — لا حسب قالب جاهز.',
     'ai.title': 'اعرف وش صار.<br>اعرف وش تسوي بعدين.',
     'ai.sub': 'OMINO يحوّل بيانات نشاطك إلى قرارات — يحدد المشكلة، يشرح ليش صارت، ويقترح خطوتك التالية.',
+    'chat.top': 'تحليل الربح',
     'chat.user': 'ليش الربح نزل هذا الشهر؟',
     'chat.ai': 'الإيرادات نمت 8%.<br>الربح الإجمالي نزل 4%.',
     'chat.1': 'تكلفة المنتجات ارتفعت 7%',
@@ -1620,9 +1676,10 @@ const copy = {
     'plan.p.desc': 'كبّر نشاطك.', 'plan.p.1': 'رؤى ذكاء متقدمة', 'plan.p.2': 'توصيات', 'plan.p.3': 'توقعات', 'plan.p.cta': 'ابدأ Pro',
     'plan.b.desc': 'وسّع نشاطك.', 'plan.b.1': 'AI Business Agent', 'plan.b.2': 'أتمتة', 'plan.b.3': 'ذكاء متقدم', 'plan.b.cta': 'ابدأ Business',
     founding: 'أول 50 نشاطاً يثبتون تسعير المؤسسين طالما بقوا على OMINO.',
+    'fee.title': 'المدفوعات',
     fee: 'رسوم منصة OMINO 0.3%–0.5% على كل دفعة إلكترونية ناجحة، بالإضافة إلى رسوم مزود الدفع نفسه.',
     'footer.copy': '© 2026 OMINO. جميع الحقوق محفوظة.',
-    'foot.privacy': 'الخصوصية', 'foot.terms': 'الشروط', 'foot.faq': 'أسئلة', 'foot.contact': 'تواصل'
+    'foot.privacy': 'الخصوصية', 'foot.terms': 'الشروط', 'foot.faq': 'أسئلة', 'foot.contact': 'تواصل', 'foot.cookies': 'الكوكيز'
   }
 };
 
@@ -1658,16 +1715,48 @@ function t(key){ return copy[lang][key]; }
 
 function applyCopy(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{
-    el.textContent = t(el.dataset.i18n);
+    const v = t(el.dataset.i18n);
+    if(v != null) el.textContent = v;
   });
   document.querySelectorAll('[data-i18n-html]').forEach(el=>{
-    el.innerHTML = t(el.dataset.i18nHtml);
+    const v = t(el.dataset.i18nHtml);
+    if(v != null) el.innerHTML = v;
   });
   document.title = t('title');
   setBilling(billing);
 }
 
 let menuAnim;
+let lockY = 0;
+function lockPage(){
+  lockY = window.scrollY || document.documentElement.scrollTop || 0;
+  document.documentElement.classList.add('menu-open');
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.top = '-' + lockY + 'px';
+  document.body.style.left = '0';
+  document.body.style.right = '0';
+  document.body.style.width = '100%';
+}
+function unlockPage(){
+  document.documentElement.classList.remove('menu-open');
+  document.documentElement.style.overflow = '';
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.left = '';
+  document.body.style.right = '';
+  document.body.style.width = '';
+  window.scrollTo(0, lockY);
+}
+function trapScroll(e){
+  if(!document.documentElement.classList.contains('menu-open')) return;
+  if(e.target.closest && e.target.closest('.menu-nav')) return;
+  e.preventDefault();
+}
+document.addEventListener('touchmove', trapScroll, {passive:false});
+document.addEventListener('wheel', trapScroll, {passive:false});
 function setMenu(open){
   const drawer = mobileMenu.querySelector('.menu-drawer');
   const scrim = document.getElementById('menuScrim');
@@ -1684,10 +1773,9 @@ function setMenu(open){
 
   if(open){
     mobileMenu.classList.add('open');
-    document.documentElement.classList.add('menu-open');
+    lockPage();
     mobileMenu.setAttribute('aria-hidden', 'false');
     mobileMenu.inert = false;
-    document.body.style.overflow = 'hidden';
     if(reduceMotion){
       gsap.set(scrim, {opacity:1});
       gsap.set(drawer, {x:0});
@@ -1706,10 +1794,9 @@ function setMenu(open){
 
   const finish = ()=>{
     mobileMenu.classList.remove('open');
-    document.documentElement.classList.remove('menu-open');
+    unlockPage();
     mobileMenu.setAttribute('aria-hidden', 'true');
     mobileMenu.inert = true;
-    document.body.style.overflow = '';
     gsap.set([scrim, drawer, items], {clearProps:'all'});
     menuAnim = null;
   };

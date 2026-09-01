@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en" dir="ltr" class="await-open">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OMINO</title>
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@500&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+<script src="js/omino-loader.js"></script>
+<script src="js/omino-cookies.js"></script>
 <style>
 :root {
   --ink: #070809;
@@ -37,6 +42,7 @@
   --shadow-lift: 0 28px 56px -32px rgba(7, 8, 9, 0.2);
   --ring: 0 0 0 4px rgba(91, 124, 255, 0.22);
   --font-display: 'Archivo', sans-serif;
+  --font-mark: 'Satoshi', 'Archivo', sans-serif;
   --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Instrument Serif', Georgia, serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
@@ -297,6 +303,16 @@ html.menu-open .orbit{opacity:0;visibility:hidden;}
 }
 @media (prefers-reduced-motion: reduce){
   .orbit-ring,.orbit-seed,.orbit-readout{transition:none;}
+}
+html.await-open header.site-nav,
+html.await-open #orbit,
+html.await-open .hero-top{
+  opacity:0;
+}
+@media (prefers-reduced-motion: reduce){
+  html.await-open header.site-nav,
+  html.await-open #orbit,
+  html.await-open .hero-top{opacity:1;}
 }
 
 .logo-lockup{
@@ -691,6 +707,14 @@ html[lang="ar"] .hero-top h1{line-height:1.08;max-width:12ch;}
   font-size:12px;
   color:var(--stone);
 }
+.hero-line{
+  display:block;
+  overflow:hidden;
+}
+.hero-line > span{
+  display:block;
+  will-change:transform,opacity;
+}
 .hero-top p.sub{
   font-size:17px;
   font-weight:400;
@@ -702,7 +726,7 @@ html[lang="ar"] .hero-top h1{line-height:1.08;max-width:12ch;}
 .hero-ctas{display:flex;align-items:center;gap:14px;margin-top:40px;flex-wrap:wrap;}
 .hero-fine{font-size:15px;color:var(--stone);margin-top:20px;}
 
-.problem-visual{margin-top:80px;position:relative;}
+.problem-visual{margin-top:80px;position:relative;overflow:visible;}
 .frag-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
 .frag-chip{
   border:1px solid rgba(41,45,49,0.95);
@@ -721,11 +745,87 @@ html[lang="ar"] .hero-top h1{line-height:1.08;max-width:12ch;}
   color:#A8ADB3;
 }
 .merge-arrow{display:flex;justify-content:center;margin:40px 0;}
-.merge-into{display:flex;justify-content:center;}
-.merge-into .logo-lockup{display:block;}
-.merge-into .logo-img{
-  height:auto;
-  width:min(460px, 78vw);
+.merge-into{
+  display:flex;
+  justify-content:center;
+  overflow:visible;
+  min-height:clamp(110px,20vw,168px);
+  align-items:center;
+}
+.merge-lock{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(14px,2.6vw,24px);
+  direction:ltr;
+  position:relative;
+  overflow:visible;
+}
+.merge-mark{
+  display:block;
+  flex:none;
+  width:clamp(52px,10vw,78px);
+  line-height:0;
+  transform-origin:50% 50%;
+  will-change:transform,opacity,filter;
+}
+.merge-mark svg{display:block;width:100%;height:auto;color:var(--paper);}
+.merge-mark-live{display:block;line-height:0;transform-origin:50% 50%;}
+.merge-mark .void{fill:var(--ink);}
+.merge-word{
+  display:flex;
+  align-items:center;
+  font-family:var(--font-mark);
+  font-stretch:normal;
+  font-weight:500;
+  font-size:clamp(1.7rem,5.1vw,3.05rem);
+  letter-spacing:0;
+  line-height:1;
+  color:var(--paper);
+  text-transform:uppercase;
+  overflow:visible;
+  text-rendering:geometricPrecision;
+  -webkit-font-smoothing:antialiased;
+}
+.merge-letter{
+  display:inline-block;
+  margin-inline-end:0.3em;
+  transform-origin:50% 70%;
+  will-change:transform,opacity,filter;
+}
+.merge-letter:last-child{margin-inline-end:0;}
+.merge-glyph{
+  display:block;
+  transform-origin:50% 80%;
+}
+@media (prefers-reduced-motion: no-preference){
+  .merge-lock:not(.is-gsap) .merge-mark{
+    animation:mergeMarkLoop 6.4s cubic-bezier(.22,1,.36,1) infinite;
+  }
+  .merge-lock:not(.is-gsap) .merge-letter{
+    opacity:0;
+    animation:mergeLetterLoop 6.4s cubic-bezier(.22,1,.36,1) infinite;
+  }
+  .merge-lock:not(.is-gsap) .merge-letter:nth-child(1){--sx:-28px;--sy:-56px;--sr:-18deg;--ex:-36px;--ey:42px;--er:14deg;animation-delay:.06s;}
+  .merge-lock:not(.is-gsap) .merge-letter:nth-child(2){--sx:18px;--sy:54px;--sr:12deg;--ex:-8px;--ey:-48px;--er:-10deg;animation-delay:.16s;}
+  .merge-lock:not(.is-gsap) .merge-letter:nth-child(3){--sx:0px;--sy:-64px;--sr:8deg;--ex:12px;--ey:56px;--er:-16deg;animation-delay:.24s;}
+  .merge-lock:not(.is-gsap) .merge-letter:nth-child(4){--sx:52px;--sy:36px;--sr:20deg;--ex:48px;--ey:-40px;--er:18deg;animation-delay:.32s;}
+  .merge-lock:not(.is-gsap) .merge-letter:nth-child(5){--sx:78px;--sy:-28px;--sr:-12deg;--ex:70px;--ey:38px;--er:-14deg;animation-delay:.4s;}
+}
+@keyframes mergeMarkLoop{
+  0%,7%{opacity:0;transform:translate3d(-42px,10px,0) rotate(-26deg) scale(.68);filter:blur(10px);}
+  24%{opacity:1;transform:translate3d(0,-2px,0) rotate(0) scale(1.06);filter:blur(0);}
+  32%,58%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1);filter:blur(0);}
+  76%,100%{opacity:0;transform:translate3d(-30px,-18px,0) rotate(18deg) scale(.78);filter:blur(8px);}
+}
+@keyframes mergeLetterLoop{
+  0%,9%{opacity:0;transform:translate3d(var(--sx),var(--sy),0) rotate(var(--sr)) scale(.72);filter:blur(8px);}
+  30%{opacity:1;transform:translate3d(0,-3px,0) rotate(0) scale(1.04);filter:blur(0);}
+  38%,60%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1);filter:blur(0);}
+  80%,100%{opacity:0;transform:translate3d(var(--ex),var(--ey),0) rotate(var(--er)) scale(.7);filter:blur(7px);}
+}
+@media (prefers-reduced-motion: reduce){
+  .merge-mark,.merge-letter,.merge-glyph{opacity:1;transform:none;filter:none;animation:none;}
 }
 .merge-caption{
   margin-top:22px;
@@ -1127,7 +1227,10 @@ footer.band-footer{
   <div class="wrap">
     <div class="hero-top">
       <p class="hero-index idx" id="heroIndex">AI BUSINESS OS / 001</p>
-      <h1 id="heroTitle" data-i18n-html="hero.title">Your business.<br>One intelligence.</h1>
+      <h1 id="heroTitle">
+        <span class="hero-line"><span data-i18n="hero.line1">Your business.</span></span>
+        <span class="hero-line"><span data-i18n="hero.line2">One intelligence.</span></span>
+      </h1>
       <p class="sub" id="heroSub" data-i18n="hero.sub">OMINO brings your store, POS, inventory, customers, payments and analytics into one intelligent business system — so you can see what’s happening, understand why, and know what to do next.</p>
       <div class="hero-ctas" id="heroCtas">
         <a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
@@ -1156,9 +1259,19 @@ footer.band-footer{
       <div class="merge-arrow">
         <svg width="18" height="34" viewBox="0 0 18 34" fill="none" aria-hidden="true"><path d="M9 0V32M9 32L2 25M9 32L16 25" stroke="#8A9096" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
-      <div class="merge-into">
-        <div class="logo-lockup">
-          <img class="logo-img" src="img/omino-lockup-paper.png" alt="OMINO" width="685" height="235" loading="lazy" decoding="async">
+      <div class="merge-into" id="mergeInto">
+        <div class="merge-lock" id="mergeLock" aria-label="OMINO">
+          <span class="merge-mark" aria-hidden="true">
+            <span class="merge-mark-live">
+            <svg viewBox="560 540 940 980" focusable="false">
+              <path fill="currentColor" d="M999.452 583.377C1002.55 582.864 1011.79 582.534 1015.45 582.52C1124.57 582.099 1238.99 628.369 1317.19 703.496C1404.53 787.545 1455.19 902.654 1458.17 1023.83C1459.59 1107.13 1419.3 1182.53 1345.73 1222.97C1309.27 1243.01 1279.13 1246.95 1238.7 1247.38C1238.42 1265.6 1237.68 1283.5 1233.94 1301.39C1214.83 1392.95 1141.63 1453.75 1050.25 1464.47C1047.01 1465.05 1037.72 1465.39 1033.89 1465.44C950.752 1466.53 864.349 1439.48 795.274 1393.52C772.236 1378.19 747.765 1357.32 728.1 1338.27C641.587 1254.46 594.019 1140.41 592.025 1020.18C591.024 959.834 610.557 907.971 652.127 864.289C695.119 819.111 748.835 802.174 809.971 800.894C808.405 683.74 882.351 597.052 999.452 583.377z"/>
+              <path class="void" d="M810.758 800.525C836.938 798.78 871.66 800.025 898.336 799.863C938.965 800.75 979.686 798.785 1020.3 799.771C1138.95 802.654 1237.7 897.607 1237.85 1017.49C1237.94 1095.14 1239.45 1171.02 1237.99 1247.5L1031.78 1247.12C968.782 1246.94 918.661 1225.44 873.509 1181.59C804.097 1114.17 810.901 1033.82 810.516 946.11L810.758 800.525z"/>
+            </svg>
+            </span>
+          </span>
+          <span class="merge-word" aria-hidden="true">
+            <span class="merge-letter"><span class="merge-glyph">O</span></span><span class="merge-letter"><span class="merge-glyph">M</span></span><span class="merge-letter"><span class="merge-glyph">I</span></span><span class="merge-letter"><span class="merge-glyph">N</span></span><span class="merge-letter"><span class="merge-glyph">O</span></span>
+          </span>
         </div>
       </div>
       <p class="merge-caption reveal" data-i18n="problem.caption">One business. One system. One clear picture.</p>
@@ -1295,6 +1408,8 @@ footer.band-footer{
 <script>
 gsap.registerPlugin(ScrollTrigger, CustomEase);
 CustomEase.create('fluid','0.22, 1, 0.36, 1');
+CustomEase.create('dock','M0,0 C0.16,1.18 0.32,1.02 1,1');
+CustomEase.create('drift','M0,0 C0.4,0 0.18,1 1,1');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fluidEase = 'fluid';
 
@@ -1441,7 +1556,8 @@ const copy = {
     'menu.kicker': 'Menu / 00',
     'menu.tag': 'AI Business OS',
     'menu.connect': 'Connect',
-    'hero.title': 'Your business.<br>One intelligence.',
+    'hero.line1': 'Your business.',
+    'hero.line2': 'One intelligence.',
     'hero.sub': 'OMINO brings your store, POS, inventory, customers, payments and analytics into one intelligent business system — so you can see what’s happening, understand why, and know what to do next.',
     'hero.fine': 'Founding pricing for the first 50 businesses.',
     'problem.title': 'Your business shouldn’t need<br>five systems to run.',
@@ -1478,7 +1594,8 @@ const copy = {
     'menu.kicker': 'Menu / 00',
     'menu.tag': 'نظام تشغيل الأعمال',
     'menu.connect': 'تواصل',
-    'hero.title': 'عملك.<br>ذكاء واحد.',
+    'hero.line1': 'عملك.',
+    'hero.line2': 'ذكاء واحد.',
     'hero.sub': 'OMINO يجمع متجرك، ونقطة البيع، والمخزون، والعملاء، والمدفوعات، والتحليلات في نظام أعمال ذكي واحد — لترى ما يحدث، وتفهم السبب، وتعرف ماذا تفعل بعد ذلك.',
     'hero.fine': 'تسعير المؤسسين لأول 50 نشاطاً.',
     'problem.title': 'عملك ما يحتاج<br>خمس أنظمة عشان يشتغل.',
@@ -1612,13 +1729,48 @@ document.getElementById('menuScrim').addEventListener('click', ()=> setMenu(fals
 mobileMenu.querySelectorAll('.menu-link, .menu-cta a').forEach(a=>a.addEventListener('click', ()=> setMenu(false)));
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && mobileMenu.classList.contains('open')) setMenu(false); });
 
-if(!reduceMotion){
-  const tl = gsap.timeline({defaults:{ease:fluidEase}});
-  tl.from('#heroTitle',{opacity:0,y:22,duration:.9})
-    .from('#heroIndex',{opacity:0,y:10,duration:.6},'-=.45')
-    .from('#heroSub',{opacity:0,y:16,duration:.75},'-=.4')
-    .from('#heroCtas',{opacity:0,y:14,duration:.65},'-=.5')
-    .from('#heroFine',{opacity:0,duration:.55},'-=.4');
+function armOpening(){
+  if(reduceMotion) return;
+  gsap.set('#siteNav', {opacity:0, y:-18});
+  gsap.set('#orbit', {opacity:0});
+  gsap.set('#heroIndex', {opacity:0, y:12});
+  gsap.set('.hero-line > span', {opacity:0, y:'108%'});
+  gsap.set('#heroSub', {opacity:0, y:18});
+  gsap.set('#heroCtas', {opacity:0, y:16});
+  gsap.set('#heroFine', {opacity:0, y:10});
+}
+function playOpening(cinematic){
+  document.documentElement.classList.remove('await-open');
+  if(reduceMotion){
+    gsap.set('#siteNav, #orbit, #heroIndex, .hero-line > span, #heroSub, #heroCtas, #heroFine', {
+      clearProps:'all'
+    });
+    return;
+  }
+  armOpening();
+  const full = cinematic !== false;
+  const tl = gsap.timeline({
+    defaults:{ease:fluidEase},
+    delay: full ? 0.18 : 0,
+    onComplete(){
+      gsap.set('.hero-line > span, #siteNav, #orbit', {clearProps:'willChange'});
+    }
+  });
+  tl.to('#siteNav', {opacity:1, y:0, duration:full ? 0.85 : 0.55}, 0)
+    .to('#heroIndex', {opacity:1, y:0, duration:full ? 0.7 : 0.45}, full ? 0.12 : 0.04)
+    .to('.hero-line > span', {
+      opacity:1, y:'0%', duration:full ? 0.95 : 0.6, stagger:full ? 0.11 : 0.07, ease:'power3.out'
+    }, full ? 0.22 : 0.1)
+    .to('#orbit', {opacity:1, duration:full ? 0.9 : 0.5}, full ? 0.28 : 0.12)
+    .to('#heroSub', {opacity:1, y:0, duration:full ? 0.8 : 0.5}, full ? 0.58 : 0.28)
+    .to('#heroCtas', {opacity:1, y:0, duration:full ? 0.72 : 0.46}, full ? 0.74 : 0.38)
+    .to('#heroFine', {opacity:1, y:0, duration:full ? 0.6 : 0.4}, full ? 0.88 : 0.46);
+}
+armOpening();
+if(window.OminoLoader){
+  OminoLoader.onReady(playOpening);
+} else {
+  playOpening(true);
 }
 
 if(!reduceMotion){
@@ -1641,10 +1793,86 @@ if(!reduceMotion){
       scrollTrigger:{trigger:'#fragRow',start:'top 85%'}
     });
   });
-  gsap.fromTo('.merge-into .logo-lockup',{opacity:0,y:18},{
-    opacity:1,y:0,duration:.85,ease:fluidEase,
-    scrollTrigger:{trigger:'.merge-into',start:'top 85%'}
-  });
+  const mergeLock = document.getElementById('mergeLock');
+  const mergeMark = mergeLock && mergeLock.querySelector('.merge-mark');
+  const mergeMarkLive = mergeLock && mergeLock.querySelector('.merge-mark-live');
+  const mergeLetters = mergeLock ? gsap.utils.toArray(mergeLock.querySelectorAll('.merge-letter')) : [];
+  const mergeGlyphs = mergeLock ? gsap.utils.toArray(mergeLock.querySelectorAll('.merge-glyph')) : [];
+  if(mergeMark && mergeLetters.length){
+    mergeLock.classList.add('is-gsap');
+    const useBlur = window.matchMedia('(min-width: 700px)').matches;
+    const from = [
+      {x:-36, y:-62, r:-22, s:.68},
+      {x:22, y:58, r:14, s:.74},
+      {x:4, y:-72, r:10, s:.62},
+      {x:58, y:40, r:24, s:.7},
+      {x:86, y:-34, r:-16, s:.72}
+    ];
+    const away = [
+      {x:-42, y:46, r:16, s:.7},
+      {x:-12, y:-54, r:-12, s:.68},
+      {x:16, y:62, r:-18, s:.66},
+      {x:54, y:-46, r:20, s:.72},
+      {x:78, y:42, r:-14, s:.7}
+    ];
+    const blurIn = useBlur ? 'blur(10px)' : 'blur(0px)';
+    const blurOut = useBlur ? 'blur(8px)' : 'blur(0px)';
+    gsap.set(mergeMark,{opacity:0, x:-48, y:12, rotation:-28, scale:.64, filter:blurIn});
+    mergeLetters.forEach((letter,i)=>{
+      const p = from[i];
+      gsap.set(letter,{opacity:0, x:p.x, y:p.y, rotation:p.r, scale:p.s, filter:blurIn});
+    });
+    mergeGlyphs.forEach((glyph,i)=>{
+      gsap.to(glyph,{
+        y: i % 2 ? 3.5 : -3.5,
+        rotation: i % 2 ? 1.4 : -1.4,
+        duration: 1.7 + i * 0.16,
+        yoyo:true,
+        repeat:-1,
+        ease:'sine.inOut',
+        delay: i * 0.11
+      });
+    });
+    if(mergeMarkLive){
+      gsap.to(mergeMarkLive,{
+        y:-3,
+        rotation:2.2,
+        duration:2.4,
+        yoyo:true,
+        repeat:-1,
+        ease:'sine.inOut'
+      });
+    }
+    const mergeTl = gsap.timeline({
+      repeat:-1,
+      defaults:{ease:'dock'}
+    });
+    mergeTl
+      .to(mergeMark,{opacity:1, x:0, y:0, rotation:0, scale:1.06, filter:'blur(0px)', duration:1.08})
+      .to(mergeMark,{scale:1, duration:.4, ease:fluidEase},'-=.2')
+      .addLabel('letters', 0.38);
+    mergeLetters.forEach((letter,i)=>{
+      mergeTl.to(letter,{
+        opacity:1, x:0, y:0, rotation:0, scale:1.06, filter:'blur(0px)', duration:1
+      }, 'letters+=' + (i * 0.1));
+      mergeTl.to(letter,{scale:1, duration:.34, ease:fluidEase},'-=0.26');
+    });
+    mergeTl
+      .to({}, {duration:2.2})
+      .addLabel('break');
+    mergeLetters.forEach((letter,i)=>{
+      const p = away[i];
+      mergeTl.to(letter,{
+        opacity:0, x:p.x, y:p.y, rotation:p.r, scale:p.s, filter:blurOut,
+        duration:.88, ease:'drift'
+      }, 'break+=' + (i * 0.07));
+    });
+    mergeTl.to(mergeMark,{
+      opacity:0, x:-32, y:-16, rotation:18, scale:.76, filter:blurOut,
+      duration:.92, ease:'drift'
+    }, 'break+=.1')
+    .to({}, {duration:.48});
+  }
   gsap.timeline({scrollTrigger:{trigger:'#revealList',start:'top 80%'}})
     .from('.reveal-item',{opacity:0,y:8,duration:.55,stagger:.16,ease:fluidEase})
     .from('#recBox',{opacity:0,y:8,duration:.55,ease:fluidEase},'-=.15');

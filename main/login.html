@@ -11,6 +11,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/omino.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/omino-loader.js"></script>
+<script src="js/omino-cookies.js"></script>
 <style>
 body{background:var(--paper);}
 .auth-shell{
@@ -607,12 +609,36 @@ nav = OminoNav.init({
 });
 setMode(modeFromHash());
 
-if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.gsap){
-  const tl = gsap.timeline({defaults:{ease:'power4.out'}});
-  tl.from('.auth-stage-copy',{opacity:0,y:18,duration:.8})
-    .from('.auth-viz',{opacity:0,y:14,duration:.7},'-=.45')
-    .from('.auth-card',{opacity:0,y:16,duration:.75},'-=.55');
+function playAuth(){
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce || !window.gsap) return;
+
+  const rtl = document.documentElement.dir === 'rtl';
+  const tl = gsap.timeline({ defaults:{ ease:'power4.out' } });
+
+  tl
+    .from('#siteNav', { opacity:0, y:-10, duration:.6 }, 0)
+    .from('.auth-glow', { opacity:0, duration:1.7, ease:'sine.out' }, .1)
+    .from('.auth-kicker', { opacity:0, y:12, filter:'blur(6px)', duration:.65 }, .18)
+    .from('.auth-stage h1', { opacity:0, y:22, filter:'blur(8px)', duration:.85, ease:'power3.out' }, .3)
+    .from('.auth-stage .lede', { opacity:0, y:14, filter:'blur(5px)', duration:.7 }, .52)
+    .from('.auth-node', { opacity:0, y:8, filter:'blur(4px)', duration:.5, stagger:.06 }, .68)
+    .fromTo('.auth-line',
+      { scaleX:0, transformOrigin: rtl ? 'right center' : 'left center' },
+      { scaleX:1, duration:.95, ease:'sine.inOut' }, .88)
+    .from('.auth-mark', { opacity:0, scale:.85, filter:'blur(6px)', duration:.7, ease:'power3.out' }, 1.1)
+    .from('.auth-card h2', { opacity:0, y:20, filter:'blur(7px)', duration:.8, ease:'power3.out' }, .58)
+    .from('.auth-card .sub', { opacity:0, y:12, filter:'blur(5px)', duration:.65 }, .76)
+    .from('.field', { opacity:0, y:14, filter:'blur(5px)', duration:.6, stagger:.09 }, .92)
+    .from('.auth-row.only-signin', { opacity:0, duration:.5 }, 1.18)
+    .from('#submitBtn', { opacity:0, y:12, duration:.6 }, 1.24)
+    .from('.or', { opacity:0, duration:.5 }, 1.4)
+    .from('.google', { opacity:0, y:10, duration:.55 }, 1.48)
+    .from('.auth-switch', { opacity:0, duration:.5 }, 1.62)
+    .from('.auth-legal a', { opacity:0, y:6, duration:.4, stagger:.05 }, 1.7);
 }
+if(window.OminoLoader) OminoLoader.onReady(playAuth);
+else playAuth();
 </script>
 </body>
 </html>

@@ -1,0 +1,7 @@
+{
+  "framework": null,
+  "rewrites": [
+    { "source": "/", "destination": "/main/index.html" },
+    { "source": "/:path((?!main/).*)", "destination": "/main/:path" }
+  ]
+}

@@ -92,6 +92,8 @@ html[dir="rtl"] .auth-line{background:linear-gradient(270deg, transparent, rgba(
   justify-content:center;
   padding:120px 56px 64px;
   background:var(--paper);
+  overflow:auto;
+  min-height:0;
 }
 .auth-card{max-width:400px;width:100%;margin:0 auto;}
 .auth-card h2{
@@ -217,6 +219,7 @@ html[lang="ar"] .field-label{letter-spacing:0;}
 .auth-panel[data-mode="forgot"] .only-signup{display:none;}
 .auth-panel[data-mode="signin"] .only-forgot,
 .auth-panel[data-mode="signup"] .only-forgot{display:none;}
+.auth-panel[data-mode="forgot"] .or{display:none;}
 .spinner{
   width:16px;height:16px;
   border:1.5px solid rgba(255,255,255,.3);
@@ -361,8 +364,7 @@ html[lang="ar"] .field-label{letter-spacing:0;}
         <button type="submit" class="btn btn-primary auth-submit" id="submitBtn" data-i18n="signin.submit">Sign in</button>
         <p class="auth-status" id="formStatus" role="status" aria-live="polite"></p>
 
-        <div class="or only-signin" data-i18n="or">or</div>
-        <div class="or only-signup" data-i18n="or">or</div>
+        <div class="or" data-i18n="or">or</div>
 
         <button type="button" class="btn google" id="googleBtn">
           <svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.6 9.2c0-.6-.1-1.2-.2-1.8H9v3.4h4.8c-.2 1.1-.9 2-1.8 2.6v2.2h3c1.7-1.6 2.6-3.9 2.6-6.4z"/><path fill="#34A853" d="M9 18c2.4 0 4.5-.8 6-2.2l-3-2.2c-.8.6-1.9.9-3 .9-2.3 0-4.3-1.6-5-3.7H1v2.3C2.4 16.1 5.5 18 9 18z"/><path fill="#FBBC05" d="M4 10.8c-.2-.6-.3-1.2-.3-1.8s.1-1.2.3-1.8V4.9H1C.4 6.2 0 7.6 0 9s.4 2.8 1 4.1l3-2.3z"/><path fill="#EA4335" d="M9 3.5c1.3 0 2.5.5 3.4 1.3l2.5-2.5C13.5.8 11.4 0 9 0 5.5 0 2.4 1.9 1 4.9l3 2.3C4.7 5.1 6.7 3.5 9 3.5z"/></svg>
@@ -609,33 +611,62 @@ nav = OminoNav.init({
 });
 setMode(modeFromHash());
 
+function shown(sel){
+  return gsap.utils.toArray(sel).filter((el) => getComputedStyle(el).display !== 'none');
+}
+
+let authPlayed = false;
 function playAuth(){
+  if(authPlayed) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce || !window.gsap) return;
+  if(reduce || !window.gsap){
+    authPlayed = true;
+    return;
+  }
+  authPlayed = true;
 
   const rtl = document.documentElement.dir === 'rtl';
-  const tl = gsap.timeline({ defaults:{ ease:'power4.out' } });
+  const nodes = shown('.auth-node');
+  const line = shown('.auth-line');
+  const mark = shown('.auth-mark');
+  const fields = shown('.field');
+  const row = shown('.auth-row.only-signin');
+  const ors = shown('.or');
+  const google = shown('#googleBtn');
+  const switches = shown('.auth-switch');
+  const legal = shown('.auth-legal a');
+  const glow = shown('.auth-glow');
+  const clearTargets = '#siteNav, .auth-glow, .auth-kicker, .auth-stage h1, .auth-stage .lede, .auth-node, .auth-line, .auth-mark, .auth-card h2, .auth-card .sub, .field, .auth-row, #submitBtn, .or, #googleBtn, .auth-switch, .auth-legal a';
+  const reveal = () => gsap.set(clearTargets, { clearProps:'opacity,visibility,transform,filter' });
 
-  tl
-    .from('#siteNav', { opacity:0, y:-10, duration:.6 }, 0)
-    .from('.auth-glow', { opacity:0, duration:1.7, ease:'sine.out' }, .1)
-    .from('.auth-kicker', { opacity:0, y:12, filter:'blur(6px)', duration:.65 }, .18)
-    .from('.auth-stage h1', { opacity:0, y:22, filter:'blur(8px)', duration:.85, ease:'power3.out' }, .3)
-    .from('.auth-stage .lede', { opacity:0, y:14, filter:'blur(5px)', duration:.7 }, .52)
-    .from('.auth-node', { opacity:0, y:8, filter:'blur(4px)', duration:.5, stagger:.06 }, .68)
-    .fromTo('.auth-line',
+  const tl = gsap.timeline({
+    defaults:{ ease:'power4.out' },
+    onComplete: reveal
+  });
+
+  tl.from('#siteNav', { autoAlpha:0, y:-10, duration:.6 }, 0);
+  if(glow.length) tl.from(glow, { autoAlpha:0, duration:1.7, ease:'sine.out' }, .1);
+  tl.from('.auth-kicker', { autoAlpha:0, y:12, filter:'blur(6px)', duration:.65 }, .18);
+  tl.from('.auth-stage h1', { autoAlpha:0, y:22, filter:'blur(8px)', duration:.85, ease:'power3.out' }, .3);
+  tl.from('.auth-stage .lede', { autoAlpha:0, y:14, filter:'blur(5px)', duration:.7 }, .52);
+  if(nodes.length) tl.from(nodes, { autoAlpha:0, y:8, filter:'blur(4px)', duration:.5, stagger:.06 }, .68);
+  if(line.length){
+    tl.fromTo(line,
       { scaleX:0, transformOrigin: rtl ? 'right center' : 'left center' },
-      { scaleX:1, duration:.95, ease:'sine.inOut' }, .88)
-    .from('.auth-mark', { opacity:0, scale:.85, filter:'blur(6px)', duration:.7, ease:'power3.out' }, 1.1)
-    .from('.auth-card h2', { opacity:0, y:20, filter:'blur(7px)', duration:.8, ease:'power3.out' }, .58)
-    .from('.auth-card .sub', { opacity:0, y:12, filter:'blur(5px)', duration:.65 }, .76)
-    .from('.field', { opacity:0, y:14, filter:'blur(5px)', duration:.6, stagger:.09 }, .92)
-    .from('.auth-row.only-signin', { opacity:0, duration:.5 }, 1.18)
-    .from('#submitBtn', { opacity:0, y:12, duration:.6 }, 1.24)
-    .from('.or', { opacity:0, duration:.5 }, 1.4)
-    .from('.google', { opacity:0, y:10, duration:.55 }, 1.48)
-    .from('.auth-switch', { opacity:0, duration:.5 }, 1.62)
-    .from('.auth-legal a', { opacity:0, y:6, duration:.4, stagger:.05 }, 1.7);
+      { scaleX:1, duration:.95, ease:'sine.inOut' }, .88);
+  }
+  if(mark.length) tl.from(mark, { autoAlpha:0, scale:.85, filter:'blur(6px)', duration:.7, ease:'power3.out' }, 1.1);
+  tl.from('.auth-card h2', { autoAlpha:0, y:20, filter:'blur(7px)', duration:.8, ease:'power3.out' }, .58);
+  tl.from('.auth-card .sub', { autoAlpha:0, y:12, filter:'blur(5px)', duration:.65 }, .76);
+  if(fields.length) tl.from(fields, { autoAlpha:0, y:14, filter:'blur(5px)', duration:.6, stagger:.09 }, .92);
+  if(row.length) tl.from(row, { autoAlpha:0, duration:.5 }, 1.18);
+  tl.from('#submitBtn', { autoAlpha:0, y:12, duration:.6 }, 1.24);
+  if(ors.length) tl.from(ors, { autoAlpha:0, duration:.5 }, 1.4);
+  if(google.length) tl.from(google, { autoAlpha:0, y:10, duration:.55 }, 1.48);
+  if(switches.length) tl.from(switches, { autoAlpha:0, duration:.5 }, 1.62);
+  if(legal.length) tl.from(legal, { autoAlpha:0, y:6, duration:.4, stagger:.05 }, 1.7);
+
+  gsap.delayedCall(2.8, reveal);
 }
 if(window.OminoLoader) OminoLoader.onReady(playAuth);
 else playAuth();

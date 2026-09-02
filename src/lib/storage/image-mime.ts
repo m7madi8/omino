@@ -6,6 +6,10 @@ export type ImageMime = (typeof IMAGE_ALLOWED_TYPES)[number];
 export type FaviconMime = (typeof FAVICON_ALLOWED_TYPES)[number];
 
 export function detectImageMime(buffer: Buffer): ImageMime | null {
+  if (isHeicOrHeifBuffer(buffer)) {
+    return null;
+  }
+
   if (
     buffer.length >= 4 &&
     buffer[0] === 0x89 &&
@@ -29,6 +33,20 @@ export function detectImageMime(buffer: Buffer): ImageMime | null {
   }
 
   return null;
+}
+
+/** iPhone / Android HEIC — not supported for product images. */
+export function isHeicOrHeifBuffer(buffer: Buffer): boolean {
+  if (buffer.length < 12) return false;
+  if (buffer.toString('ascii', 4, 8) !== 'ftyp') return false;
+  const brand = buffer.toString('ascii', 8, 12).toLowerCase();
+  return (
+    brand.startsWith('hei') ||
+    brand === 'mif1' ||
+    brand === 'msf1' ||
+    brand === 'hevc' ||
+    brand === 'heix'
+  );
 }
 
 export function detectFaviconMime(buffer: Buffer): FaviconMime | null {

@@ -4,10 +4,13 @@ import { useCallback, useRef, useState } from 'react';
 import { ImagePlus, Loader2, RefreshCw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-
 import { IMAGE_MAX_BYTES } from '@/lib/storage/image-mime';
+import {
+  uploadErrorMessage,
+  validateProductImageFile,
+} from '@/lib/storage/file-validation';
 
-const ACCEPT = 'image/png,image/jpeg,image/webp';
+const ACCEPT = 'image/png,image/jpeg,image/webp,.jpg,.jpeg,.png,.webp,image/*';
 const MAX_BYTES = IMAGE_MAX_BYTES;
 
 export type PendingProductImage = {
@@ -26,13 +29,8 @@ export type ExistingProductImage = {
 };
 
 function validateFile(file: File): string | null {
-  if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) {
-    return 'Only PNG, JPG, and WEBP images are allowed.';
-  }
-  if (file.size > MAX_BYTES) {
-    return 'Image must be 5 MB or smaller.';
-  }
-  return null;
+  const result = validateProductImageFile(file, MAX_BYTES);
+  return result.ok ? null : result.message;
 }
 
 export async function uploadProductImageFile(
@@ -51,7 +49,7 @@ export async function uploadProductImageFile(
   });
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(data.error || data.message || 'Upload failed');
+    throw new Error(uploadErrorMessage(data.error, data.message));
   }
   return data;
 }
@@ -76,6 +74,7 @@ export function ProductImageUpload({
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
   const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const addFiles = useCallback(
     (files: FileList | File[]) => {
@@ -103,11 +102,12 @@ export function ProductImageUpload({
         for (const file of list) {
           const validationError = validateFile(file);
           if (validationError) {
-            window.alert(validationError);
+            setUploadError(validationError);
             continue;
           }
           const tempId = crypto.randomUUID();
           setUploadingId(tempId);
+          setUploadError(null);
           try {
             const result = await uploadProductImageFile(productId, file, {
               isPrimary: existingImages.length === 0,
@@ -123,7 +123,7 @@ export function ProductImageUpload({
               )
             );
           } catch (err) {
-            window.alert(err instanceof Error ? err.message : 'Upload failed');
+            setUploadError(err instanceof Error ? err.message : 'Upload failed');
           } finally {
             setUploadingId(null);
           }
@@ -246,7 +246,7 @@ export function ProductImageUpload({
 
       <div
         className={cn(
-          'rounded-md border-2 border-dashed p-8 text-center transition',
+          'rounded-md border-2 border-dashed p-6 sm:p-8 text-center transition touch-manipulation',
           dragOver ? 'border-accent bg-accent-soft/20' : 'border-hairline bg-paper',
           disabled && 'opacity-60 pointer-events-none'
         )}
@@ -268,7 +268,7 @@ export function ProductImageUpload({
           type="button"
           variant="secondary"
           size="sm"
-          className="mt-3"
+          className="mt-3 min-h-[44px] touch-manipulation"
           onClick={() => inputRef.current?.click()}
           disabled={disabled || Boolean(uploadingId)}
         >
@@ -287,12 +287,19 @@ export function ProductImageUpload({
           accept={ACCEPT}
           multiple
           className="hidden"
+          aria-label="Choose product images"
           onChange={(e) => {
             if (e.target.files?.length) addFiles(e.target.files);
             e.target.value = '';
           }}
         />
       </div>
+
+      {uploadError && (
+        <p className="text-sm text-danger bg-danger/10 border border-danger/20 rounded-sm px-3 py-2.5" role="alert">
+          {uploadError}
+        </p>
+      )}
 
       {(showPending || showExisting) && (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">

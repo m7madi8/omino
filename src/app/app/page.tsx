@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { sessionHasPermission } from '@/lib/permissions/check';
 import { getAnalyticsOverview } from '@/server/services/analytics/analytics-service';
+import { PageHeader } from '@/components/app/dashboard/page-header';
 import { OverviewDashboard } from '@/components/analytics/overview-dashboard';
 import { GettingStarted } from '@/components/app/getting-started';
 
@@ -34,16 +35,12 @@ export default async function OverviewPage() {
   }
 
   return (
-    <div className="max-w-6xl space-y-6">
-      <div>
-        <p className="font-mono text-xs uppercase tracking-[0.15em] text-stone mb-2">Overview</p>
-        <h1 className="text-3xl font-display">
-          Welcome back{user.name ? `, ${user.name.split(' ')[0]}` : ''}
-        </h1>
-        <p className="mt-2 text-stone-2">
-          {user.organizationName} · {user.storeName} · {user.branchName}
-        </p>
-      </div>
+    <div className="max-w-6xl space-y-4 sm:space-y-6">
+      <PageHeader
+        eyebrow="Overview"
+        title={`Welcome back${user.name ? `, ${user.name.split(' ')[0]}` : ''}`}
+        description={[user.organizationName, user.storeName, user.branchName].filter(Boolean).join(' · ')}
+      />
 
       {canViewAnalytics && overview ? (
         overview.hasData ? (

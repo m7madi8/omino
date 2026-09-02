@@ -18,15 +18,14 @@ import {
   Warehouse,
   Workflow,
   X,
-  Bell,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { useMemo, useState } from 'react';
 import { AppNavLink } from '@/components/app/app-nav-link';
-import { AppRoutePrefetch } from '@/components/app/app-route-prefetch';
 import { NavigationProgress } from '@/components/app/navigation-progress';
+import { MobileBottomNav, pickMobileBottomNavItems } from '@/components/app/mobile-bottom-nav';
 import { MODULE_NAV } from '@/lib/permissions/constants';
 import { sessionHasPermission } from '@/lib/permissions/check';
 import { sessionIsPlatformAdmin } from '@/lib/platform/admin';
@@ -62,11 +61,14 @@ export function AppShell({
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   const navItems = useMemo(
-    () => MODULE_NAV.filter((item) => !item.permission || sessionHasPermission(user, item.permission)),
+    () =>
+      MODULE_NAV.filter(
+        (item) => !item.permission || sessionHasPermission(user, item.permission)
+      ),
     [user]
   );
 
-  const prefetchHrefs = useMemo(() => navItems.map((item) => item.href), [navItems]);
+  const mobileNavItems = useMemo(() => pickMobileBottomNavItems(navItems), [navItems]);
 
   async function handleSignOut() {
     await signOut({ callbackUrl: '/main' });
@@ -76,9 +78,8 @@ export function AppShell({
   const roleLabel = isPlatformAdmin ? 'OMINO Platform Owner' : user.roleSlug;
 
   return (
-    <div className="min-h-svh bg-paper flex">
+    <div className="min-h-svh bg-paper flex overflow-x-hidden">
       <NavigationProgress />
-      <AppRoutePrefetch hrefs={prefetchHrefs} />
 
       {sidebarOpen && (
         <button
@@ -89,15 +90,17 @@ export function AppShell({
         />
       )}
 
+      {/* Desktop sidebar + mobile drawer */}
       <aside
         className={cn(
-          'fixed lg:sticky top-0 z-50 h-svh w-64 bg-ink text-paper flex flex-col',
+          'fixed lg:sticky top-0 z-50 h-svh w-[min(100vw-3rem,16rem)] sm:w-64 bg-ink text-paper flex flex-col',
           'transition-transform duration-150 ease-out lg:translate-x-0 will-change-transform',
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
+        aria-label="Dashboard navigation"
       >
-        <div className="flex items-center justify-between p-5 border-b border-hairline-dark">
-          <Link href="/app" prefetch className="inline-flex items-center" aria-label="OMINO">
+        <div className="flex items-center justify-between p-4 sm:p-5 border-b border-hairline-dark shrink-0">
+          <Link href="/app" prefetch={false} className="inline-flex items-center" aria-label="OMINO">
             <img
               src="/main/img/omino-lockup-paper.png"
               alt="OMINO"
@@ -108,20 +111,21 @@ export function AppShell({
           </Link>
           <button
             type="button"
-            className="lg:hidden p-1 touch-manipulation active:opacity-70"
+            className="lg:hidden p-2 -mr-1 touch-manipulation active:opacity-70 min-h-[44px] min-w-[44px] flex items-center justify-center"
             onClick={() => setSidebarOpen(false)}
+            aria-label="Close menu"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {isPlatformAdmin && (
-          <div className="mx-3 mt-3 px-3 py-2 rounded-sm bg-accent/20 border border-accent/30 text-[11px] font-mono uppercase tracking-wider text-accent-soft">
+          <div className="mx-3 mt-3 px-3 py-2 rounded-sm bg-accent/20 border border-accent/30 text-[11px] font-mono uppercase tracking-wider text-accent-soft shrink-0">
             Platform Owner
           </div>
         )}
 
-        <nav className="flex-1 overflow-y-auto p-3 space-y-0.5 scrollbar-thin overscroll-contain">
+        <nav className="flex-1 overflow-y-auto overscroll-contain p-3 space-y-0.5 scrollbar-thin">
           {navItems.map((item) => {
             const Icon = ICONS[item.slug] || LayoutDashboard;
             return (
@@ -130,65 +134,68 @@ export function AppShell({
                 href={item.href}
                 label={item.label}
                 icon={<Icon className="w-4 h-4" />}
+                compact
                 onNavigate={() => setSidebarOpen(false)}
               />
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-hairline-dark text-xs text-stone space-y-1">
-          <p className="truncate">{user.organizationName}</p>
-          <p className="truncate text-stone/70">{user.storeName}</p>
+        <div className="p-4 border-t border-hairline-dark text-xs text-stone space-y-1 shrink-0">
+          <p className="truncate font-medium text-paper/90">{user.organizationName}</p>
+          <p className="truncate text-stone/70">
+            {[user.storeName, user.branchName].filter(Boolean).join(' · ')}
+          </p>
         </div>
       </aside>
 
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-hairline px-4 sm:px-6 h-16 flex items-center gap-4">
+      <div className="flex-1 flex flex-col min-w-0 w-full">
+        <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-sm border-b border-hairline px-3 sm:px-6 h-14 sm:h-16 flex items-center gap-2 sm:gap-4 shrink-0">
           <button
             type="button"
-            className="lg:hidden p-2 -ml-2 rounded-sm hover:bg-paper-2 touch-manipulation active:scale-95 transition-transform duration-100"
+            className="lg:hidden p-2.5 -ml-1 rounded-sm hover:bg-paper-2 touch-manipulation active:scale-95 transition-transform duration-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
             onClick={() => setSidebarOpen(true)}
+            aria-label="Open menu"
           >
             <Menu className="w-5 h-5" />
           </button>
 
-          <div className="flex items-center gap-2 ml-auto">
+          {/* Mobile context — org/store visible without opening drawer */}
+          <div className="lg:hidden min-w-0 flex-1">
+            <p className="text-sm font-medium truncate">{user.storeName || user.organizationName}</p>
+            <p className="text-[11px] text-stone-2 truncate">{user.organizationName}</p>
+          </div>
+
+          <div className="flex items-center gap-1 sm:gap-2 ml-auto shrink-0">
             <ContextSwitcher user={user} />
 
             {sessionHasPermission(user, 'ai.use') && (
               <Link
                 href={`/app/ai${pathname !== '/app/ai' ? `?from=${encodeURIComponent(pathname)}` : ''}`}
-                prefetch
-                className="p-2 rounded-sm hover:bg-paper-2 text-stone-2 touch-manipulation active:scale-95 transition-transform duration-100"
+                prefetch={false}
+                className="p-2.5 rounded-sm hover:bg-paper-2 text-stone-2 touch-manipulation active:scale-95 transition-transform duration-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
                 title="OMINO AI"
+                aria-label="OMINO AI"
               >
                 <Bot className="w-5 h-5" />
               </Link>
             )}
 
-            <button
-              type="button"
-              className="p-2 rounded-sm hover:bg-paper-2 text-stone-2 relative hidden"
-              disabled
-              aria-hidden
-              title="Notifications (coming soon)"
-            >
-              <Bell className="w-5 h-5" />
-            </button>
-
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-sm hover:bg-paper-2 touch-manipulation active:scale-[0.98] transition-transform duration-100"
+                className="flex items-center gap-2 pl-1 pr-2 py-1 rounded-sm hover:bg-paper-2 touch-manipulation active:scale-[0.98] transition-transform duration-100 min-h-[44px]"
+                aria-expanded={userMenuOpen}
+                aria-haspopup="menu"
               >
-                <div className="w-8 h-8 rounded-full bg-accent/20 text-accent flex items-center justify-center text-sm font-medium">
+                <div className="w-9 h-9 rounded-full bg-accent/20 text-accent flex items-center justify-center text-sm font-medium">
                   {(user.name || user.email).charAt(0).toUpperCase()}
                 </div>
                 <span className="hidden md:block text-sm max-w-[120px] truncate">
                   {user.name || user.email}
                 </span>
-                <ChevronDown className="w-4 h-4 text-stone" />
+                <ChevronDown className="hidden md:block w-4 h-4 text-stone" />
               </button>
 
               {userMenuOpen && (
@@ -197,23 +204,29 @@ export function AppShell({
                     type="button"
                     className="fixed inset-0 z-40"
                     onClick={() => setUserMenuOpen(false)}
+                    aria-label="Close user menu"
                   />
-                  <div className="absolute right-0 top-full mt-1 w-52 bg-white border border-hairline rounded-sm shadow-lift z-50 py-1">
+                  <div
+                    role="menu"
+                    className="absolute right-0 top-full mt-1 w-52 max-w-[calc(100vw-1.5rem)] bg-white border border-hairline rounded-sm shadow-lift z-50 py-1"
+                  >
                     <div className="px-3 py-2 border-b border-hairline text-xs text-stone-2">
                       {roleLabel}
                     </div>
                     <Link
                       href="/app/settings"
-                      prefetch
-                      className="block px-3 py-2 text-sm hover:bg-paper-2 touch-manipulation"
+                      prefetch={false}
+                      role="menuitem"
+                      className="block px-3 py-3 text-sm hover:bg-paper-2 touch-manipulation min-h-[44px]"
                       onClick={() => setUserMenuOpen(false)}
                     >
                       Settings
                     </Link>
                     <button
                       type="button"
+                      role="menuitem"
                       onClick={handleSignOut}
-                      className="w-full text-left px-3 py-2 text-sm hover:bg-paper-2 flex items-center gap-2 text-danger touch-manipulation"
+                      className="w-full text-left px-3 py-3 text-sm hover:bg-paper-2 flex items-center gap-2 text-danger touch-manipulation min-h-[44px]"
                     >
                       <LogOut className="w-4 h-4" />
                       Sign out
@@ -225,7 +238,17 @@ export function AppShell({
           </div>
         </header>
 
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">{children}</main>
+        <main
+          className={cn(
+            'flex-1 w-full min-w-0 overflow-x-hidden',
+            'p-3 sm:p-6 lg:p-8',
+            'pb-[calc(3.75rem+env(safe-area-inset-bottom))] lg:pb-8'
+          )}
+        >
+          {children}
+        </main>
+
+        <MobileBottomNav items={mobileNavItems} onOpenMenu={() => setSidebarOpen(true)} />
       </div>
     </div>
   );
@@ -233,15 +256,12 @@ export function AppShell({
 
 function ContextSwitcher({ user }: { user: SessionUser }) {
   return (
-    <div className="hidden md:flex items-center gap-2 text-xs">
+    <div className="hidden md:flex items-center gap-2 text-xs max-w-[50vw]">
       <span className="px-2.5 py-1.5 rounded-sm bg-paper-2 text-stone-2 border border-hairline truncate max-w-[140px]">
         {user.organizationName}
       </span>
       <span className="px-2.5 py-1.5 rounded-sm bg-paper-2 text-stone-2 border border-hairline truncate max-w-[120px]">
         {user.storeName || 'Store'}
-      </span>
-      <span className="px-2.5 py-1.5 rounded-sm bg-paper-2 text-stone-2 border border-hairline truncate max-w-[120px]">
-        {user.branchName || 'Branch'}
       </span>
     </div>
   );

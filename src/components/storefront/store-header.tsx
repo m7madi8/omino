@@ -11,6 +11,7 @@ import { buildStoreNavCategories } from '@/lib/storefront/nav-categories';
 import { HeaderSearch } from '@/components/storefront/header-search';
 import { SocialContactIcons } from '@/components/storefront/social-contact-icons';
 import { useStoreCart } from '@/components/storefront/store-cart-context';
+import { useStorefrontLocale } from '@/components/providers/storefront-locale-provider';
 
 function NavLink({
   href,
@@ -84,6 +85,7 @@ export function StoreHeader({
   storeSlug: string;
   categories: StorefrontCategory[];
 }) {
+  const { t } = useStorefrontLocale();
   const pathname = usePathname();
   const { cart, cartPulse, badgeBump, openDrawer } = useStoreCart();
   const [scrolled, setScrolled] = useState(false);
@@ -98,7 +100,7 @@ export function StoreHeader({
   const shopHref = `/store/${storeSlug}/products`;
 
   const mobileNavItems = [
-    { href: shopHref, label: 'Shop all' },
+    { href: shopHref, label: t('sf.nav.shopAll') },
     ...primaryCategories,
     ...overflowCategories,
   ];
@@ -138,9 +140,9 @@ export function StoreHeader({
 
           <nav
             className="hidden lg:flex items-center justify-center gap-0.5 flex-1"
-            aria-label="Store navigation"
+            aria-label={t('sf.nav.menu')}
           >
-            <NavLink href={shopHref}>Shop</NavLink>
+            <NavLink href={shopHref}>{t('sf.nav.shop')}</NavLink>
             {primaryCategories.map((cat) => (
               <NavLink key={cat.href} href={cat.href}>
                 {cat.label}
@@ -158,7 +160,7 @@ export function StoreHeader({
                   aria-expanded={dropdownOpen}
                   aria-haspopup="true"
                 >
-                  More
+                  {t('sf.nav.more')}
                   <ChevronDown
                     className={cn('w-3.5 h-3.5 transition-transform', dropdownOpen && 'rotate-180')}
                   />
@@ -199,7 +201,11 @@ export function StoreHeader({
                 'relative min-w-[44px] min-h-[44px] inline-flex items-center justify-center transition-colors sf-muted hover:sf-ink',
                 cartPulse && 'motion-safe:sf-cart-pulse'
               )}
-              aria-label={`Open cart${cart?.itemCount ? `, ${cart.itemCount} items` : ''}`}
+              aria-label={
+                cart?.itemCount
+                  ? t('sf.openCartWithCount', { n: String(cart.itemCount) })
+                  : t('sf.cart')
+              }
             >
               <ShoppingBag className="w-[18px] h-[18px]" strokeWidth={1.5} />
               {cart && cart.itemCount > 0 && (
@@ -218,7 +224,7 @@ export function StoreHeader({
               type="button"
               className="lg:hidden min-w-[44px] min-h-[44px] inline-flex items-center justify-center transition-colors sf-muted hover:sf-ink"
               onClick={() => setMenuOpen(true)}
-              aria-label="Open menu"
+              aria-label={t('sf.nav.openMenu')}
               aria-expanded={menuOpen}
             >
               <Menu className="w-5 h-5" strokeWidth={1.5} />
@@ -229,7 +235,7 @@ export function StoreHeader({
 
       <AnimatePresence>
         {menuOpen && (
-          <div className="fixed inset-0 z-[60] lg:hidden" role="dialog" aria-modal="true" aria-label="Navigation menu">
+          <div className="fixed inset-0 z-[60] lg:hidden" role="dialog" aria-modal="true" aria-label={t('sf.nav.menu')}>
             <motion.button
               type="button"
               className="absolute inset-0 bg-black/45"
@@ -238,7 +244,7 @@ export function StoreHeader({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               onClick={() => setMenuOpen(false)}
-              aria-label="Close menu"
+              aria-label={t('sf.nav.closeMenu')}
             />
             <motion.div
               className="absolute inset-y-0 end-0 w-full max-w-[min(100%,22rem)] bg-white flex flex-col shadow-2xl"
@@ -248,12 +254,12 @@ export function StoreHeader({
               transition={{ type: 'spring', stiffness: 380, damping: 36 }}
             >
               <div className="flex items-center justify-between px-4 h-14 border-b sf-border shrink-0">
-                <span className="font-mono text-[10px] uppercase tracking-[0.18em] sf-muted">Menu</span>
+                <span className="font-mono text-[10px] uppercase tracking-[0.18em] sf-muted">{t('sf.nav.menu')}</span>
                 <button
                   type="button"
                   onClick={() => setMenuOpen(false)}
                   className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center sf-muted"
-                  aria-label="Close menu"
+                  aria-label={t('sf.nav.closeMenu')}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -317,7 +323,7 @@ export function StoreHeader({
 
               {(store.contactLinks.length > 0 || store.contactEmail || store.contactPhone) && (
                 <div className="shrink-0 border-t sf-border px-6 py-5 space-y-4 bg-[color-mix(in_srgb,var(--sf-surface)_60%,#fff)]">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] sf-muted">Connect</p>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] sf-muted">{t('sf.nav.connect')}</p>
                   {store.contactLinks.length > 0 && (
                     <SocialContactIcons links={store.contactLinks} className="gap-2" />
                   )}

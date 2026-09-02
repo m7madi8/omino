@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { X } from 'lucide-react';
 import { CartContent } from '@/components/storefront/cart-content';
 import { useStoreCart } from '@/components/storefront/store-cart-context';
+import { useStorefrontLocale } from '@/components/providers/storefront-locale-provider';
 
 export function CartDrawer({ storeSlug, currency }: { storeSlug: string; currency: string }) {
+  const { t } = useStorefrontLocale();
   const { cart, loading, drawerOpen, closeDrawer, refreshCart, setCart } = useStoreCart();
   const [busy, setBusy] = useState(false);
 
@@ -34,6 +36,10 @@ export function CartDrawer({ storeSlug, currency }: { storeSlug: string; currenc
     }
   }
 
+  const cartTitle = cart?.itemCount
+    ? `${t('sf.cart')} (${cart.itemCount})`
+    : t('sf.cart');
+
   return (
     <>
       <div
@@ -46,20 +52,18 @@ export function CartDrawer({ storeSlug, currency }: { storeSlug: string; currenc
       <aside
         role="dialog"
         aria-modal="true"
-        aria-label="Shopping cart"
+        aria-label={t('sf.cartDialogLabel')}
         className={`sf-drawer-panel fixed inset-y-0 end-0 z-[60] w-full max-w-md flex flex-col sf-surface border-s sf-border shadow-2xl ${
           drawerOpen ? 'translate-x-0' : 'translate-x-full rtl:-translate-x-full'
         }`}
       >
         <div className="flex items-center justify-between gap-3 px-4 sm:px-5 h-16 border-b sf-border shrink-0">
-          <h2 className="font-display text-lg sf-ink">
-            Cart{cart?.itemCount ? ` (${cart.itemCount})` : ''}
-          </h2>
+          <h2 className="font-display text-lg sf-ink">{cartTitle}</h2>
           <button
             type="button"
             onClick={closeDrawer}
             className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center sf-muted hover:sf-ink"
-            aria-label="Close cart"
+            aria-label={t('sf.closeCart')}
           >
             <X className="w-5 h-5" />
           </button>
@@ -84,7 +88,7 @@ export function CartDrawer({ storeSlug, currency }: { storeSlug: string; currenc
               onClick={closeDrawer}
               className="block text-center text-xs sf-link min-h-[44px] leading-[44px]"
             >
-              View full cart
+              {t('sf.viewFullCart')}
             </Link>
           </div>
         ) : null}

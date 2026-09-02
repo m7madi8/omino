@@ -6,6 +6,7 @@ import { ChevronDown } from 'lucide-react';
 import { formatMoney } from '@/lib/money';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { useStorefrontLocale } from '@/components/providers/storefront-locale-provider';
 import type { StorefrontCart, StorefrontCartItem } from '@/types/storefront';
 
 function CartLineItem({
@@ -23,6 +24,7 @@ function CartLineItem({
   removing: boolean;
   onUpdateQty: (itemId: string, quantity: number) => void;
 }) {
+  const { t, intlLocale } = useStorefrontLocale();
   const [expanded, setExpanded] = useState(false);
   const isBundle = item.catalogKind === 'BUNDLE' && item.bundleItems && item.bundleItems.length > 0;
 
@@ -49,7 +51,9 @@ function CartLineItem({
           <div className="flex items-start gap-2">
             <p className="font-medium text-sm sm:text-base sf-ink leading-snug">{item.productName}</p>
             {isBundle && (
-              <span className="font-mono text-[10px] uppercase tracking-wider sf-muted shrink-0">Set</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider sf-muted shrink-0">
+                {t('sf.bundleSet')}
+              </span>
             )}
           </div>
           {item.variantName && <p className="text-xs sf-muted mt-0.5">{item.variantName}</p>}
@@ -59,7 +63,7 @@ function CartLineItem({
               onClick={() => setExpanded((v) => !v)}
               className="mt-1 inline-flex items-center gap-1 text-xs sf-link min-h-[32px]"
             >
-              {expanded ? 'Hide' : 'Show'} included
+              {expanded ? t('sf.bundleHide') : t('sf.bundleShow')}
               <ChevronDown className={cn('w-3.5 h-3.5 transition-transform', expanded && 'rotate-180')} />
             </button>
           )}
@@ -83,7 +87,7 @@ function CartLineItem({
               className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center border sf-border rounded-sm sf-muted hover:sf-ink transition"
               disabled={busy || removing}
               onClick={() => onUpdateQty(item.id, item.quantity - 1)}
-              aria-label="Decrease quantity"
+              aria-label={t('sf.decreaseQty')}
             >
               −
             </button>
@@ -93,12 +97,14 @@ function CartLineItem({
               className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center border sf-border rounded-sm sf-muted hover:sf-ink transition"
               disabled={busy || removing}
               onClick={() => onUpdateQty(item.id, item.quantity + 1)}
-              aria-label="Increase quantity"
+              aria-label={t('sf.increaseQty')}
             >
               +
             </button>
           </div>
-          <p className="font-mono text-sm sf-ink">{formatMoney(item.subtotalMinor, currency)}</p>
+          <p className="font-mono text-sm sf-ink">
+            {formatMoney(item.subtotalMinor, currency, intlLocale)}
+          </p>
         </div>
       </div>
     </div>
@@ -124,6 +130,7 @@ export function CartContent({
   onRefresh?: () => void;
   compact?: boolean;
 }) {
+  const { t, intlLocale } = useStorefrontLocale();
   const [removingIds, setRemovingIds] = useState<Set<string>>(new Set());
 
   async function handleUpdate(itemId: string, quantity: number) {
@@ -138,21 +145,19 @@ export function CartContent({
   }
 
   if (loading) {
-    return <p className="sf-muted py-12 text-center text-sm">Loading cart…</p>;
+    return <p className="sf-muted py-12 text-center text-sm">{t('sf.cartLoading')}</p>;
   }
 
   if (!cart?.items.length) {
     return (
       <div className="text-center py-16 px-4 space-y-5">
-        <p className="font-display text-xl sf-ink">Your bag is empty</p>
-        <p className="text-sm sf-muted max-w-xs mx-auto">
-          Discover what&apos;s new — your next favorite is waiting.
-        </p>
+        <p className="font-display text-xl sf-ink">{t('sf.cartEmptyTitle')}</p>
+        <p className="text-sm sf-muted max-w-xs mx-auto">{t('sf.cartEmptyHint')}</p>
         <Link
           href={`/store/${storeSlug}/products`}
           className="sf-btn-primary inline-flex items-center justify-center min-h-[44px] px-8 rounded-sm text-sm font-medium"
         >
-          Continue shopping
+          {t('sf.continueShopping')}
         </Link>
       </div>
     );
@@ -183,13 +188,16 @@ export function CartContent({
         )}
       >
         <div className="flex justify-between text-sm">
-          <span className="sf-muted">Subtotal</span>
-          <span className="font-mono">{formatMoney(cart.subtotalMinor, currency)}</span>
+          <span className="sf-muted">{t('sf.subtotal')}</span>
+          <span className="font-mono">{formatMoney(cart.subtotalMinor, currency, intlLocale)}</span>
         </div>
         {cart.discountAmount > 0 && (
           <div className="flex justify-between text-sm text-good">
-            <span>Discount{cart.couponCode ? ` (${cart.couponCode})` : ''}</span>
-            <span>-{formatMoney(cart.discountAmount, currency)}</span>
+            <span>
+              {t('sf.discount')}
+              {cart.couponCode ? ` (${cart.couponCode})` : ''}
+            </span>
+            <span>-{formatMoney(cart.discountAmount, currency, intlLocale)}</span>
           </div>
         )}
         {!compact && (
@@ -197,25 +205,28 @@ export function CartContent({
         )}
         {cart.taxAmount > 0 && (
           <div className="flex justify-between text-sm">
-            <span className="sf-muted">Tax</span>
-            <span className="font-mono">{formatMoney(cart.taxAmount, currency)}</span>
+            <span className="sf-muted">{t('sf.tax')}</span>
+            <span className="font-mono">{formatMoney(cart.taxAmount, currency, intlLocale)}</span>
           </div>
         )}
         <div className="flex justify-between items-baseline pt-2 border-t sf-border">
-          <span className="font-display text-lg sf-ink">Total</span>
+          <span className="font-display text-lg sf-ink">{t('sf.total')}</span>
           <span className="font-display text-2xl sf-ink font-mono">
-            {formatMoney(cart.totalMinor, currency)}
+            {formatMoney(cart.totalMinor, currency, intlLocale)}
           </span>
         </div>
         <Link
           href={`/store/${storeSlug}/checkout`}
           className="sf-btn-primary flex items-center justify-center min-h-[48px] w-full rounded-sm text-sm font-medium"
         >
-          Checkout
+          {t('sf.checkout')}
         </Link>
         {!compact && (
-          <Link href={`/store/${storeSlug}/products`} className="block text-center text-sm sf-link min-h-[44px] leading-[44px]">
-            Continue shopping
+          <Link
+            href={`/store/${storeSlug}/products`}
+            className="block text-center text-sm sf-link min-h-[44px] leading-[44px]"
+          >
+            {t('sf.continueShopping')}
           </Link>
         )}
       </div>
@@ -232,6 +243,7 @@ function CouponInput({
   couponCode?: string | null;
   onApplied: () => void;
 }) {
+  const { t } = useStorefrontLocale();
   const [code, setCode] = useState(couponCode ?? '');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -246,7 +258,7 @@ function CouponInput({
     });
     setBusy(false);
     if (!res.ok) {
-      setError('Invalid or expired coupon');
+      setError(t('sf.couponInvalid'));
       return;
     }
     onApplied();
@@ -266,7 +278,7 @@ function CouponInput({
 
   return (
     <div className="pt-2 border-t sf-border space-y-2">
-      <p className="text-xs font-mono uppercase sf-muted">Coupon</p>
+      <p className="text-xs font-mono uppercase sf-muted">{t('sf.coupon')}</p>
       <div className="flex gap-2">
         <input
           className="flex-1 border sf-border rounded-sm px-2 py-1.5 text-sm font-mono uppercase min-h-[44px]"
@@ -277,11 +289,11 @@ function CouponInput({
         />
         {couponCode ? (
           <Button type="button" variant="ghost" size="sm" onClick={remove} disabled={busy}>
-            Remove
+            {t('sf.couponRemove')}
           </Button>
         ) : (
           <Button type="button" size="sm" onClick={apply} disabled={busy || !code}>
-            Apply
+            {t('sf.couponApply')}
           </Button>
         )}
       </div>

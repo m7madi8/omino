@@ -5,8 +5,11 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { COUNTRIES, CURRENCIES } from '@/lib/permissions/constants';
 import { BranchManager } from '@/components/settings/branch-manager';
+import { PageChrome } from '@/components/app/dashboard/page-chrome';
+import { useMerchant } from '@/components/providers/merchant-provider';
 
 type OrgData = {
   organization: {
@@ -24,6 +27,7 @@ type OrgData = {
 };
 
 export default function SettingsPage() {
+  const { t, dir } = useMerchant();
   const [data, setData] = useState<OrgData | null>(null);
   const [name, setName] = useState('');
   const [currency, setCurrency] = useState('USD');
@@ -64,60 +68,72 @@ export default function SettingsPage() {
       body: JSON.stringify({ name, currency, country, locale, merchantExperienceMode: experienceMode }),
     });
     setSaving(false);
-    if (res.ok) setMessage('Settings saved.');
-    else setMessage('Could not save settings.');
+    if (res.ok) setMessage(t('common.save'));
+    else setMessage(t('common.error'));
+  }
+
+  if (!data) {
+    return (
+      <PageChrome width="narrow" title={t('settings.title')}>
+        <div className="space-y-4" dir={dir}>
+          <Skeleton className="h-11 w-full" />
+          <Skeleton className="h-11 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </div>
+      </PageChrome>
+    );
   }
 
   return (
-    <div className="max-w-2xl space-y-6">
-      <div>
-        <p className="font-mono text-xs uppercase tracking-[0.15em] text-stone mb-2">Settings</p>
-        <h1 className="text-3xl font-display">Organization settings</h1>
-        <p className="mt-2 text-stone-2">Manage your business profile and preferences.</p>
-      </div>
+    <PageChrome
+      width="narrow"
+      title={t('settings.title')}
+      description={t('settings.experienceMode')}
+    >
+      <div className="space-y-6" dir={dir}>
 
-      <Card title="Business profile">
+      <Card title={t('settings.businessProfile')}>
         <div className="space-y-4">
-          <Input label="Business name" value={name} onChange={(e) => setName(e.target.value)} />
+          <Input label={t('settings.businessName')} value={name} onChange={(e) => setName(e.target.value)} />
           <Select
-            label="Country"
+            label={t('settings.country')}
             value={country}
             onChange={(e) => setCountry(e.target.value)}
             options={COUNTRIES.map((c) => ({ value: c.code, label: c.label }))}
           />
           <Select
-            label="Currency"
+            label={t('settings.currency')}
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
             options={CURRENCIES.map((c) => ({ value: c.code, label: c.label }))}
           />
           <Select
-            label="Language"
+            label={t('settings.language')}
             value={locale}
             onChange={(e) => setLocale(e.target.value as 'ar' | 'en')}
             options={[
-              { value: 'ar', label: 'العربية' },
-              { value: 'en', label: 'English' },
+              { value: 'ar', label: t('lang.ar') },
+              { value: 'en', label: t('lang.en') },
             ]}
           />
           <Select
-            label="Experience mode"
+            label={t('settings.experienceMode')}
             value={experienceMode}
             onChange={(e) => setExperienceMode(e.target.value as 'simple' | 'standard')}
             options={[
-              { value: 'simple', label: 'Simple (Today / Orders / Add)' },
-              { value: 'standard', label: 'Standard (full dashboard)' },
+              { value: 'simple', label: t('settings.simpleDesc') },
+              { value: 'standard', label: t('settings.standardDesc') },
             ]}
           />
           {message && <p className="text-sm text-good">{message}</p>}
           <Button onClick={save} disabled={saving}>
-            {saving ? 'Saving…' : 'Save changes'}
+            {saving ? t('settings.saving') : t('settings.saveChanges')}
           </Button>
         </div>
       </Card>
 
       {data?.stores && (
-        <Card title="Stores & branches" description="Manage your retail locations and inventory points">
+        <Card title={t('settings.storesBranches')} description={t('settings.storesBranchesDesc')}>
           <div className="space-y-4">
             {data.stores.map((store) => (
               <BranchManager
@@ -131,6 +147,7 @@ export default function SettingsPage() {
           </div>
         </Card>
       )}
-    </div>
+      </div>
+    </PageChrome>
   );
 }

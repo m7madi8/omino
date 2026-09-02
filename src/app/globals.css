@@ -22,6 +22,12 @@
   --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   --font-ar: 'IBM Plex Sans Arabic', sans-serif;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 350ms;
+  --page-width-narrow: 42rem;
+  --page-width-default: 72rem;
+  --page-width-wide: 80rem;
 }
 
 @layer base {
@@ -118,6 +124,17 @@
   to {
     opacity: 0;
     transform: translateY(-6px);
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

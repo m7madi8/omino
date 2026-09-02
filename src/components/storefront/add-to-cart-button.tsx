@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useStoreCart } from '@/components/storefront/store-cart-context';
+import { useStorefrontLocale } from '@/components/providers/storefront-locale-provider';
 import type { StorefrontVariant } from '@/types/storefront';
 
 export function AddToCartButton({
@@ -16,6 +17,7 @@ export function AddToCartButton({
   defaultVariantId: string;
   productImageUrl?: string | null;
 }) {
+  const { t } = useStorefrontLocale();
   const { openDrawer, refreshCart, notifyItemAdded, setCart, triggerFlyToCart } = useStoreCart();
   const [variantId, setVariantId] = useState(defaultVariantId);
   const [quantity, setQuantity] = useState(1);
@@ -45,7 +47,7 @@ export function AddToCartButton({
     const data = await res.json();
     setBusy(false);
     if (!res.ok) {
-      setError(data.message || data.error || 'Could not add to cart');
+      setError(data.message || data.error || t('sf.addToCartError'));
       return;
     }
     setCart(data.cart);
@@ -58,7 +60,7 @@ export function AddToCartButton({
     <div id="add-to-cart" className="space-y-4">
       {variants.length > 1 && (
         <div className="space-y-2">
-          <p className="text-sm font-medium sf-ink">Variant</p>
+          <p className="text-sm font-medium sf-ink">{t('sf.variant')}</p>
           <div className="flex flex-wrap gap-2">
             {variants.map((v) => (
               <motion.button
@@ -80,14 +82,14 @@ export function AddToCartButton({
       )}
 
       <div className="flex items-center gap-3">
-        <label className="text-sm font-medium sf-ink">Qty</label>
+        <label className="text-sm font-medium sf-ink">{t('sf.quantity')}</label>
         <div className="flex items-center border sf-border rounded-sm">
           <motion.button
             whileTap={{ scale: 0.92 }}
             className="w-11 h-11 hover:bg-[color-mix(in_srgb,var(--sf-surface)_80%,#fff)]"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             type="button"
-            aria-label="Decrease quantity"
+            aria-label={t('sf.decreaseQty')}
           >
             −
           </motion.button>
@@ -97,13 +99,15 @@ export function AddToCartButton({
             className="w-11 h-11 hover:bg-[color-mix(in_srgb,var(--sf-surface)_80%,#fff)]"
             onClick={() => setQuantity((q) => q + 1)}
             type="button"
-            aria-label="Increase quantity"
+            aria-label={t('sf.increaseQty')}
           >
             +
           </motion.button>
         </div>
         <span className="text-sm sf-muted">
-          {selected.inStock ? `${selected.available} available` : 'Out of stock'}
+          {selected.inStock
+            ? t('sf.available', { n: String(selected.available) })
+            : t('sf.outOfStock')}
         </span>
       </div>
 
@@ -118,7 +122,7 @@ export function AddToCartButton({
         whileTap={{ scale: 0.98 }}
         className="w-full h-12 rounded-sm sf-btn-primary sf-btn-hero text-sm font-medium disabled:opacity-50"
       >
-        {busy ? 'Adding…' : 'Add to cart'}
+        {busy ? t('sf.addToCartAdding') : t('sf.addToCart')}
       </motion.button>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useMemo } from 'react';
 import type { MerchantExperienceMode, MerchantLocale } from '@/lib/merchant/palestine-mode';
-import { getDir, t, type MessageKey } from '@/lib/i18n';
+import { getDir, t, type MessageKey, type TranslateParams } from '@/lib/i18n';
 import { isSimpleMode } from '@/lib/merchant/palestine-mode';
 
 type MerchantContextValue = {
@@ -10,7 +10,7 @@ type MerchantContextValue = {
   experienceMode: MerchantExperienceMode;
   isSimple: boolean;
   dir: 'rtl' | 'ltr';
-  t: (key: MessageKey) => string;
+  t: (key: MessageKey, params?: TranslateParams) => string;
 };
 
 const MerchantContext = createContext<MerchantContextValue>({
@@ -36,7 +36,7 @@ export function MerchantProvider({
       experienceMode,
       isSimple: isSimpleMode(experienceMode),
       dir: getDir(locale),
-      t: (key: MessageKey) => t(key, locale),
+      t: (key: MessageKey, params?: TranslateParams) => t(key, locale, params),
     }),
     [locale, experienceMode]
   );
@@ -46,7 +46,11 @@ export function MerchantProvider({
     document.documentElement.dir = value.dir;
   }, [locale, value.dir]);
 
-  return <MerchantContext.Provider value={value}>{children}</MerchantContext.Provider>;
+  return (
+    <MerchantContext.Provider value={value}>
+      <div className={locale === 'ar' ? 'font-ar' : 'font-body'}>{children}</div>
+    </MerchantContext.Provider>
+  );
 }
 
 export function useMerchant() {

@@ -120,21 +120,21 @@ export const ROLE_PERMISSION_MAP: Record<SystemRoleSlug, PermissionKey[]> = {
 ROLE_PERMISSION_MAP.ADMIN = PERMISSIONS.filter((p) => p !== 'ai.execute') as PermissionKey[];
 
 export const MODULE_NAV = [
-  { slug: 'overview', label: 'Overview', href: '/app', permission: null },
-  { slug: 'pos', label: 'POS', href: '/app/pos', permission: 'pos.sell' as PermissionKey },
-  { slug: 'store', label: 'Store', href: '/app/store', permission: 'store.read' as PermissionKey },
-  { slug: 'products', label: 'Products', href: '/app/products', permission: 'products.read' as PermissionKey },
-  { slug: 'collections', label: 'Collections', href: '/app/collections', permission: 'products.read' as PermissionKey },
-  { slug: 'inventory', label: 'Inventory', href: '/app/inventory', permission: 'inventory.read' as PermissionKey },
-  { slug: 'orders', label: 'Orders', href: '/app/orders', permission: 'orders.read' as PermissionKey },
-  { slug: 'customers', label: 'Customers', href: '/app/customers', permission: 'customers.read' as PermissionKey },
-  { slug: 'payments', label: 'Payments', href: '/app/payments', permission: 'payments.read' as PermissionKey },
-  { slug: 'analytics', label: 'Analytics', href: '/app/analytics', permission: 'analytics.read' as PermissionKey },
-  { slug: 'ai', label: 'AI', href: '/app/ai', permission: 'ai.use' as PermissionKey },
-  { slug: 'automations', label: 'Automations', href: '/app/automations', permission: 'automations.read' as PermissionKey },
-  { slug: 'marketing', label: 'Marketing', href: '/app/marketing', permission: 'marketing.read' as PermissionKey },
-  { slug: 'team', label: 'Team', href: '/app/team', permission: 'team.read' as PermissionKey },
-  { slug: 'settings', label: 'Settings', href: '/app/settings', permission: 'settings.read' as PermissionKey },
+  { slug: 'overview', label: 'Overview', labelKey: 'nav.overview', href: '/app', permission: null },
+  { slug: 'pos', label: 'POS', labelKey: 'nav.pos', href: '/app/pos', permission: 'pos.sell' as PermissionKey },
+  { slug: 'store', label: 'Store', labelKey: 'nav.store', href: '/app/store', permission: 'store.read' as PermissionKey },
+  { slug: 'products', label: 'Products', labelKey: 'nav.products', href: '/app/products', permission: 'products.read' as PermissionKey },
+  { slug: 'collections', label: 'Collections', labelKey: 'nav.collections', href: '/app/collections', permission: 'products.read' as PermissionKey },
+  { slug: 'inventory', label: 'Inventory', labelKey: 'nav.inventory', href: '/app/inventory', permission: 'inventory.read' as PermissionKey },
+  { slug: 'orders', label: 'Orders', labelKey: 'nav.orders', href: '/app/orders', permission: 'orders.read' as PermissionKey },
+  { slug: 'customers', label: 'Customers', labelKey: 'nav.customers', href: '/app/customers', permission: 'customers.read' as PermissionKey },
+  { slug: 'payments', label: 'Payments', labelKey: 'nav.payments', href: '/app/payments', permission: 'payments.read' as PermissionKey },
+  { slug: 'analytics', label: 'Analytics', labelKey: 'nav.analytics', href: '/app/analytics', permission: 'analytics.read' as PermissionKey },
+  { slug: 'ai', label: 'AI', labelKey: 'nav.ai', href: '/app/ai', permission: 'ai.use' as PermissionKey },
+  { slug: 'automations', label: 'Automations', labelKey: 'nav.automations', href: '/app/automations', permission: 'automations.read' as PermissionKey },
+  { slug: 'marketing', label: 'Marketing', labelKey: 'nav.marketing', href: '/app/marketing', permission: 'marketing.read' as PermissionKey },
+  { slug: 'team', label: 'Team', labelKey: 'nav.team', href: '/app/team', permission: 'team.read' as PermissionKey },
+  { slug: 'settings', label: 'Settings', labelKey: 'nav.settings', href: '/app/settings', permission: 'settings.read' as PermissionKey },
 ] as const;
 
 export const BUSINESS_TYPES = [

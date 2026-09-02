@@ -18,9 +18,11 @@ import { formatMoney } from '@/lib/money';
 import type { CartView, PosProduct } from '@/types/commerce';
 import { cachePosProducts, isOnline } from '@/lib/pos/offline-queue';
 import { useMerchant } from '@/components/providers/merchant-provider';
+import { formatLocaleForIntl } from '@/lib/merchant/palestine-mode';
 
 export function PosClient({ currency, simpleMode = false }: { currency: string; simpleMode?: boolean }) {
-  const { t } = useMerchant();
+  const { t, locale } = useMerchant();
+  const intlLocale = formatLocaleForIntl(locale);
   const router = useRouter();
   const [online, setOnline] = useState(true);
   const [products, setProducts] = useState<PosProduct[]>([]);
@@ -183,7 +185,7 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
       router.push(`/app/orders/${data.order.id}`);
     } else {
       const err = await res.json();
-      alert(err.error || 'Checkout failed');
+      alert(err.error || t('pos.checkoutFailed'));
     }
   }
 
@@ -201,14 +203,14 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
       )}
       <div className="flex-1 flex flex-col rounded-md border border-hairline bg-white overflow-hidden">
         <div className="p-4 border-b border-hairline">
-          <h1 className="text-xl font-display mb-3">{simpleMode ? t('add.posSale') : 'Point of Sale'}</h1>
+          <h1 className="text-xl font-display mb-3">{simpleMode ? t('add.posSale') : t('pos.title')}</h1>
           <form onSubmit={handleSearch} className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone" />
+            <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder={t('pos.search')}
-              className="w-full h-11 pl-10 pr-4 rounded-sm border border-hairline text-sm"
+              className="w-full h-11 ps-10 pe-4 rounded-sm border border-hairline text-sm"
             />
           </form>
         </div>
@@ -220,7 +222,7 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
                 type="button"
                 disabled={loading || (p.available <= 0 && p.available !== 0)}
                 onClick={() => addProduct(p.variantId)}
-                className="text-left rounded-sm border border-hairline p-3 hover:border-accent/50 hover:shadow-soft transition disabled:opacity-50"
+                className="text-start rounded-sm border border-hairline p-3 hover:border-accent/50 hover:shadow-soft transition disabled:opacity-50"
               >
                 {p.imageUrl ? (
                   <img
@@ -236,8 +238,10 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
                   <div className="text-xs text-stone-2">{p.variantName}</div>
                 )}
                 <div className="flex justify-between items-center mt-2">
-                  <span className="font-mono text-sm">{formatMoney(p.priceMinor, p.currency)}</span>
-                  <span className="text-xs text-stone-2">{p.available} avail</span>
+                  <span className="font-mono text-sm">{formatMoney(p.priceMinor, p.currency, intlLocale)}</span>
+                  <span className="text-xs text-stone-2">
+                    {p.available} {t('pos.avail')}
+                  </span>
                 </div>
               </button>
             ))}
@@ -248,9 +252,9 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
       <div className="w-full lg:w-96 flex flex-col rounded-md border border-hairline bg-white overflow-hidden">
         <div className="p-4 border-b border-hairline flex items-center gap-2">
           <ShoppingCart className="w-5 h-5" />
-          <h2 className="font-medium">Cart</h2>
+          <h2 className="font-medium">{t('pos.cart')}</h2>
           {cart && cart.itemCount > 0 && (
-            <span className="ml-auto text-sm text-stone-2">{cart.itemCount} items</span>
+            <span className="ms-auto text-sm text-stone-2">{t('pos.items', { n: String(cart.itemCount) })}</span>
           )}
         </div>
 
@@ -262,11 +266,11 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
           >
             <User className="w-4 h-4 text-stone" />
             <span className="truncate">
-              {cart?.customer?.name || 'Attach customer'}
+              {cart?.customer?.name || t('pos.attachCustomer')}
             </span>
             {cart?.customer && (
               <X
-                className="w-4 h-4 ml-auto text-stone"
+                className="w-4 h-4 ms-auto text-stone"
                 onClick={(e) => {
                   e.stopPropagation();
                   attachCustomer(null);
@@ -278,7 +282,7 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
 
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {!cart?.items.length ? (
-            <p className="text-sm text-stone-2 text-center py-8">Cart is empty</p>
+            <p className="text-sm text-stone-2 text-center py-8">{t('pos.cartEmpty')}</p>
           ) : (
             cart.items.map((item) => (
               <div key={item.id} className="flex gap-3 py-2 border-b border-hairline last:border-0">
@@ -286,7 +290,7 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
                   <div className="text-sm font-medium truncate">{item.productName}</div>
                   <div className="text-xs text-stone-2 font-mono">{item.sku}</div>
                   <div className="font-mono text-sm mt-1">
-                    {formatMoney(item.subtotalMinor, cart.currency)}
+                    {formatMoney(item.subtotalMinor, cart.currency, intlLocale)}
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
@@ -318,27 +322,27 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
         {cart && cart.itemCount > 0 && (
           <div className="p-4 border-t border-hairline space-y-3">
             <div className="flex justify-between text-sm">
-              <span className="text-stone-2">Subtotal</span>
-              <span className="font-mono">{formatMoney(cart.subtotalMinor, currency)}</span>
+              <span className="text-stone-2">{t('pos.subtotal')}</span>
+              <span className="font-mono">{formatMoney(cart.subtotalMinor, currency, intlLocale)}</span>
             </div>
             {cart.discountAmount > 0 && (
               <div className="flex justify-between text-sm text-good">
-                <span>Discount</span>
-                <span className="font-mono">−{formatMoney(cart.discountAmount, currency)}</span>
+                <span>{t('pos.discount')}</span>
+                <span className="font-mono">−{formatMoney(cart.discountAmount, currency, intlLocale)}</span>
               </div>
             )}
             {cart.taxAmount > 0 && (
               <div className="flex justify-between text-sm">
-                <span className="text-stone-2">Tax</span>
-                <span className="font-mono">{formatMoney(cart.taxAmount, currency)}</span>
+                <span className="text-stone-2">{t('pos.tax')}</span>
+                <span className="font-mono">{formatMoney(cart.taxAmount, currency, intlLocale)}</span>
               </div>
             )}
             <div className="flex justify-between font-medium text-lg pt-2 border-t border-hairline">
-              <span>Total</span>
-              <span className="font-mono">{formatMoney(cart.totalMinor, currency)}</span>
+              <span>{t('pos.total')}</span>
+              <span className="font-mono">{formatMoney(cart.totalMinor, currency, intlLocale)}</span>
             </div>
             <Button className="w-full" onClick={() => setPayOpen(true)} disabled={loading}>
-              Charge {formatMoney(cart.totalMinor, currency)}
+              {t('pos.charge', { amount: formatMoney(cart.totalMinor, currency, intlLocale) })}
             </Button>
           </div>
         )}
@@ -347,14 +351,14 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
       {customerOpen && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-ink/40 p-4">
           <div className="w-full max-w-md rounded-md border border-hairline bg-white p-6 shadow-lift">
-            <h3 className="text-lg font-medium mb-4">Find or create customer</h3>
+            <h3 className="text-lg font-medium mb-4">{t('pos.findCustomer')}</h3>
             <input
               value={customerQuery}
               onChange={(e) => {
                 setCustomerQuery(e.target.value);
                 searchCustomers(e.target.value);
               }}
-              placeholder="Search name, email, phone…"
+              placeholder={t('pos.searchCustomer')}
               className="w-full h-11 px-3 rounded-sm border border-hairline mb-3"
               autoFocus
             />
@@ -364,7 +368,7 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
                   key={c.id}
                   type="button"
                   onClick={() => attachCustomer(c.id)}
-                  className="w-full text-left px-3 py-2 rounded-sm hover:bg-paper text-sm"
+                  className="w-full text-start px-3 py-2 rounded-sm hover:bg-paper text-sm"
                 >
                   <div className="font-medium">{c.displayName}</div>
                   <div className="text-xs text-stone-2">
@@ -375,10 +379,10 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
             </div>
             <div className="flex gap-2">
               <Button onClick={quickCreateCustomer} disabled={!customerQuery.trim() || loading}>
-                Create new
+                {t('pos.createNew')}
               </Button>
               <Button variant="secondary" onClick={() => setCustomerOpen(false)}>
-                Cancel
+                {t('common.cancel')}
               </Button>
             </div>
           </div>
@@ -388,9 +392,9 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
       {payOpen && cart && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-ink/40 p-4">
           <div className="w-full max-w-md rounded-md border border-hairline bg-white p-6 shadow-lift">
-            <h3 className="text-lg font-medium mb-1">Complete Payment</h3>
+            <h3 className="text-lg font-medium mb-1">{t('pos.completePayment')}</h3>
             <p className="text-2xl font-mono font-medium mb-6">
-              {formatMoney(cart.totalMinor, currency)}
+              {formatMoney(cart.totalMinor, currency, intlLocale)}
             </p>
 
             <div className="grid grid-cols-3 gap-2 mb-4">
@@ -399,7 +403,7 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
                   key={m}
                   type="button"
                   onClick={() => setPayMethod(m)}
-                  className={`p-3 rounded-sm border text-sm font-medium capitalize ${
+                  className={`p-3 rounded-sm border text-sm font-medium ${
                     payMethod === m
                       ? 'border-accent bg-accent/10 text-accent'
                       : 'border-hairline'
@@ -407,14 +411,14 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
                 >
                   {m === 'CASH' && <Banknote className="w-4 h-4 mx-auto mb-1" />}
                   {m === 'CARD' && <CreditCard className="w-4 h-4 mx-auto mb-1" />}
-                  {m.toLowerCase()}
+                  {m === 'CASH' ? t('pos.cash') : m === 'CARD' ? t('pos.card') : t('pos.other')}
                 </button>
               ))}
             </div>
 
             {payMethod === 'CASH' && (
               <div className="mb-4">
-                <label className="text-sm text-stone-2">Cash received</label>
+                <label className="text-sm text-stone-2">{t('pos.cashReceived')}</label>
                 <input
                   type="number"
                   step="0.01"
@@ -425,10 +429,11 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
                 />
                 {cashReceived && parseFloat(cashReceived) * 100 >= cart.totalMinor && (
                   <p className="text-sm text-stone-2 mt-1">
-                    Change:{' '}
+                    {t('pos.change')}:{' '}
                     {formatMoney(
                       Math.round(parseFloat(cashReceived) * 100) - cart.totalMinor,
-                      currency
+                      currency,
+                      intlLocale
                     )}
                   </p>
                 )}
@@ -437,10 +442,10 @@ export function PosClient({ currency, simpleMode = false }: { currency: string; 
 
             <div className="flex gap-2">
               <Button className="flex-1" onClick={handleCheckout} disabled={loading}>
-                Complete Sale
+                {t('pos.completeSale')}
               </Button>
               <Button variant="secondary" onClick={() => setPayOpen(false)}>
-                Cancel
+                {t('common.cancel')}
               </Button>
             </div>
           </div>

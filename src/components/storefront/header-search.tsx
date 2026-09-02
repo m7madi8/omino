@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useStorefrontLocale } from '@/components/providers/storefront-locale-provider';
 
 export function HeaderSearch({
   storeSlug,
@@ -14,6 +15,7 @@ export function HeaderSearch({
   className?: string;
   variant?: 'icon' | 'expanded';
 }) {
+  const { t } = useStorefrontLocale();
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(variant === 'expanded');
@@ -41,8 +43,8 @@ export function HeaderSearch({
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search products…"
-            aria-label="Search products"
+            placeholder={t('sf.search')}
+            aria-label={t('sf.search')}
             className="h-11 w-full ps-10 pe-4 text-sm rounded-sm border sf-border bg-white sf-ink outline-none focus:ring-1 focus:ring-[var(--sf-primary)]"
           />
         </div>
@@ -59,15 +61,15 @@ export function HeaderSearch({
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search products…"
-            aria-label="Search products"
+            placeholder={t('sf.search')}
+            aria-label={t('sf.search')}
             className="h-10 w-[9.5rem] sm:w-[12rem] px-3 text-sm rounded-sm border sf-border bg-white sf-ink outline-none focus:ring-1 focus:ring-[var(--sf-primary)]"
           />
           <button
             type="button"
             onClick={() => setOpen(false)}
             className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center sf-muted"
-            aria-label="Close search"
+            aria-label={t('sf.searchClose')}
           >
             <X className="w-4 h-4" />
           </button>
@@ -77,7 +79,7 @@ export function HeaderSearch({
           type="button"
           onClick={() => setOpen(true)}
           className="min-w-[44px] min-h-[44px] inline-flex items-center justify-center transition-colors sf-muted hover:sf-ink"
-          aria-label="Open search"
+          aria-label={t('sf.openSearch')}
         >
           <Search className="w-[18px] h-[18px]" />
         </button>

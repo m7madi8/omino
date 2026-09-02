@@ -22,11 +22,12 @@ export function NavigationProgress() {
   return (
     <div
       aria-hidden
-      className={cn(
-        'pointer-events-none fixed inset-x-0 top-0 z-[100] h-0.5 origin-left bg-accent',
-        'transition-[transform,opacity] duration-300 ease-out',
-        visible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
-      )}
+        className={cn(
+          'pointer-events-none fixed inset-x-0 top-0 z-[100] h-0.5 bg-accent',
+          'transition-[transform,opacity] duration-300 ease-out',
+          'origin-start rtl:origin-end',
+          visible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
+        )}
       style={{ transitionProperty: 'transform, opacity' }}
     />
   );

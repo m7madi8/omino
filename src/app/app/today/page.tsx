@@ -4,7 +4,6 @@ import { sessionHasPermission } from '@/lib/permissions/check';
 import { getTodayDashboard } from '@/server/services/analytics/today-dashboard-service';
 import { getBusinessInsights } from '@/server/services/business-insights-service';
 import { TodayDashboard } from '@/components/merchant/today-dashboard';
-import { ShareStoreWhatsAppButton } from '@/components/merchant/share-store-whatsapp';
 
 export default async function TodayPage() {
   const session = await auth();
@@ -29,16 +28,11 @@ export default async function TodayPage() {
   ]);
 
   return (
-    <div className="space-y-4">
-      <TodayDashboard data={data} insights={insights} />
-      {session.user.storePublicSlug && (
-        <div className="max-w-lg mx-auto lg:max-w-2xl flex justify-center">
-          <ShareStoreWhatsAppButton
-            storeName={session.user.storeName || session.user.organizationName || 'OMINO'}
-            publicSlug={session.user.storePublicSlug}
-          />
-        </div>
-      )}
-    </div>
+    <TodayDashboard
+      data={data}
+      insights={insights}
+      storePublicSlug={session.user.storePublicSlug}
+      storeName={session.user.storeName || session.user.organizationName || 'OMINO'}
+    />
   );
 }

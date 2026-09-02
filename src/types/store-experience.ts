@@ -15,13 +15,20 @@ export type StoreAnnouncementConfig = {
   textColor?: string | null;
 };
 
+export type StoreSpacingPreset = 'compact' | 'balanced' | 'generous';
+
 export type StoreAppearanceConfig = {
   themeId: import('@/lib/themes/types').StoreThemeId;
   themeVersion: string;
+  /** Design language independent of theme */
+  styleId?: import('@/lib/design/styles/types').StoreStyleId;
+  /** Product grid / page composition */
+  layoutId?: import('@/lib/design/layouts/registry').StoreLayoutId;
   /** @deprecated Use themeId — kept for migration */
   preset?: StoreStylePreset;
   typography?: StoreTypographyPreset;
   radius?: 'none' | 'sm' | 'md' | 'lg';
+  spacing?: StoreSpacingPreset;
 };
 
 export type StoreSeoConfig = {
@@ -80,9 +87,12 @@ export const DEFAULT_ANNOUNCEMENT: StoreAnnouncementConfig = {
 export const DEFAULT_APPEARANCE: StoreAppearanceConfig = {
   themeId: DEFAULT_THEME_ID,
   themeVersion: '1.0.0',
+  styleId: 'modern',
+  layoutId: 'grid',
   preset: 'modern',
   typography: 'modern',
   radius: 'sm',
+  spacing: 'balanced',
 };
 
 export const DEFAULT_SEO: StoreSeoConfig = {

@@ -5,9 +5,10 @@ import { useRouter } from 'next/navigation';
 import { Plus, Search, Filter } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ProductStatusBadge, StockBadge } from '@/components/catalog/status-badge';
+import { useMerchant } from '@/components/providers/merchant-provider';
 import { formatMoney } from '@/lib/money';
+import { formatLocaleForIntl } from '@/lib/merchant/palestine-mode';
 import type { ProductListItem } from '@/types/catalog';
 import type { ProductStatus } from '@/types/prisma-enums';
 
@@ -21,6 +22,8 @@ export function ProductsListClient({
   canWrite: boolean;
 }) {
   const router = useRouter();
+  const { t, locale } = useMerchant();
+  const intlLocale = formatLocaleForIntl(locale);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<ProductStatus | ''>('');
   const [items, setItems] = useState(initialItems);
@@ -43,7 +46,7 @@ export function ProductsListClient({
   }
 
   async function handleArchive(id: string) {
-    if (!confirm('Archive this product?')) return;
+    if (!confirm(t('products.archiveConfirm'))) return;
     const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
     if (res.ok) router.refresh();
   }
@@ -52,16 +55,16 @@ export function ProductsListClient({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl">Products</h1>
+          <h1 className="text-2xl sm:text-3xl">{t('products.title')}</h1>
           <p className="text-sm text-stone-2 mt-1">
-            {initialTotal} product{initialTotal !== 1 ? 's' : ''} in catalog
+            {t('products.subtitle', { count: String(initialTotal) })}
           </p>
         </div>
         {canWrite && (
           <Link href="/app/products/new">
             <Button>
               <Plus className="w-4 h-4" />
-              Add product
+              {t('products.add')}
             </Button>
           </Link>
         )}
@@ -69,12 +72,12 @@ export function ProductsListClient({
 
       <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone" />
+          <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name, SKU, brand…"
-            className="w-full h-11 pl-10 pr-4 rounded-sm border border-hairline bg-white text-sm"
+            placeholder={t('products.search')}
+            className="w-full h-11 ps-10 pe-4 rounded-sm border border-hairline bg-white text-sm"
           />
         </div>
         <select
@@ -82,36 +85,35 @@ export function ProductsListClient({
           onChange={(e) => setStatus(e.target.value as ProductStatus | '')}
           className="h-11 px-3 rounded-sm border border-hairline bg-white text-sm"
         >
-          <option value="">All statuses</option>
-          <option value="ACTIVE">Active</option>
-          <option value="DRAFT">Draft</option>
-          <option value="ARCHIVED">Archived</option>
+          <option value="">{t('products.status.all')}</option>
+          <option value="ACTIVE">{t('products.status.active')}</option>
+          <option value="DRAFT">{t('products.status.draft')}</option>
+          <option value="ARCHIVED">{t('products.status.archived')}</option>
         </select>
         <Button type="submit" variant="secondary" disabled={loading}>
           <Filter className="w-4 h-4" />
-          Filter
+          {t('common.filter')}
         </Button>
       </form>
 
-      {/* Desktop table */}
       <div className="hidden md:block rounded-md border border-hairline bg-white overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-hairline bg-paper text-left text-stone-2">
-              <th className="px-4 py-3 font-medium">Product</th>
-              <th className="px-4 py-3 font-medium">SKU</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Category</th>
-              <th className="px-4 py-3 font-medium text-right">Price</th>
-              <th className="px-4 py-3 font-medium text-right">Stock</th>
-              <th className="px-4 py-3 font-medium text-right">Actions</th>
+            <tr className="border-b border-hairline bg-paper text-start text-stone-2">
+              <th className="px-4 py-3 font-medium">{t('products.table.product')}</th>
+              <th className="px-4 py-3 font-medium">{t('products.table.sku')}</th>
+              <th className="px-4 py-3 font-medium">{t('products.table.status')}</th>
+              <th className="px-4 py-3 font-medium">{t('products.table.category')}</th>
+              <th className="px-4 py-3 font-medium text-end">{t('products.table.price')}</th>
+              <th className="px-4 py-3 font-medium text-end">{t('products.table.stock')}</th>
+              <th className="px-4 py-3 font-medium text-end">{t('products.table.actions')}</th>
             </tr>
           </thead>
           <tbody>
             {items.length === 0 ? (
               <tr>
                 <td colSpan={7} className="px-4 py-12 text-center text-stone-2">
-                  No products yet. {canWrite && 'Create your first product to get started.'}
+                  {t('empty.products.title')}. {canWrite && t('products.emptyInline')}
                 </td>
               </tr>
             ) : (
@@ -139,17 +141,17 @@ export function ProductsListClient({
                     <ProductStatusBadge status={p.status} />
                   </td>
                   <td className="px-4 py-3 text-stone-2">{p.categoryName || '—'}</td>
-                  <td className="px-4 py-3 text-right font-mono">
-                    {formatMoney(p.sellingPrice, p.currency)}
+                  <td className="px-4 py-3 text-end font-mono">
+                    {formatMoney(p.sellingPrice, p.currency, intlLocale)}
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3 text-end">
                     <StockBadge available={p.totalAvailable} isLowStock={p.isLowStock} />
                   </td>
-                  <td className="px-4 py-3 text-right">
+                  <td className="px-4 py-3 text-end">
                     <div className="flex justify-end gap-2">
                       <Link href={`/app/products/${p.id}`}>
                         <Button variant="ghost" size="sm">
-                          View
+                          {t('products.view')}
                         </Button>
                       </Link>
                       {canWrite && (
@@ -159,7 +161,7 @@ export function ProductsListClient({
                           onClick={() => handleArchive(p.id)}
                           className="text-danger"
                         >
-                          Archive
+                          {t('products.archive')}
                         </Button>
                       )}
                     </div>
@@ -171,7 +173,6 @@ export function ProductsListClient({
         </table>
       </div>
 
-      {/* Mobile cards */}
       <div className="md:hidden space-y-3">
         {items.map((p) => (
           <Link
@@ -192,7 +193,7 @@ export function ProductsListClient({
                 </div>
                 <p className="text-xs font-mono text-stone mt-1">{p.sku}</p>
                 <div className="flex justify-between mt-2 text-sm">
-                  <span className="font-mono">{formatMoney(p.sellingPrice, p.currency)}</span>
+                  <span className="font-mono">{formatMoney(p.sellingPrice, p.currency, intlLocale)}</span>
                   <StockBadge available={p.totalAvailable} isLowStock={p.isLowStock} />
                 </div>
               </div>

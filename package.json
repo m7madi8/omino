@@ -16,6 +16,7 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
+    "db:seed:novae": "tsx scripts/seed-novae.ts",
     "db:setup": "prisma migrate dev && tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "test:phase1": "tsx scripts/test-phase1.ts",

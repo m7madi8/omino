@@ -7,9 +7,9 @@
   };
 
   const plans = {
-    starter: { id: 'starter', name: 'Starter', monthly: 9, yearly: 7.5 },
-    pro: { id: 'pro', name: 'Pro', monthly: 24, yearly: 20 },
-    business: { id: 'business', name: 'Business', monthly: 49, yearly: 40.8 }
+    starter: { id: 'starter', name: 'Run', monthly: 9, yearly: 7.5, annual: 90, save: 18 },
+    pro: { id: 'pro', name: 'Grow', monthly: 29, yearly: 24.2, annual: 290, save: 58 },
+    business: { id: 'business', name: 'Scale', monthly: 59, yearly: 49.2, annual: 590, save: 118 }
   };
 
   const ORDER_KEY = 'omino.lastOrder';
@@ -49,7 +49,8 @@
       plan: p,
       billing: yearly ? 'yearly' : 'monthly',
       monthly,
-      annual: Math.round(p.yearly * 12 * 10) / 10
+      annual: p.annual != null ? p.annual : Math.round(p.yearly * 12 * 10) / 10,
+      save: p.save
     };
   }
 

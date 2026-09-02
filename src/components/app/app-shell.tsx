@@ -34,6 +34,7 @@ import { MODULE_NAV } from '@/lib/permissions/constants';
 import { sessionHasPermission } from '@/lib/permissions/check';
 import { sessionIsPlatformAdmin } from '@/lib/platform/admin';
 import { ADVANCED_NAV_ENTRY } from '@/lib/merchant/simple-nav';
+import type { MessageKey } from '@/lib/i18n/messages/en';
 import { cn } from '@/lib/utils';
 import type { SessionUser } from '@/types';
 
@@ -116,11 +117,15 @@ function AppShellInner({
   }
 
   const isPlatformAdmin = sessionIsPlatformAdmin(user);
-  const roleLabel = isPlatformAdmin ? 'OMINO Platform Owner' : user.roleSlug;
+  const roleLabel = isPlatformAdmin ? t('nav.platformOwner') : user.roleSlug;
 
   const canAddProduct = sessionHasPermission(user, 'products.write');
   const canAddOrder = sessionHasPermission(user, 'orders.write');
   const canPos = sessionHasPermission(user, 'pos.sell');
+
+  function navLabel(item: { label: string; labelKey?: string }) {
+    return item.labelKey ? t(item.labelKey as MessageKey) : item.label;
+  }
 
   return (
     <div className="min-h-svh bg-paper flex overflow-x-hidden" dir={dir}>
@@ -131,7 +136,7 @@ function AppShellInner({
           type="button"
           className="fixed inset-0 bg-ink/40 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
-          aria-label="Close menu"
+          aria-label={t('shell.closeMenu')}
         />
       )}
 
@@ -139,9 +144,15 @@ function AppShellInner({
         className={cn(
           'fixed lg:sticky top-0 z-50 h-svh w-[min(100vw-3rem,16rem)] sm:w-64 bg-ink text-paper flex flex-col',
           'transition-transform duration-150 ease-out lg:translate-x-0 will-change-transform',
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+          dir === 'rtl'
+            ? sidebarOpen
+              ? 'translate-x-0'
+              : 'translate-x-full lg:translate-x-0'
+            : sidebarOpen
+              ? 'translate-x-0'
+              : '-translate-x-full lg:translate-x-0'
         )}
-        aria-label="Dashboard navigation"
+        aria-label={t('shell.dashboardNav')}
         dir={dir}
       >
         <div className="flex items-center justify-between p-4 sm:p-5 border-b border-hairline-dark shrink-0">
@@ -158,7 +169,7 @@ function AppShellInner({
             type="button"
             className="lg:hidden p-2 -mr-1 touch-manipulation active:opacity-70 min-h-[44px] min-w-[44px] flex items-center justify-center"
             onClick={() => setSidebarOpen(false)}
-            aria-label="Close menu"
+            aria-label={t('shell.closeMenu')}
           >
             <X className="w-5 h-5" />
           </button>
@@ -166,7 +177,7 @@ function AppShellInner({
 
         {isPlatformAdmin && (
           <div className="mx-3 mt-3 px-3 py-2 rounded-sm bg-accent/20 border border-accent/30 text-[11px] font-mono uppercase tracking-wider text-accent-soft shrink-0">
-            Platform Owner
+            {t('nav.platformOwner')}
           </div>
         )}
 
@@ -177,7 +188,7 @@ function AppShellInner({
               <AppNavLink
                 key={item.slug}
                 href={item.href}
-                label={item.label}
+                label={navLabel(item)}
                 icon={<Icon className="w-4 h-4" />}
                 compact
                 onNavigate={() => setSidebarOpen(false)}
@@ -197,7 +208,7 @@ function AppShellInner({
                     <AppNavLink
                       key={item.slug}
                       href={item.href}
-                      label={item.label}
+                      label={navLabel(item)}
                       icon={<Icon className="w-4 h-4" />}
                       compact
                       onNavigate={() => setSidebarOpen(false)}
@@ -223,7 +234,7 @@ function AppShellInner({
               type="button"
               className="lg:hidden p-2.5 -ml-1 rounded-sm hover:bg-paper-2 touch-manipulation active:scale-95 transition-transform duration-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
               onClick={() => setSidebarOpen(true)}
-              aria-label="Open menu"
+              aria-label={t('shell.openMenu')}
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -234,7 +245,7 @@ function AppShellInner({
             <p className="text-[11px] text-stone-2 truncate">{user.organizationName}</p>
           </div>
 
-          <div className="flex items-center gap-1 sm:gap-2 ml-auto shrink-0">
+          <div className="flex items-center gap-1 sm:gap-2 ms-auto shrink-0">
             <ContextSwitcher user={user} />
 
             {sessionHasPermission(user, 'ai.use') && !isSimple && (
@@ -242,8 +253,8 @@ function AppShellInner({
                 href={`/app/ai${pathname !== '/app/ai' ? `?from=${encodeURIComponent(pathname)}` : ''}`}
                 prefetch={false}
                 className="p-2.5 rounded-sm hover:bg-paper-2 text-stone-2 touch-manipulation active:scale-95 transition-transform duration-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
-                title="OMINO AI"
-                aria-label="OMINO AI"
+                title={t('shell.ominoAi')}
+                aria-label={t('shell.ominoAi')}
               >
                 <Bot className="w-5 h-5" />
               </Link>
@@ -272,11 +283,11 @@ function AppShellInner({
                     type="button"
                     className="fixed inset-0 z-40"
                     onClick={() => setUserMenuOpen(false)}
-                    aria-label="Close user menu"
+                    aria-label={t('shell.closeUserMenu')}
                   />
                   <div
                     role="menu"
-                    className="absolute right-0 top-full mt-1 w-52 max-w-[calc(100vw-1.5rem)] bg-white border border-hairline rounded-sm shadow-lift z-50 py-1"
+                    className="absolute end-0 top-full mt-1 w-52 max-w-[calc(100vw-1.5rem)] bg-white border border-hairline rounded-sm shadow-lift z-50 py-1"
                   >
                     <div className="px-3 py-2 border-b border-hairline text-xs text-stone-2">
                       {roleLabel}
@@ -294,10 +305,10 @@ function AppShellInner({
                       type="button"
                       role="menuitem"
                       onClick={handleSignOut}
-                      className="w-full text-left px-3 py-3 text-sm hover:bg-paper-2 flex items-center gap-2 text-danger touch-manipulation min-h-[44px]"
+                      className="w-full text-start px-3 py-3 text-sm hover:bg-paper-2 flex items-center gap-2 text-danger touch-manipulation min-h-[44px]"
                     >
                       <LogOut className="w-4 h-4" />
-                      Sign out
+                      {t('nav.signOut')}
                     </button>
                   </div>
                 </>
@@ -332,13 +343,14 @@ function AppShellInner({
 }
 
 function ContextSwitcher({ user }: { user: SessionUser }) {
+  const { t } = useMerchant();
   return (
     <div className="hidden md:flex items-center gap-2 text-xs max-w-[50vw]">
       <span className="px-2.5 py-1.5 rounded-sm bg-paper-2 text-stone-2 border border-hairline truncate max-w-[140px]">
         {user.organizationName}
       </span>
       <span className="px-2.5 py-1.5 rounded-sm bg-paper-2 text-stone-2 border border-hairline truncate max-w-[120px]">
-        {user.storeName || 'Store'}
+        {user.storeName || t('shell.defaultStore')}
       </span>
     </div>
   );

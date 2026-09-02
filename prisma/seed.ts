@@ -233,12 +233,18 @@ async function seedDemoCatalog(
   console.log('Demo catalog seeded (2 products, variants, stock)');
 }
 
+import { seedNovaeDemo } from './seeds/novae';
+
 async function main() {
   console.log('Seeding permissions...');
   await seedPermissions();
   console.log(`  ${PERMISSIONS.length} permissions ready`);
 
   await seedDemoOrg();
+
+  const novae = await seedNovaeDemo();
+  console.log('\nNOVAÉ summary:', JSON.stringify(novae, null, 2));
+
   console.log('Seed complete');
 }
 

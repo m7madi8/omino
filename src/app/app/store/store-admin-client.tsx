@@ -9,6 +9,7 @@ import { Select } from '@/components/ui/select';
 import { MediaUploader } from '@/components/media/media-uploader';
 import { StoreHero } from '@/components/storefront/store-hero';
 import { StorePreviewPanel } from '@/components/store-admin/store-preview-panel';
+import { DesignStudio } from '@/components/store-admin/design-studio';
 import { deleteStoreMedia, uploadStoreMedia } from '@/lib/store-media';
 import { FAVICON_ACCEPT } from '@/lib/storage/file-validation';
 import type { StoreSocialLinks } from '@/types/store-contact';
@@ -24,8 +25,6 @@ import type {
 } from '@/types/store-experience';
 import { defaultExperienceConfig } from '@/types/store-experience';
 import {
-  STYLE_PRESETS,
-  applyStylePreset,
   parseExperienceDocument,
 } from '@/lib/storefront/store-experience-engine';
 import type { StoreHealthReport } from '@/lib/storefront/store-health';
@@ -647,61 +646,42 @@ export default function StoreAdminPage() {
       )}
 
       {tab === 'appearance' && (
-        <Card title="Appearance" description="Brand colors and visual direction">
+        <Card title="Appearance" description="Theme, style, layout, and brand colors">
           <div className="space-y-6">
             <div className="rounded-sm border border-hairline bg-paper p-4 flex flex-wrap items-center justify-between gap-3">
               <div>
-                <p className="font-medium">Storefront themes</p>
+                <p className="font-medium">Live preview</p>
                 <p className="text-sm text-stone-2 mt-1">
-                  Choose a complete visual direction — typography, layout, and product presentation.
+                  Changes apply to draft — publish when ready.
                 </p>
               </div>
               <Link
                 href="/app/store/themes"
                 className="inline-flex items-center justify-center h-10 px-4 text-sm font-medium bg-ink text-paper rounded-sm"
               >
-                Open theme library
+                Full preview
               </Link>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {Object.entries(STYLE_PRESETS).map(([key, preset]) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => {
-                    const applied = applyStylePreset(
-                      key as keyof typeof STYLE_PRESETS,
-                      draft.appearance
-                    );
-                    setStore({
-                      ...store,
-                      primaryColor: applied.primaryColor,
-                      secondaryColor: applied.secondaryColor,
-                    });
-                    updateDraft({ appearance: applied.appearance });
-                  }}
-                  className={`text-left p-4 rounded-sm border transition ${
-                    draft.appearance.preset === key
-                      ? 'border-accent ring-1 ring-accent'
-                      : 'border-hairline hover:border-stone'
-                  }`}
-                >
-                  <div className="flex gap-2 mb-2">
-                    <span
-                      className="w-6 h-6 rounded-full border border-hairline"
-                      style={{ backgroundColor: preset.primary }}
-                    />
-                    <span
-                      className="w-6 h-6 rounded-full border border-hairline"
-                      style={{ backgroundColor: preset.secondary }}
-                    />
-                  </div>
-                  <p className="font-medium text-sm">{preset.label}</p>
-                  <p className="text-xs text-stone-2 mt-1">{preset.description}</p>
-                </button>
-              ))}
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
+            <DesignStudio
+              draft={draft}
+              primaryColor={store.primaryColor}
+              secondaryColor={store.secondaryColor}
+              onChange={({ appearance, primaryColor, secondaryColor }) => {
+                if (primaryColor !== undefined || secondaryColor !== undefined) {
+                  setStore({
+                    ...store,
+                    ...(primaryColor !== undefined ? { primaryColor } : {}),
+                    ...(secondaryColor !== undefined ? { secondaryColor } : {}),
+                  });
+                }
+                if (appearance) {
+                  updateDraft({
+                    appearance: { ...draft.appearance, ...appearance },
+                  });
+                }
+              }}
+            />
+            <div className="grid gap-4 sm:grid-cols-2 pt-4 border-t border-hairline">
               <Input
                 label="Primary color"
                 value={store.primaryColor || ''}

@@ -11,6 +11,7 @@ import { StorefrontAnalyticsTracker } from '@/components/storefront/storefront-a
 import { CartDrawer } from '@/components/storefront/cart-drawer';
 import { StorePageTransition } from '@/components/storefront/store-page-transition';
 import { StoreThemeProvider } from '@/components/storefront/themes/theme-context';
+import { StorefrontLocaleProvider } from '@/components/providers/storefront-locale-provider';
 import { cn } from '@/lib/utils';
 
 export function StorefrontShell({
@@ -28,7 +29,12 @@ export function StorefrontShell({
   const isHome = pathname === `/store/${storeSlug}` || pathname === `/store/${storeSlug}/`;
 
   return (
-    <StoreThemeProvider experience={store.experience}>
+    <StorefrontLocaleProvider locale={store.locale}>
+    <StoreThemeProvider
+      experience={store.experience}
+      primaryColor={store.primaryColor}
+      secondaryColor={store.secondaryColor}
+    >
       <StoreCartProvider storeSlug={storeSlug}>
         <LayoutGroup id={`storefront-${storeSlug}`}>
         <StorefrontAnalyticsTracker storeSlug={storeSlug} storeId={store.id} />
@@ -47,5 +53,6 @@ export function StorefrontShell({
       </LayoutGroup>
     </StoreCartProvider>
     </StoreThemeProvider>
+    </StorefrontLocaleProvider>
   );
 }

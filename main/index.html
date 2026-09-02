@@ -4,13 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OMINO</title>
-<meta name="description" content="OMINO connects your POS, online store, inventory, customers, payments, analytics, AI, and automation into one intelligent business system.">
+<meta name="description" content="OMINO brings your store, sales, inventory, customers, payments, and AI into one intelligent business system — so you see what's happening and know what to do next.">
 <meta property="og:title" content="OMINO — The Intelligent Operating System for Your Business">
-<meta property="og:description" content="OMINO connects your POS, online store, inventory, customers, payments, analytics, AI, and automation into one intelligent business system.">
-<meta property="og:type" content="website">
+<meta property="og:description" content="One business. One system. One clear picture.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="OMINO — The Intelligent Operating System for Your Business">
-<meta name="twitter:description" content="One business. One system. One clear picture.">
 <link rel="canonical" href="/main/index.html">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -19,168 +16,71 @@
 <link href="https://api.fontshare.com/v2/css?f[]=satoshi@500&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Instrument+Serif:ital@1&family=Inter:wght@400;500&family=Zain:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600;125,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600&family=Zain:wght@400;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
-<script src="js/omino-loader.js"></script>
-<script src="js/omino-cookies.js"></script>
 <style>
-:root {
-  --ink: #070809;
-  --ink-2: #101214;
-  --paper: #F4F5F6;
-  --paper-2: #E8EAEC;
-  --stone: #85898D;
-  --stone-2: #5D6267;
-  --hairline: #D7DADD;
-  --hairline-dark: #292D31;
-  --accent: #5B7CFF;
-  --accent-soft: #CBD3FF;
-  --good: #63D6A0;
-  --radius-xs: 10px;
-  --radius-sm: 14px;
-  --radius-md: 20px;
-  --radius-lg: 28px;
-  --radius-xl: 36px;
-  --radius-2xl: 48px;
-  --radius-pill: 999px;
-  --ease: cubic-bezier(.22, 1, .36, 1);
-  --shadow-soft: 0 18px 40px -28px rgba(7, 8, 9, 0.16);
-  --shadow-lift: 0 28px 56px -32px rgba(7, 8, 9, 0.2);
-  --ring: 0 0 0 4px rgba(91, 124, 255, 0.22);
-  --font-display: 'Archivo', sans-serif;
-  --font-mark: 'Satoshi', 'Archivo', sans-serif;
-  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-serif: 'Instrument Serif', Georgia, serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
-  --font-ar: 'IBM Plex Sans Arabic', sans-serif;
-  --font-ar-display: 'Zain', sans-serif;
-}
-@media (max-width: 768px) {
-  :root {
-    --radius-xs: 8px;
-    --radius-sm: 12px;
-    --radius-md: 16px;
-    --radius-lg: 20px;
-    --radius-xl: 24px;
-    --radius-2xl: 32px;
-  }
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --ink:#070809; --ink-2:#101214;
+  --paper:#F4F5F6; --paper-2:#E8EAEC;
+  --stone:#85898D; --stone-2:#5D6267;
+  --hairline:#D7DADD; --hairline-dark:#292D31;
+  --accent:#5B7CFF; --accent-soft:#CBD3FF;
+  --good:#63D6A0; --warn:#E8A855;
+  --radius-xs:10px; --radius-sm:14px; --radius-md:20px; --radius-lg:28px; --radius-xl:36px; --radius-pill:999px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --shadow-soft:0 18px 40px -28px rgba(7,8,9,.16);
+  --shadow-lift:0 28px 56px -32px rgba(7,8,9,.2);
+  --shadow-deep:0 40px 90px -36px rgba(7,8,9,.5);
+  --ring:0 0 0 4px rgba(91,124,255,.22);
+  --font-display:'Archivo',sans-serif;
+  --font-mark:'Satoshi','Archivo',sans-serif;
+  --font-body:'Inter',ui-sans-serif,system-ui,sans-serif;
+  --font-serif:'Instrument Serif',Georgia,serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  --font-ar:'IBM Plex Sans Arabic',sans-serif;
+  --font-ar-display:'Zain',sans-serif;
 }
 *{box-sizing:border-box;}
-html{
-  scroll-behavior:smooth;
-  scroll-padding-top:104px;
-  overflow-x:hidden;
-  scrollbar-width:none;
-  -ms-overflow-style:none;
-}
-html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0;}
+html{scroll-behavior:smooth;scroll-padding-top:88px;-webkit-text-size-adjust:100%;}
 body{
   margin:0;
-  background:
-    radial-gradient(ellipse 80% 42% at 70% -8%, rgba(91,124,255,0.07), transparent 58%),
-    var(--paper);
+  background:radial-gradient(ellipse 80% 40% at 72% -6%,rgba(91,124,255,.07),transparent 58%) var(--paper);
   color:var(--ink);
   font-family:var(--font-body);
-  font-size:16px;
-  font-weight:400;
-  line-height:1.6;
+  font-size:16px;line-height:1.6;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
-  scrollbar-width:none;
 }
-html[lang="ar"] body{
-  font-family:var(--font-ar);
-  line-height:1.7;
-}
-h1,h2{
-  font-family:var(--font-display);
-  font-weight:500;
-  font-stretch:125%;
-  margin:0;
-  letter-spacing:-0.025em;
-  font-synthesis:none;
-}
-html[lang="ar"] h1,html[lang="ar"] h2{
-  font-family:var(--font-ar-display);
-  font-weight:700;
-  font-stretch:normal;
-  letter-spacing:0;
-  line-height:1.15;
-  overflow-wrap:break-word;
-}
+html[lang="ar"] body{font-family:var(--font-ar);line-height:1.75;}
+h1,h2{font-family:var(--font-display);font-weight:600;font-stretch:125%;margin:0;letter-spacing:-.025em;}
+html[lang="ar"] h1,html[lang="ar"] h2{font-family:var(--font-ar-display);font-weight:800;font-stretch:normal;letter-spacing:0;line-height:1.18;}
 h3,h4{font-family:inherit;font-weight:500;margin:0;}
 p{margin:0;}
 a{color:inherit;text-decoration:none;}
 button{font-family:inherit;cursor:pointer;touch-action:manipulation;}
 img,svg{display:block;max-width:100%;}
-.skip{
-  position:absolute;
-  inset-inline-start:-999px;
-  top:8px;
-  background:var(--ink);
-  color:var(--paper);
-  padding:10px 16px;
-  border-radius:var(--radius-pill);
-  z-index:400;
-}
+ul{margin:0;padding:0;list-style:none;}
+.skip{position:absolute;inset-inline-start:-999px;top:8px;background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:var(--radius-pill);z-index:400;}
 .skip:focus{inset-inline-start:16px;}
-.wrap{
-  max-width:1180px;
-  margin:0 auto;
-  padding:0 max(32px, env(safe-area-inset-right)) 0 max(32px, env(safe-area-inset-left));
-}
-@media(max-width:640px){
-  .wrap{padding:0 max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));}
-}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:max(32px,env(safe-area-inset-right)) max(32px,env(safe-area-inset-left));}
+@media(max-width:640px){.wrap{padding-inline:max(20px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-left));}}
+.en{font-family:var(--font-body);font-weight:500;letter-spacing:.14em;text-transform:uppercase;direction:ltr;unicode-bidi:isolate;}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important;}}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:none;box-shadow:var(--ring);}
+section{position:relative;}
 
-.en{
-  font-family:var(--font-body);
-  font-weight:500;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  direction:ltr;
-  unicode-bidi:isolate;
-}
-.idx{
-  font-family:var(--font-mono);
-  font-weight:500;
-  font-size:12px;
-  letter-spacing:0.12em;
-  text-transform:uppercase;
-  font-variant-numeric:tabular-nums;
-  font-feature-settings:"tnum" 1;
-  direction:ltr;
-  unicode-bidi:isolate;
-  width:max-content;
-  max-width:100%;
-}
-html[dir="rtl"] .hero-index,
-html[dir="rtl"] .section-index{
-  margin-left:auto;
-  margin-right:0;
-}
-
-@media (prefers-reduced-motion: reduce){
-  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
-}
-
-a:focus-visible,button:focus-visible,input:focus-visible{
-  outline:none;
-  box-shadow:var(--ring);
-}
-
+/* ---------- orbit scroll progress (compact, bottom-fixed) ---------- */
 .orbit{
   position:fixed;
-  top:22vh;
-  bottom:16vh;
-  inset-inline-end:max(14px, env(safe-area-inset-right));
+  bottom:calc(18px + env(safe-area-inset-bottom));
+  inset-inline-end:max(12px, env(safe-area-inset-right));
   z-index:90;
-  width:56px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  width:auto;height:auto;
+  display:flex;flex-direction:column;align-items:center;
   pointer-events:none;
   color:#fff;
   mix-blend-mode:difference;
@@ -188,58 +88,14 @@ a:focus-visible,button:focus-visible,input:focus-visible{
 html.menu-open .orbit{opacity:0;visibility:hidden;}
 .orbit-field{
   position:relative;
-  flex:1;
-  width:44px;
-  pointer-events:auto;
-  cursor:ns-resize;
-  touch-action:none;
+  width:52px;height:52px;flex:none;
+  pointer-events:none;
   user-select:none;
 }
-.orbit-beam{
-  position:absolute;
-  left:50%;
-  top:0;
-  width:1px;
-  height:0;
-  transform:translateX(-50%);
-  background:linear-gradient(180deg, transparent, currentColor 18%, currentColor);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity 500ms var(--ease);
-}
-.orbit.is-live .orbit-beam{opacity:.35;}
-.orbit-nodes{position:absolute;inset:0;pointer-events:none;}
-.orbit-node{
-  position:absolute;
-  left:50%;
-  width:28px;height:28px;
-  transform:translate(-50%,-50%);
-  pointer-events:auto;
-  cursor:pointer;
-  background:none;border:none;padding:0;
-  color:inherit;
-}
-.orbit-node i{
-  display:block;
-  width:5px;height:5px;
-  margin:0 auto;
-  border-radius:var(--radius-pill);
-  border:1px solid currentColor;
-  opacity:.28;
-  transition:transform 500ms var(--ease), opacity 500ms var(--ease), background 500ms var(--ease), box-shadow 500ms var(--ease);
-}
-.orbit.is-live .orbit-node i{opacity:.55;}
-.orbit-node.is-here i,
-.orbit-node:hover i{
-  opacity:1;
-  background:currentColor;
-  transform:scale(1.55);
-  box-shadow:0 0 14px rgba(255,255,255,.55);
-}
+.orbit-beam,.orbit-nodes,.orbit-wake{display:none;}
 .orbit-seed{
   position:absolute;
-  left:50%;
-  top:0;
+  left:50%;top:50%;
   width:36px;height:36px;
   transform:translate(-50%,-50%);
   pointer-events:none;
@@ -247,8 +103,7 @@ html.menu-open .orbit{opacity:0;visibility:hidden;}
 .orbit-ring{
   position:absolute;
   inset:-12px;
-  width:auto;
-  height:auto;
+  width:auto;height:auto;
   max-width:none;
   overflow:visible;
   transform:rotate(-90deg);
@@ -262,1009 +117,338 @@ html.menu-open .orbit{opacity:0;visibility:hidden;}
 }
 .orbit-ring-track{opacity:.22;}
 .orbit-ring-value{stroke-linecap:round;}
-.orbit-core{
-  position:absolute;
-  inset:8px;
-}
-.orbit-core img{
-  width:100%;height:100%;
-  object-fit:contain;
-}
-.orbit-wake{
-  position:absolute;
-  left:50%;
-  width:2px;
-  transform:translateX(-50%);
-  background:linear-gradient(180deg, transparent, #fff, transparent);
-  opacity:0;
-  filter:blur(.4px);
-  pointer-events:none;
-}
+.orbit-core{position:absolute;inset:8px;}
+.orbit-core img{width:100%;height:100%;object-fit:contain;}
 .orbit-readout{
   position:absolute;
-  inset-inline-start:auto;
-  inset-inline-end:calc(100% + 10px);
-  top:0;
+  inset-inline-start:50%;
+  inset-inline-end:auto;
+  top:auto;
+  bottom:-18px;
+  transform:translate(-50%,0);
   font-family:var(--font-mono);
   font-size:11px;
   letter-spacing:.06em;
   font-variant-numeric:tabular-nums;
   white-space:nowrap;
-  opacity:0;
+  opacity:.7;
   pointer-events:none;
-  transform:translateY(-50%);
-  transition:opacity 480ms var(--ease);
 }
 .orbit.is-live .orbit-readout{opacity:.85;}
-@media (max-width:859px){
-  .orbit{
-    top:auto;
-    bottom:calc(18px + env(safe-area-inset-bottom));
-    height:auto;
-    width:auto;
-    inset-inline-end:max(12px, env(safe-area-inset-right));
-  }
-  .orbit-field{
-    width:52px;height:52px;flex:none;
-    cursor:default;
-    pointer-events:none;
-  }
-  .orbit-beam,.orbit-nodes{display:none;}
-  .orbit-seed{top:50% !important;}
-  .orbit-readout{
-    position:absolute;
-    inset-inline-start:50% !important;
-    inset-inline-end:auto !important;
-    top:auto !important;
-    bottom:-18px;
-    transform:translate(-50%,0);
-    margin:0;
-    opacity:.7;
-  }
-}
-@media (prefers-reduced-motion: reduce){
+@media(prefers-reduced-motion:reduce){
   .orbit-ring,.orbit-seed,.orbit-readout{transition:none;}
 }
 html.await-open header.site-nav,
-html.await-open #orbit,
-html.await-open .hero-top{
-  opacity:0;
-}
-@media (prefers-reduced-motion: reduce){
+html.await-open #orbit{opacity:0;}
+@media(prefers-reduced-motion:reduce){
   html.await-open header.site-nav,
-  html.await-open #orbit,
-  html.await-open .hero-top{opacity:1;}
+  html.await-open #orbit{opacity:1;}
 }
 
-.logo-lockup{
-  display:grid;
-  align-items:center;
-  direction:ltr;
-  line-height:0;
-}
-.logo-img{
-  grid-area:1 / 1;
-  display:block;
-  height:26px;
-  width:auto;
-  max-width:none;
-  transition:opacity 280ms ease;
-}
+/* ---------- header / nav ---------- */
+.logo-lockup{display:grid;align-items:center;direction:ltr;line-height:0;}
+.logo-img{grid-area:1/1;display:block;height:26px;width:auto;transition:opacity 280ms ease;}
 .logo-lockup .logo-on-dark{opacity:0;}
-header.site-nav .logo-lockup{flex:none;}
 html.menu-open header.site-nav .logo-on-light{opacity:0;}
 html.menu-open header.site-nav .logo-on-dark{opacity:1;}
 
-.label{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:12px;
-  color:var(--stone);
-}
-.label .dot{width:6px;height:6px;border-radius:var(--radius-pill);background:var(--accent);flex:none;}
-.on-dark .label{color:#A8ADB3;}
-
-header.site-nav{
-  position:fixed;top:16px;left:0;right:0;z-index:120;
-  padding:0;
-  background:transparent;
-  border:none;
-}
-header.site-nav.scrolled{
-  background:transparent;
-  padding:0;
-  border:none;
-}
+header.site-nav{position:fixed;top:16px;inset-inline:0;z-index:120;}
 .nav-inner{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;
-  min-width:0;
-  padding:8px 10px 8px 18px;
-  padding-inline:18px 10px;
-  background:rgba(255,255,255,0.78);
-  backdrop-filter:blur(18px) saturate(1.15);
-  -webkit-backdrop-filter:blur(18px) saturate(1.15);
-  border:1px solid rgba(215,218,221,0.7);
-  border-radius:var(--radius-pill);
-  box-shadow:var(--shadow-soft);
-  transition:background 500ms var(--ease), border-color 500ms var(--ease), box-shadow 500ms var(--ease);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;
+  padding:8px 10px 8px 18px;padding-inline:18px 10px;
+  background:rgba(255,255,255,.8);backdrop-filter:blur(18px) saturate(1.15);-webkit-backdrop-filter:blur(18px) saturate(1.15);
+  border:1px solid rgba(215,218,221,.7);border-radius:var(--radius-pill);box-shadow:var(--shadow-soft);
+  transition:background 400ms var(--ease),border-color 400ms var(--ease),box-shadow 400ms var(--ease);
 }
-header.site-nav.scrolled .nav-inner{
-  background:rgba(255,255,255,0.94);
-  border-color:rgba(215,218,221,0.9);
-  box-shadow:var(--shadow-lift);
-}
+header.site-nav.scrolled .nav-inner{background:rgba(255,255,255,.95);border-color:rgba(215,218,221,.9);box-shadow:var(--shadow-lift);}
 .nav-links{display:none;align-items:center;gap:4px;}
 @media(min-width:980px){.nav-links{display:flex;}}
-html[lang="ar"] .nav-links a.en{
-  font-family:var(--font-ar);
-  letter-spacing:0;
-  text-transform:none;
-  direction:rtl;
-}
-.nav-links a{
-  font-size:12px;color:var(--ink-2);
-  padding:8px 14px;
-  border-radius:var(--radius-pill);
-  transition:background 400ms var(--ease), color 400ms var(--ease);
-}
-.nav-links a:hover{background:rgba(7,8,9,0.05);}
-.nav-links a:focus-visible{box-shadow:var(--ring);}
+.nav-links a{font-size:12px;color:var(--ink-2);padding:8px 14px;border-radius:var(--radius-pill);transition:background 300ms var(--ease);}
+html[lang="ar"] .nav-links a{font-family:var(--font-ar);letter-spacing:0;text-transform:none;font-size:14px;}
+.nav-links a:hover{background:rgba(7,8,9,.05);}
 .nav-actions{display:flex;align-items:center;gap:4px;flex:none;}
-.lang-btn{
-  font-family:var(--font-body);
-  font-size:12px;
-  font-weight:500;
-  letter-spacing:0.14em;
-  text-transform:uppercase;
-  background:none;border:none;color:var(--ink-2);
-  min-width:44px;min-height:44px;
-  padding:8px 12px;
-  border-radius:var(--radius-pill);
-  transition:color 400ms var(--ease);
-  -webkit-tap-highlight-color:transparent;
-}
-.lang-btn:hover,
-.lang-btn:active,
-.lang-btn:focus{
-  background:none;
-}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  padding:12px 20px;font-size:12px;font-weight:500;
-  font-family:var(--font-body);
-  letter-spacing:0.08em;text-transform:uppercase;
-  min-height:44px;
-  white-space:nowrap;
-  flex:none;
-  cursor:pointer;
-  border:1px solid transparent;
-  transition:
-    transform 500ms var(--ease),
-    background-color 400ms ease,
-    box-shadow 500ms ease,
-    border-color 400ms ease,
-    color 400ms ease;
-}
-html[lang="ar"] .btn{
-  font-family:var(--font-ar);
-  font-size:15px;
-  letter-spacing:0;
-  text-transform:none;
-  padding:12px 22px;
-  white-space:normal;
-  line-height:1.3;
-  height:auto;
-}
-.btn-primary{
-  background:var(--ink);color:var(--paper);
-  border-radius:var(--radius-pill);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.1),
-    0 10px 22px -14px rgba(7,8,9,0.45);
-}
-.btn-primary:hover{
-  transform:translateY(-2px) scale(1.02);
-  background:var(--ink-2);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.12),
-    0 14px 28px -14px rgba(7,8,9,0.5);
-}
-.btn-primary:focus-visible{
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.1),
-    0 10px 22px -14px rgba(7,8,9,0.45),
-    var(--ring);
-}
-.btn-ghost{
-  border-color:rgba(215,218,221,0.95);
-  color:var(--ink);
-  border-radius:16px;
-  background:transparent;
-}
-.btn-ghost:hover{
-  border-color:var(--ink);
-  transform:translateY(-1px) scale(1.015);
-  background:rgba(255,255,255,0.45);
-}
-.on-dark .btn-primary,
-.plan.pro .btn-primary{
-  background:var(--paper);color:var(--ink);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.7),
-    0 10px 22px -14px rgba(0,0,0,0.45);
-}
-.on-dark .btn-primary:hover,
-.plan.pro .btn-primary:hover{background:#fff;}
-.on-dark .btn-ghost{border-color:rgba(41,45,49,0.95);color:var(--paper);background:transparent;}
-.on-dark .btn-ghost:hover{border-color:var(--paper);background:rgba(255,255,255,0.04);}
+.lang-btn{font-family:var(--font-body);font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;background:none;border:none;color:var(--ink-2);min-width:44px;min-height:44px;padding:8px 12px;border-radius:var(--radius-pill);}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;font-size:12px;font-weight:600;font-family:var(--font-body);letter-spacing:.08em;text-transform:uppercase;min-height:44px;white-space:nowrap;flex:none;border:1px solid transparent;transition:transform 400ms var(--ease),background-color 300ms ease,box-shadow 400ms ease,border-color 300ms ease,color 300ms ease;}
+html[lang="ar"] .btn{font-family:var(--font-ar);font-size:15px;letter-spacing:0;text-transform:none;padding:12px 22px;white-space:normal;line-height:1.3;height:auto;font-weight:700;}
+.btn-primary{background:var(--ink);color:var(--paper);border-radius:var(--radius-pill);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 10px 22px -14px rgba(7,8,9,.45);}
+.btn-primary:hover{transform:translateY(-2px);background:var(--ink-2);}
+.btn-ghost{border-color:rgba(215,218,221,.95);color:var(--ink);border-radius:16px;background:transparent;}
+.btn-ghost:hover{border-color:var(--ink);background:rgba(255,255,255,.5);}
+.on-dark .btn-primary{background:var(--paper);color:var(--ink);}
+.on-dark .btn-primary:hover{background:#fff;}
+.on-dark .btn-ghost{border-color:rgba(255,255,255,.25);color:var(--paper);}
+.on-dark .btn-ghost:hover{border-color:var(--paper);background:rgba(255,255,255,.06);}
 .btn-sm{padding:9px 16px;font-size:12px;min-height:40px;}
 html[lang="ar"] .btn-sm{font-size:14px;padding:9px 16px;}
-.menu-btn{
-  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;
-  background:transparent;border:none;padding:10px;width:44px;height:44px;
-  border-radius:0;
-  -webkit-tap-highlight-color:transparent;
-  transition:none;
-}
-.menu-btn:hover,
-.menu-btn:active,
-.menu-btn:focus{
-  background:transparent;
-}
+.btn-lg{padding:16px 28px;font-size:13px;min-height:52px;}
+html[lang="ar"] .btn-lg{font-size:16px;padding:16px 30px;}
+.menu-btn{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;background:transparent;border:none;padding:10px;width:44px;height:44px;}
 @media(min-width:980px){.menu-btn{display:none;}}
-@media (min-width:980px) and (max-width:1180px){
-  html[lang="ar"] .nav-links{display:none;}
-  html[lang="ar"] .menu-btn{display:flex;}
-}
 @media(max-width:979px){
   header.site-nav{top:10px;}
-  header.site-nav .wrap{
-    padding-inline:max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right));
-  }
-  .nav-inner{
-    gap:8px;
-    padding:6px 6px 6px 14px;
-    padding-inline:14px 6px;
-  }
+  header.site-nav .wrap{padding-inline:max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right));}
+  .nav-inner{gap:8px;padding:6px 6px 6px 14px;padding-inline:14px 6px;}
   header.site-nav .logo-img{height:22px;}
   header.site-nav .nav-actions .btn-primary{display:none;}
-  .lang-btn{min-width:40px;padding:8px;letter-spacing:0.1em;}
+  .lang-btn{min-width:40px;padding:8px;}
 }
-.menu-btn span{
-  display:block;width:18px;height:1.5px;background:var(--ink);
-  border-radius:var(--radius-pill);
-  transition:transform 500ms var(--ease);
-}
+.menu-btn span{display:block;width:18px;height:1.5px;background:var(--ink);border-radius:var(--radius-pill);transition:transform 400ms var(--ease);}
 .menu-btn[aria-expanded="true"] span:first-child{transform:translateY(3.75px) rotate(45deg);}
 .menu-btn[aria-expanded="true"] span:last-child{transform:translateY(-3.75px) rotate(-45deg);}
 
-.menu-shell{
-  position:fixed;inset:0;z-index:200;
-  pointer-events:none;
-  visibility:hidden;
-}
-.menu-shell.open{
-  pointer-events:auto;
-  visibility:visible;
-}
-.menu-scrim{
-  position:absolute;inset:0;
-  background:rgba(7,8,9,0.72);
-  backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  opacity:0;
-  border:0;padding:0;width:100%;cursor:pointer;
-}
-.menu-drawer{
-  position:absolute;top:0;bottom:0;inset-inline-end:0;
-  width:min(428px, 100%);
-  background:var(--ink);
-  color:var(--paper);
-  display:flex;flex-direction:column;
-  padding:28px 28px calc(28px + env(safe-area-inset-bottom)) 28px;
-  box-shadow:-24px 0 64px -32px rgba(0,0,0,0.45);
-  transform:translateX(100%);
-}
-html[dir="rtl"] .menu-drawer{
-  transform:translateX(-100%);
-  box-shadow:24px 0 64px -32px rgba(0,0,0,0.45);
-}
+.menu-shell{position:fixed;inset:0;z-index:200;pointer-events:none;visibility:hidden;}
+.menu-shell.open{pointer-events:auto;visibility:visible;}
+.menu-scrim{position:absolute;inset:0;background:rgba(7,8,9,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;border:0;padding:0;width:100%;cursor:pointer;}
+.menu-drawer{position:absolute;top:0;bottom:0;inset-inline-end:0;width:min(428px,100%);background:var(--ink);color:var(--paper);display:flex;flex-direction:column;padding:28px 28px calc(28px + env(safe-area-inset-bottom)) 28px;transform:translateX(100%);}
+html[dir="rtl"] .menu-drawer{transform:translateX(-100%);}
 .menu-drawer-top{padding-top:88px;margin-bottom:36px;}
-.menu-kicker{font-size:12px;color:#8A9096;}
-.menu-tag{
-  margin-top:10px;
-  font-size:15px;
-  color:#C5C9CE;
-  max-width:22ch;
-  line-height:1.5;
-}
+.menu-tag{margin-top:10px;font-size:15px;color:#C5C9CE;max-width:22ch;line-height:1.5;}
 .menu-nav{display:flex;flex-direction:column;flex:1;}
-.menu-link{
-  display:flex;align-items:baseline;gap:18px;
-  padding:18px 0;
-  border-bottom:1px solid var(--hairline-dark);
-  transition:color 400ms var(--ease), padding-inline-start 400ms var(--ease);
-}
+.menu-link{display:flex;align-items:baseline;gap:18px;padding:18px 0;border-bottom:1px solid var(--hairline-dark);transition:padding-inline-start 400ms var(--ease);}
 .menu-link:first-child{border-top:1px solid var(--hairline-dark);}
-.menu-idx{
-  font-family:var(--font-mono);
-  font-size:12px;
-  font-weight:500;
-  color:var(--accent);
-  letter-spacing:0.06em;
-  font-variant-numeric:tabular-nums;
-  direction:ltr;
-}
-.menu-name{
-  font-family:var(--font-display);
-  font-stretch:125%;
-  font-size:clamp(2rem,7vw,2.7rem);
-  font-weight:500;
-  letter-spacing:-0.025em;
-  line-height:1;
-}
-html[lang="ar"] .menu-name{
-  font-family:var(--font-ar);
-  font-stretch:normal;
-  letter-spacing:0;
-}
-.menu-link:hover{color:#fff;padding-inline-start:8px;}
+.menu-name{font-family:var(--font-display);font-stretch:125%;font-size:clamp(2rem,7vw,2.7rem);font-weight:600;letter-spacing:-.025em;line-height:1;}
+html[lang="ar"] .menu-name{font-family:var(--font-ar-display);font-stretch:normal;font-weight:800;letter-spacing:0;}
+.menu-link:hover{padding-inline-start:8px;}
 .menu-cta{margin-top:28px;}
 .menu-cta .btn{width:100%;}
-.menu-foot{
-  margin-top:auto;
-  padding-top:28px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  flex-wrap:wrap;
-  border-top:1px solid var(--hairline-dark);
-}
-.menu-connect{
-  font-size:12px;
-  color:#8A9096;
-  font-weight:500;
-  letter-spacing:0.16em;
-  text-transform:uppercase;
-}
-html[lang="ar"] .menu-connect{
-  font-family:var(--font-ar);
-  letter-spacing:0;
-  text-transform:none;
-}
+.menu-foot{margin-top:auto;padding-top:28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:1px solid var(--hairline-dark);}
+.menu-connect{font-size:12px;color:#8A9096;font-weight:600;letter-spacing:.16em;text-transform:uppercase;}
+html[lang="ar"] .menu-connect{font-family:var(--font-ar);letter-spacing:0;text-transform:none;}
 .socials{display:flex;gap:10px;}
-.social{
-  width:44px;height:44px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:50%;
-  border:1px solid var(--hairline-dark);
-  color:var(--paper);
-  background:rgba(255,255,255,0.03);
-  transition:
-    background 400ms var(--ease),
-    color 400ms var(--ease),
-    border-color 400ms var(--ease),
-    transform 400ms var(--ease);
-}
+.social{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:1px solid var(--hairline-dark);color:var(--paper);background:rgba(255,255,255,.03);transition:background 300ms var(--ease),color 300ms var(--ease),border-color 300ms var(--ease);}
 .social svg{width:18px;height:18px;}
-.social:hover{
-  background:var(--paper);
-  color:var(--ink);
-  border-color:var(--paper);
-  transform:translateY(-2px);
-}
-.social:focus-visible{box-shadow:var(--ring);}
-
-html.menu-open,
-html.menu-open body{
-  overflow:hidden !important;
-  overscroll-behavior:none;
-}
-html.menu-open .menu-scrim{touch-action:none;}
-html.menu-open .menu-nav{
-  touch-action:pan-y;
-  overscroll-behavior:contain;
-}
+.social:hover{background:var(--paper);color:var(--ink);border-color:var(--paper);}
+html.menu-open,html.menu-open body{overflow:hidden!important;overscroll-behavior:none;}
 html.menu-open header.site-nav{z-index:220;}
-html.menu-open header.site-nav .nav-inner,
-html.menu-open header.site-nav.scrolled .nav-inner{
-  background:transparent;
-  border-color:transparent;
-  box-shadow:none;
-  backdrop-filter:none;
-  -webkit-backdrop-filter:none;
-}
+html.menu-open header.site-nav .nav-inner{background:transparent;border-color:transparent;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;}
 html.menu-open .lang-btn{color:var(--paper);}
-html.menu-open .lang-btn:hover,
-html.menu-open .lang-btn:active,
-html.menu-open .lang-btn:focus{background:none;}
-html.menu-open .menu-btn,
-html.menu-open .menu-btn:hover,
-html.menu-open .menu-btn:active,
-html.menu-open .menu-btn:focus{
-  background:transparent;
-}
 html.menu-open .menu-btn span{background:var(--paper);}
 html.menu-open .nav-actions .btn-primary{display:none;}
 
-section{position:relative;}
-.section-pad{padding:148px 0;}
-@media(max-width:768px){.section-pad{padding:100px 0;}}
-
-.band{
-  position:relative;
-  z-index:3;
-  margin-block:-72px;
-  padding:188px 0 200px;
-  background:transparent;
-  color:var(--paper);
-  overflow:visible;
-}
-@media(max-width:768px){
-  .band{
-    margin-block:-40px;
-    padding:128px 0 140px;
-  }
-}
-.band-fill{
-  position:absolute;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-  background:var(--ink);
-  clip-path:url(#bandClip);
-}
-@media(max-width:768px){
-  .band-fill{clip-path:url(#bandClipSm);}
-}
-.band > .wrap{position:relative;z-index:1;}
-.section-flow.section-pad{padding:200px 0;}
-@media(max-width:768px){.section-flow.section-pad{padding:132px 0;}}
-.band-fill{transform-origin:50% 50%;}
-
-h2.section-head{
-  font-size:clamp(2.8rem,7vw,5.75rem);
-  line-height:0.96;
-  max-width:22ch;
-}
-html[lang="ar"] h2.section-head{line-height:1.12;max-width:18ch;}
-@media(max-width:768px){
-  html[lang="ar"] h2.section-head{max-width:none;}
-}
-p.section-sub{
-  font-size:17px;
-  font-weight:400;
-  color:var(--stone-2);
-  max-width:42ch;
-  margin-top:28px;
-  line-height:1.7;
-}
-.on-dark p.section-sub{color:#A8ADB3;}
-.section-index{margin:0 0 22px;font-size:12px;color:var(--stone);}
+/* ---------- section rhythm ---------- */
+.section{padding-block:clamp(72px,11vw,132px);}
+.section-tight{padding-block:clamp(56px,8vw,96px);}
+.on-dark{background:var(--ink);color:var(--paper);}
+.section-index{margin:0 0 14px;font-size:11px;color:var(--stone);font-family:var(--font-body);font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
+html[lang="ar"] .section-index{font-family:var(--font-ar);letter-spacing:0;text-transform:none;font-size:13px;}
 .on-dark .section-index{color:#8A9096;}
+h2.section-head{font-size:clamp(1.85rem,4vw,3.1rem);line-height:1.06;max-width:17ch;}
+html[lang="ar"] h2.section-head{max-width:15ch;}
+@media(max-width:640px){h2.section-head{font-size:clamp(1.65rem,7.5vw,2.35rem);}}
+p.section-sub{font-size:16px;color:var(--stone-2);max-width:44ch;margin-top:16px;line-height:1.6;}
+.on-dark p.section-sub{color:#A8ADB3;}
+.center{text-align:center;}
+.center .section-sub,.center h2.section-head{margin-inline:auto;}
 
-.hero{padding:188px 0 120px;overflow:visible;z-index:1;}
-@media(max-width:768px){.hero{padding:148px 0 88px;}}
-.hero-top{max-width:none;}
-.hero-top h1{
-  font-size:clamp(2.35rem,10vw + 0.65rem,8.5rem);
-  line-height:1;
-  max-width:20ch;
-  overflow-wrap:break-word;
-}
-html[lang="ar"] .hero-top h1{line-height:1.12;max-width:14ch;}
-@media(max-width:768px){
-  .hero-top h1{
-    font-size:clamp(2.2rem,11.2vw,3.45rem);
-    line-height:1.04;
-    max-width:none;
-    letter-spacing:-0.02em;
-  }
-  html[lang="ar"] .hero-top h1{
-    font-size:clamp(2.35rem,11.5vw,3.55rem);
-    line-height:1.14;
-    max-width:none;
-  }
-}
-@media(max-width:380px){
-  .hero-top h1{font-size:clamp(2rem,10.5vw,2.75rem);}
-  html[lang="ar"] .hero-top h1{font-size:clamp(2.1rem,10.8vw,2.85rem);}
-}
-.hero-index{
-  margin:0 0 28px;
-  font-size:12px;
-  color:var(--stone);
-}
-.hero-line{
-  display:block;
-  overflow:hidden;
-  padding-bottom:0.08em;
-}
-.hero-line > span{
-  display:block;
-  will-change:transform,opacity;
-}
-@media(max-width:768px){
-  .hero-line{padding-bottom:0.1em;}
-}
-.hero-top p.sub{
-  font-size:17px;
-  font-weight:400;
-  color:var(--stone-2);
-  max-width:46ch;
-  margin-top:36px;
-  line-height:1.7;
-}
-.hero-ctas{display:flex;align-items:center;gap:14px;margin-top:40px;flex-wrap:wrap;}
-.hero-fine{font-size:15px;color:var(--stone);margin-top:20px;}
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{padding-top:clamp(132px,20vw,180px);padding-bottom:clamp(56px,9vw,96px);overflow:visible;}
+.hero-grid{display:grid;gap:48px;align-items:center;}
+@media(min-width:980px){.hero-grid{grid-template-columns:1fr .96fr;gap:56px;}}
+.hero-copy h1{font-size:clamp(2.15rem,5.4vw,3.85rem);line-height:1.06;max-width:15ch;}
+html[lang="ar"] .hero-copy h1{max-width:12ch;}
+.hero-copy .sub{font-size:17px;max-width:42ch;margin-top:20px;line-height:1.6;color:var(--stone-2);}
+.hero-ctas{display:flex;align-items:center;gap:12px;margin-top:28px;flex-wrap:wrap;}
+.hero-fine{margin-top:14px;font-size:13px;color:var(--stone);}
+.hero-badges{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;}
+.hero-badge{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--stone-2);}
+.hero-badge i{width:6px;height:6px;border-radius:50%;background:var(--good);flex:none;}
 
-.problem-visual{margin-top:80px;position:relative;overflow:visible;}
-.frag-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
-.frag-chip{
-  border:1px solid rgba(41,45,49,0.95);
-  color:#A8ADB3;
-  padding:10px 16px;
-  border-radius:var(--radius-pill);
-  font-size:12px;
-  background:rgba(255,255,255,0.03);
+/* ---- product mockup: the concrete "this is the product" moment ---- */
+.mock{position:relative;}
+.mock-card{
+  background:var(--ink);color:var(--paper);border-radius:var(--radius-lg);
+  padding:22px 22px 24px;box-shadow:var(--shadow-deep);
+  border:1px solid rgba(255,255,255,.06);
+  max-width:440px;margin-inline:auto;
 }
-.merge-connect{
-  margin:28px auto 0;
-  text-align:center;
-  max-width:36ch;
-  font-size:16px;
-  line-height:1.6;
-  color:#A8ADB3;
-}
-.merge-arrow{display:flex;justify-content:center;margin:40px 0;}
-.merge-into{
-  display:flex;
-  justify-content:center;
-  overflow:visible;
-  min-height:clamp(110px,20vw,168px);
-  align-items:center;
-}
-.merge-lock{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:clamp(14px,2.6vw,24px);
-  direction:ltr;
-  position:relative;
-  overflow:visible;
-}
-.merge-mark{
-  display:block;
-  flex:none;
-  width:clamp(52px,10vw,78px);
-  line-height:0;
-  transform-origin:50% 50%;
-  will-change:transform,opacity,filter;
-}
-.merge-mark svg{display:block;width:100%;height:auto;color:var(--paper);}
-.merge-mark-live{display:block;line-height:0;transform-origin:50% 50%;}
-.merge-mark .void{fill:var(--ink);}
-.merge-word{
-  display:flex;
-  align-items:center;
-  font-family:var(--font-mark);
-  font-stretch:normal;
-  font-weight:500;
-  font-size:clamp(1.7rem,5.1vw,3.05rem);
-  letter-spacing:0;
-  line-height:1;
-  color:var(--paper);
-  text-transform:uppercase;
-  overflow:visible;
-  text-rendering:geometricPrecision;
-  -webkit-font-smoothing:antialiased;
-}
-.merge-letter{
-  display:inline-block;
-  margin-inline-end:0.3em;
-  transform-origin:50% 70%;
-  will-change:transform,opacity,filter;
-}
-.merge-letter:last-child{margin-inline-end:0;}
-.merge-glyph{
-  display:block;
-  transform-origin:50% 80%;
-}
-@media (prefers-reduced-motion: no-preference){
-  .merge-lock:not(.is-gsap) .merge-mark{
-    animation:mergeMarkLoop 6.4s cubic-bezier(.22,1,.36,1) infinite;
-  }
-  .merge-lock:not(.is-gsap) .merge-letter{
-    opacity:0;
-    animation:mergeLetterLoop 6.4s cubic-bezier(.22,1,.36,1) infinite;
-  }
-  .merge-lock:not(.is-gsap) .merge-letter:nth-child(1){--sx:-28px;--sy:-56px;--sr:-18deg;--ex:-36px;--ey:42px;--er:14deg;animation-delay:.06s;}
-  .merge-lock:not(.is-gsap) .merge-letter:nth-child(2){--sx:18px;--sy:54px;--sr:12deg;--ex:-8px;--ey:-48px;--er:-10deg;animation-delay:.16s;}
-  .merge-lock:not(.is-gsap) .merge-letter:nth-child(3){--sx:0px;--sy:-64px;--sr:8deg;--ex:12px;--ey:56px;--er:-16deg;animation-delay:.24s;}
-  .merge-lock:not(.is-gsap) .merge-letter:nth-child(4){--sx:52px;--sy:36px;--sr:20deg;--ex:48px;--ey:-40px;--er:18deg;animation-delay:.32s;}
-  .merge-lock:not(.is-gsap) .merge-letter:nth-child(5){--sx:78px;--sy:-28px;--sr:-12deg;--ex:70px;--ey:38px;--er:-14deg;animation-delay:.4s;}
-}
-@keyframes mergeMarkLoop{
-  0%,7%{opacity:0;transform:translate3d(-42px,10px,0) rotate(-26deg) scale(.68);filter:blur(10px);}
-  24%{opacity:1;transform:translate3d(0,-2px,0) rotate(0) scale(1.06);filter:blur(0);}
-  32%,58%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1);filter:blur(0);}
-  76%,100%{opacity:0;transform:translate3d(-30px,-18px,0) rotate(18deg) scale(.78);filter:blur(8px);}
-}
-@keyframes mergeLetterLoop{
-  0%,9%{opacity:0;transform:translate3d(var(--sx),var(--sy),0) rotate(var(--sr)) scale(.72);filter:blur(8px);}
-  30%{opacity:1;transform:translate3d(0,-3px,0) rotate(0) scale(1.04);filter:blur(0);}
-  38%,60%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1);filter:blur(0);}
-  80%,100%{opacity:0;transform:translate3d(var(--ex),var(--ey),0) rotate(var(--er)) scale(.7);filter:blur(7px);}
-}
-@media (prefers-reduced-motion: reduce){
-  .merge-mark,.merge-letter,.merge-glyph{opacity:1;transform:none;filter:none;animation:none;}
-}
-.merge-caption{
-  margin-top:22px;
-  text-align:center;
-  font-family:var(--font-serif);
-  font-style:italic;
-  font-weight:400;
-  font-size:clamp(1.15rem,2.2vw,1.4rem);
-  letter-spacing:0;
-  color:#C5C9CE;
-  max-width:40ch;
-  margin-inline:auto;
-}
-html[lang="ar"] .merge-caption{
-  font-family:var(--font-ar-display);
-  font-style:normal;
-  font-weight:400;
-}
+.mock-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--hairline-dark);}
+.mock-top .who{display:flex;align-items:center;gap:8px;font-size:12px;color:#A8ADB3;}
+.mock-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);}
+.mock-live{font-family:var(--font-mono);font-size:10px;color:#63D6A0;letter-spacing:.08em;}
+.mock-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;}
+.mock-stat{background:#14171A;border-radius:14px;padding:14px 16px;}
+.mock-stat .k{font-size:11px;color:#8A9096;font-family:var(--font-body);letter-spacing:.06em;text-transform:uppercase;}
+html[lang="ar"] .mock-stat .k{font-family:var(--font-ar);letter-spacing:0;text-transform:none;}
+.mock-stat .v{font-family:var(--font-mono);font-size:clamp(1.3rem,2.4vw,1.6rem);font-weight:500;margin-top:6px;letter-spacing:-.02em;direction:ltr;}
+.mock-stat .d{font-size:12px;margin-top:4px;color:#63D6A0;direction:ltr;display:inline-block;}
+.mock-stat .d.down{color:#E8A855;}
+.mock-alert{margin-top:12px;display:flex;align-items:flex-start;gap:10px;background:rgba(232,168,85,.1);border:1px solid rgba(232,168,85,.25);border-radius:12px;padding:12px 14px;}
+.mock-alert i{width:6px;height:6px;border-radius:50%;background:var(--warn);flex:none;margin-top:6px;}
+.mock-alert p{font-size:13px;color:#E8EAEC;line-height:1.5;}
+.mock-alert span{display:block;font-size:11px;color:#8A9096;margin-top:2px;}
+.mock-ai{margin-top:12px;background:linear-gradient(165deg,rgba(91,124,255,.16),rgba(91,124,255,.03));border:1px solid rgba(91,124,255,.28);border-radius:12px;padding:14px 16px;}
+.mock-ai .rk{font-size:11px;color:var(--accent-soft);font-weight:600;letter-spacing:.04em;}
+html[lang="ar"] .mock-ai .rk{font-family:var(--font-ar);letter-spacing:0;}
+.mock-ai p{font-size:14px;color:#E8EAEC;line-height:1.55;margin-top:6px;}
+.mock-glow{position:absolute;width:70%;height:70%;inset-inline-end:-8%;top:6%;background:radial-gradient(ellipse at 60% 40%,rgba(91,124,255,.28),transparent 68%);filter:blur(46px);pointer-events:none;z-index:-1;}
 
-.ai-wrap{
-  margin-top:56px;
-  max-width:760px;
-  position:relative;
-}
-@media(min-width:900px){
-  .band-asymmetric .ai-wrap{
-    margin-inline-start:16%;
-    max-width:680px;
-  }
-}
-.ai-glow{
-  position:absolute;
-  width:78%;height:86%;
-  inset-inline-end:-12%;
-  top:8%;
-  background:radial-gradient(ellipse at 60% 40%, rgba(91,124,255,0.32), rgba(91,124,255,0.04) 55%, transparent 72%);
-  filter:blur(42px);
-  pointer-events:none;
-  z-index:0;
-}
-.chat-shell{
-  position:relative;z-index:1;
-  border:1px solid rgba(41,45,49,0.9);
-  border-radius:36px;
-  background:var(--ink-2);
-  overflow:hidden;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.04),
-    0 28px 64px -36px rgba(0,0,0,0.55);
-}
-.chat-top{padding:16px 22px 8px;display:flex;align-items:center;gap:10px;}
+/* ============================================================
+   PROBLEM -> SOLUTION (merged single section)
+   ============================================================ */
+.shift{display:grid;gap:20px;margin-top:36px;}
+@media(min-width:860px){.shift{grid-template-columns:1fr auto 1fr;align-items:center;gap:28px;}}
+.shift-col{background:#14171A;border:1px solid var(--hairline-dark);border-radius:var(--radius-md);padding:24px 24px 22px;}
+.shift-col.after{background:linear-gradient(165deg,rgba(91,124,255,.14),transparent 55%),#14171A;border-color:rgba(91,124,255,.3);}
+.shift-label{font-size:12px;font-weight:600;letter-spacing:.06em;color:#8A9096;}
+html[lang="ar"] .shift-label{font-family:var(--font-ar);letter-spacing:0;}
+.shift-col.after .shift-label{color:var(--accent-soft);}
+.shift-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+.shift-chip{border:1px solid rgba(255,255,255,.14);color:#A8ADB3;padding:6px 12px;border-radius:var(--radius-pill);font-size:11px;background:rgba(255,255,255,.03);}
+.shift-col.after .shift-chip{border-color:rgba(91,124,255,.35);color:#E8EAEC;background:rgba(91,124,255,.08);}
+.shift-note{margin-top:14px;font-size:13px;color:#8A9096;line-height:1.5;}
+.shift-col.after .shift-note{color:#C5C9CE;}
+.shift-arrow{display:flex;align-items:center;justify-content:center;color:#5A6066;font-size:20px;}
+@media(max-width:859px){.shift-arrow{transform:rotate(90deg);margin:2px auto;}}
+
+.flow-strip{margin-top:44px;display:flex;flex-wrap:wrap;align-items:center;gap:0;justify-content:center;}
+.flow-step{font-size:13px;color:#C5C9CE;padding:10px 16px;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-pill);background:rgba(255,255,255,.03);white-space:nowrap;}
+.flow-sep{color:#5A6066;font-family:var(--font-mono);font-size:12px;padding-inline:10px;}
+@media(max-width:640px){.flow-strip{flex-direction:column;align-items:stretch;gap:8px;}.flow-step{text-align:center;}.flow-sep{display:none;}}
+
+/* ============================================================
+   OMNICHANNEL + INDUSTRIES
+   ============================================================ */
+.truth-row{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:24px;}
+.truth-row span{font-size:14px;color:var(--ink-2);position:relative;padding-inline-start:16px;}
+.truth-row span::before{content:'';position:absolute;inset-inline-start:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+.industry-rail{margin-top:28px;padding-top:24px;border-top:1px solid var(--hairline);display:flex;flex-wrap:wrap;gap:10px;}
+.industry-pill{font-size:13px;padding:9px 16px;border:1px solid var(--hairline);border-radius:var(--radius-pill);color:var(--ink-2);background:#fff;}
+html[lang="ar"] .industry-pill{font-size:14px;}
+
+/* ============================================================
+   AI SECTION
+   ============================================================ */
+.ai-layout{display:grid;gap:44px;align-items:start;margin-top:8px;}
+@media(min-width:960px){.ai-layout{grid-template-columns:1fr 1.05fr;gap:64px;align-items:center;}}
+.ai-prompts{margin-top:24px;display:flex;flex-direction:column;gap:2px;}
+.ai-prompt{font-size:14px;color:#C5C9CE;padding:13px 0;border-bottom:1px solid var(--hairline-dark);display:flex;align-items:center;gap:12px;}
+.ai-prompt .qm{font-family:var(--font-mono);color:var(--accent);font-size:12px;flex:none;}
+.chat-shell{position:relative;border:1px solid rgba(255,255,255,.1);border-radius:28px;background:var(--ink-2);overflow:hidden;box-shadow:var(--shadow-deep);}
+.chat-top{padding:16px 22px 10px;display:flex;align-items:center;gap:10px;}
 .chat-top span{font-size:12px;color:#8A9096;}
 html[lang="ar"] .chat-top span{font-family:var(--font-ar);letter-spacing:0;}
-.ai-dot{width:7px;height:7px;border-radius:var(--radius-pill);background:var(--accent);flex:none;}
-.chat-body{padding:18px 22px 26px;display:flex;flex-direction:column;gap:20px;}
-.msg{max-width:82%;}
+.chat-body{padding:16px 22px 26px;display:flex;flex-direction:column;gap:18px;}
+.msg{max-width:84%;}
 .msg.user{align-self:flex-end;}
 html[lang="ar"] .msg.user{align-self:flex-start;}
-.msg .bubble{
-  display:inline-block;padding:12px 16px;
-  border-radius:16px;
-  font-size:15px;line-height:1.6;
-}
-.msg.user .bubble{
-  background:#1A1D21;color:var(--paper);
-  border-end-end-radius:var(--radius-xs);
-}
-.msg.ai .bubble{
-  background:var(--paper);color:var(--ink);
-  border-end-start-radius:var(--radius-xs);
-  font-variant-numeric:tabular-nums;
-  line-height:1.45;
-}
-html[lang="ar"] .msg.user .bubble{
-  border-end-end-radius:var(--radius-md);
-  border-end-start-radius:var(--radius-xs);
-}
-html[lang="ar"] .msg.ai .bubble{
-  border-end-start-radius:var(--radius-md);
-  border-end-end-radius:var(--radius-xs);
-}
-.reveal-list{
-  margin-top:4px;padding-top:12px;
-  display:flex;flex-direction:column;gap:10px;
-}
-.reveal-item{
-  display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#C5C9CE;
-}
-.reveal-item .m{color:var(--accent);font-family:var(--font-mono);font-size:12px;flex:none;padding-top:4px;direction:ltr;}
-.rec-box{
-  margin-top:20px;
-  background:#16191C;
-  border-radius:14px;
-  padding:18px 20px;
-}
-.rec-box .rk{font-size:12px;color:var(--accent);font-weight:500;margin-bottom:8px;}
-html[lang="ar"] .rec-box .rk{
-  font-family:var(--font-ar);
-  letter-spacing:0;
-  text-transform:none;
-  direction:rtl;
-}
-.rec-box .rv{font-size:15px;color:#E8EAEC;line-height:1.6;}
-.ai-note{margin-top:20px;font-size:14px;color:#A8ADB3;}
+.msg .bubble{display:inline-block;padding:12px 16px;border-radius:16px;font-size:15px;line-height:1.6;}
+.msg.user .bubble{background:#1A1D21;color:var(--paper);border-end-end-radius:var(--radius-xs);}
+.msg.ai .bubble{background:var(--paper);color:var(--ink);border-end-start-radius:var(--radius-xs);line-height:1.5;}
+html[lang="ar"] .msg.user .bubble{border-end-end-radius:var(--radius-md);border-end-start-radius:var(--radius-xs);}
+html[lang="ar"] .msg.ai .bubble{border-end-start-radius:var(--radius-md);border-end-end-radius:var(--radius-xs);}
+.reveal-list{margin-top:6px;padding-top:12px;display:flex;flex-direction:column;gap:9px;}
+.reveal-item{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:#C5C9CE;}
+.reveal-item .m{color:var(--accent);font-family:var(--font-mono);font-size:12px;flex:none;padding-top:3px;direction:ltr;}
+.rec-box{margin-top:16px;background:#16191C;border-radius:14px;padding:16px 18px;}
+.rec-box .rk{font-size:12px;color:var(--accent-soft);font-weight:600;margin-bottom:6px;}
+html[lang="ar"] .rec-box .rk{font-family:var(--font-ar);letter-spacing:0;}
+.rec-box .rv{font-size:14.5px;color:#E8EAEC;line-height:1.6;}
 
-.cat-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:56px;}
-.cat-tab{
-  padding:10px 18px;
-  border-radius:var(--radius-pill);
-  font-size:12px;font-weight:500;
-  font-family:var(--font-body);letter-spacing:0.08em;text-transform:uppercase;
-  border:none;
-  min-height:40px;
-  transition:background-color 400ms ease, color 400ms ease, transform 500ms var(--ease);
-  color:var(--stone-2);background:transparent;
-}
-html[lang="ar"] .cat-tab{
-  font-family:var(--font-ar);font-size:14px;letter-spacing:0;text-transform:none;
-}
-.cat-tab:hover{background:rgba(7,8,9,0.05);}
-.cat-tab.active{background:var(--ink);color:var(--paper);}
-.cat-tab:focus-visible{box-shadow:var(--ring);}
-.cat-panel{margin-top:28px;}
-.cat-metrics{
-  display:grid;grid-template-columns:repeat(5,1fr);
-  gap:0;
-  padding:8px 0 0;
-  background:transparent;
-  border:none;
-  border-radius:0;
-  box-shadow:none;
-  border-top:1px solid var(--hairline);
-}
-@media(max-width:900px){.cat-metrics{grid-template-columns:repeat(2,1fr);}}
-.cat-metric{padding:24px 20px 24px 0;}
-.cat-metric .k{font-size:12px;color:var(--stone);}
-html[lang="en"] .cat-metric .k{font-family:var(--font-body);letter-spacing:0.08em;text-transform:uppercase;}
-html[lang="ar"] .cat-metric .k{font-family:var(--font-ar);}
-.cat-metric .v{font-family:var(--font-mono);font-size:clamp(1.35rem,1.8vw,1.75rem);font-weight:500;margin-top:10px;letter-spacing:-0.03em;line-height:1.15;direction:ltr;font-variant-numeric:tabular-nums;}
+/* ============================================================
+   TRUST + AUTOMATION
+   ============================================================ */
+.auto-rail{margin-top:32px;display:flex;flex-direction:column;gap:2px;}
+.auto-row{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;padding:16px 0;border-bottom:1px solid var(--hairline-dark);}
+@media(max-width:720px){.auto-row{grid-template-columns:1fr;gap:6px;text-align:start;}.auto-arrow{display:none;}}
+.auto-col .k{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#8A9096;margin-bottom:4px;}
+html[lang="ar"] .auto-col .k{font-family:var(--font-ar);letter-spacing:0;text-transform:none;}
+.auto-col .v{color:#E8EAEC;font-size:13.5px;}
+.auto-arrow{color:#5A6066;font-family:var(--font-mono);font-size:12px;text-align:center;}
+.trust-points{margin-top:32px;display:grid;gap:14px;}
+@media(min-width:768px){.trust-points{grid-template-columns:repeat(3,1fr);}}
+.trust-points li{font-size:13.5px;color:#C5C9CE;line-height:1.55;padding-inline-start:16px;position:relative;}
+.trust-points li::before{content:'';position:absolute;inset-inline-start:0;top:.5em;width:5px;height:5px;border-radius:50%;background:var(--accent);}
 
-.price-toggle{
-  display:inline-flex;align-items:center;gap:0;
-  background:rgba(255,255,255,0.65);
-  border:1px solid rgba(215,218,221,0.8);
-  border-radius:var(--radius-pill);
-  padding:4px;
-  margin-top:40px;
-}
-.price-toggle button{
-  padding:9px 18px;
-  border-radius:var(--radius-pill);
-  font-size:12px;font-weight:500;
-  font-family:var(--font-body);letter-spacing:0.1em;text-transform:uppercase;
-  background:none;border:none;color:var(--stone-2);
-  min-height:40px;
-  transition:background-color 400ms ease, color 400ms ease, transform 500ms var(--ease);
-}
-html[lang="ar"] .price-toggle button{
-  font-family:var(--font-ar);font-size:14px;letter-spacing:0;text-transform:none;
-}
+/* ============================================================
+   PRICING (normal flow — no forced viewport lock)
+   ============================================================ */
+.price-toggle-wrap{margin-top:26px;display:flex;align-items:center;flex-wrap:wrap;gap:12px 16px;}
+.price-toggle{display:inline-flex;align-items:center;gap:4px;background:var(--paper-2);border:1px solid rgba(215,218,221,.9);border-radius:var(--radius-pill);padding:4px;}
+.price-toggle button{padding:9px 20px;border-radius:var(--radius-pill);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:none;border:none;color:var(--stone-2);min-height:40px;transition:background-color 300ms ease,color 300ms ease;}
+html[lang="ar"] .price-toggle button{font-family:var(--font-ar);font-size:14px;letter-spacing:0;text-transform:none;}
 .price-toggle button.active{background:var(--ink);color:var(--paper);}
-.price-toggle button:focus-visible{box-shadow:var(--ring);}
-.price-toggle .save{font-size:12px;color:var(--good);margin-inline-start:10px;margin-inline-end:10px;}
-.plans{
-  display:grid;
-  grid-template-columns:1fr 1.14fr 1fr;
-  gap:18px;
-  margin-top:56px;
-  padding-top:28px;
-  align-items:stretch;
-  background:transparent;
-  border:none;
-}
-@media(max-width:900px){.plans{grid-template-columns:1fr;padding-top:12px;}}
-.plan{
-  padding:38px 32px;
-  background:#fff;
-  border:1px solid rgba(215,218,221,0.8);
-  border-radius:22px;
-  position:relative;
-  box-shadow:var(--shadow-soft);
-  transition:transform 500ms var(--ease), box-shadow 500ms var(--ease);
-}
-.plan.pro{
-  border-radius:28px;
-  border-color:transparent;
-  background:
-    linear-gradient(165deg, rgba(91,124,255,0.18), transparent 44%),
-    linear-gradient(180deg, #16191C 0%, #070809 100%);
-  color:var(--paper);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.06),
-    0 40px 80px -36px rgba(7,8,9,0.55),
-    0 0 72px -20px rgba(91,124,255,0.22);
-}
-@media(min-width:901px){
-  .plan.pro{transform:translateY(-22px);}
-}
-@media(max-width:900px){
-  .plan.pro{
-    transform:scale(1.03);
-    z-index:2;
-    margin-block:8px;
-  }
-}
-.plan-tab{
-  position:absolute;
-  top:0;left:50%;
-  transform:translate(-50%,-50%);
-  font-size:11px;
-  color:var(--accent-soft);
-  background:#0C0E11;
-  border:1px solid rgba(91,124,255,0.35);
-  padding:7px 14px;
-  border-radius:var(--radius-pill);
-  letter-spacing:0.12em;
-  white-space:nowrap;
-}
-.plan.pro{padding-top:48px;}
-.plan-name{font-size:12px;color:var(--stone);}
+.price-toggle .save{font-size:12px;color:var(--good);}
+.plans{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:18px;margin-top:44px;align-items:stretch;}
+@media(max-width:900px){.plans{grid-template-columns:1fr;}}
+.plan{padding:34px 28px;background:#fff;border:1px solid var(--hairline);border-radius:22px;position:relative;box-shadow:var(--shadow-soft);}
+.plan.pro{border-radius:26px;border-color:transparent;background:linear-gradient(165deg,rgba(91,124,255,.18),transparent 44%),linear-gradient(180deg,#16191C,#070809);color:var(--paper);box-shadow:0 0 0 1px rgba(255,255,255,.06),0 36px 72px -32px rgba(7,8,9,.5),0 0 60px -18px rgba(91,124,255,.22);}
+@media(min-width:901px){.plan.pro{transform:translateY(-14px);}}
+.plan-tab{position:absolute;top:0;inset-inline-start:50%;transform:translate(-50%,-50%);font-size:11px;color:var(--accent-soft);background:#0C0E11;border:1px solid rgba(91,124,255,.35);padding:7px 14px;border-radius:var(--radius-pill);letter-spacing:.1em;white-space:nowrap;}
+html[lang="ar"] .plan-tab{font-family:var(--font-ar);letter-spacing:0;}
+.plan-name{font-size:12px;color:var(--stone);font-weight:600;letter-spacing:.06em;}
+html[lang="ar"] .plan-name{font-family:var(--font-ar);letter-spacing:0;font-size:14px;}
 .plan.pro .plan-name{color:#A8ADB3;}
-.plan-price{font-family:var(--font-mono);font-size:clamp(3.25rem,4.2vw,4.75rem);font-weight:500;margin-top:12px;display:flex;align-items:baseline;gap:6px;letter-spacing:-0.04em;line-height:1;direction:ltr;font-variant-numeric:tabular-nums;}
-.plan-price .pfx{font-size:1.35rem;font-family:var(--font-mono);color:var(--stone);}
-.plan-price .per{font-size:12px;font-family:var(--font-body);font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--stone);}
-html[lang="ar"] .plan-price .per{font-family:var(--font-ar);font-size:13px;letter-spacing:0;text-transform:none;}
+.plan-price{font-family:var(--font-mono);font-size:clamp(2rem,3.2vw,2.9rem);font-weight:500;margin-top:10px;display:flex;align-items:baseline;gap:6px;letter-spacing:-.03em;direction:ltr;}
+.plan-price .pfx{font-size:1.3rem;color:var(--stone);}
+.plan-price .per{font-size:12px;font-family:var(--font-body);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--stone);}
+html[lang="ar"] .plan-price .per{font-family:var(--font-ar);letter-spacing:0;text-transform:none;}
 .plan.pro .plan-price .pfx,.plan.pro .plan-price .per{color:#8A9096;}
-.plan-desc{font-size:15px;color:var(--stone-2);margin-top:10px;}
+.plan-desc{font-size:14.5px;color:var(--stone-2);margin-top:10px;line-height:1.5;}
 .plan.pro .plan-desc{color:#A8ADB3;}
-.plan-feats{margin-top:26px;display:flex;flex-direction:column;gap:11px;}
-.plan-feats div{font-size:14px;display:flex;gap:10px;align-items:flex-start;color:var(--ink-2);}
+.plan-feats{margin-top:20px;display:flex;flex-direction:column;gap:8px;}
+.plan-feats div{font-size:13.5px;display:flex;gap:10px;align-items:flex-start;color:var(--ink-2);}
 .plan.pro .plan-feats div{color:#E8EAEC;}
 .plan-feats div::before{content:'—';color:var(--stone);flex:none;}
-.plan .btn{width:100%;margin-top:28px;}
-.fee-note{
-  margin-top:20px;
-  background:#fff;
-  border:1px solid rgba(215,218,221,0.8);
-  border-radius:24px;
-  padding:22px 26px;
-  display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center;
-  box-shadow:var(--shadow-soft);
-}
-.fee-note h4{font-size:12px;}
-.fee-note p{font-size:14px;color:var(--stone-2);margin-top:6px;max-width:420px;}
-.fee-note .pct{font-family:var(--font-mono);font-size:clamp(1.6rem,2.4vw,2.2rem);font-weight:500;flex:none;letter-spacing:-0.03em;direction:ltr;font-variant-numeric:tabular-nums;}
+.plan .btn{width:100%;margin-top:22px;}
+.plan-save{font-size:12px;color:var(--good);margin-top:6px;min-height:1.2em;}
+.plan-save:empty{display:none;}
+.pricing-note{margin-top:20px;font-size:14.5px;color:var(--stone-2);max-width:60ch;line-height:1.55;}
+.compare-wrap{margin-top:22px;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px;border:1px solid var(--hairline);}
+.compare-table{width:100%;min-width:640px;border-collapse:collapse;font-size:13px;}
+.compare-table th,.compare-table td{padding:13px 16px;border-bottom:1px solid var(--hairline);text-align:start;vertical-align:middle;}
+.compare-table tr:last-child td{border-bottom:none;}
+.compare-table th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--stone);font-weight:600;background:var(--paper-2);}
+html[lang="ar"] .compare-table th{font-family:var(--font-ar);text-transform:none;letter-spacing:0;font-size:13px;}
+.compare-table tbody th{text-transform:none;letter-spacing:0;color:var(--ink-2);font-weight:500;font-size:13.5px;background:transparent;}
+.compare-table .col-hero{background:rgba(91,124,255,.06);}
+.compare-table thead .col-hero{background:rgba(91,124,255,.12);color:var(--ink);}
+.fee-note{margin-top:22px;background:var(--paper-2);border:1px solid var(--hairline);border-radius:16px;padding:16px 20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;}
+.fee-note h4{font-size:12px;font-weight:600;}
+html[lang="ar"] .fee-note h4{font-family:var(--font-ar);font-weight:700;font-size:14px;}
+.fee-note p{font-size:13px;color:var(--stone-2);margin-top:4px;max-width:420px;}
 
-.founding-box{
-  margin-top:28px;
-  background:#fff;
-  border:1px solid rgba(215,218,221,0.8);
-  border-radius:28px;
-  padding:32px 36px;
-  display:flex;justify-content:space-between;gap:32px;align-items:center;flex-wrap:wrap;
-  box-shadow:var(--shadow-soft);
-}
-.founding-box .num{font-family:var(--font-mono);font-size:clamp(4.5rem,9vw,7rem);font-weight:500;flex:none;letter-spacing:-0.06em;line-height:0.9;direction:ltr;font-variant-numeric:tabular-nums;}
-.founding-box p{max-width:420px;font-size:16px;color:var(--stone-2);}
-.founding-box h3{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:12px;max-width:20ch;}
-.hero-micro{font-size:14px;color:var(--stone);margin-top:14px;}
-.problem-lead{margin-top:20px;font-size:clamp(1rem,1.8vw,1.15rem);line-height:1.65;color:#A8ADB3;max-width:48ch;margin-inline:auto;text-align:center;}
-.problem-shift{margin-top:16px;font-size:clamp(1.05rem,2vw,1.25rem);line-height:1.6;color:#C5C9CE;max-width:44ch;margin-inline:auto;text-align:center;font-family:var(--font-serif);font-style:italic;}
-html[lang="ar"] .problem-shift{font-family:var(--font-ar-display);font-style:normal;}
-.story-flow{margin-top:48px;display:flex;flex-direction:column;gap:0;max-width:540px;margin-inline:auto;}
-.story-step{padding:13px 0;border-bottom:1px solid rgba(215,218,221,0.9);font-size:15px;color:var(--ink-2);}
-.story-step:last-child{border-bottom:none;font-weight:500;color:var(--ink);}
-.loop-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px;justify-content:center;}
-.loop-step{font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:10px 14px;border:1px solid var(--hairline);border-radius:var(--radius-pill);color:var(--ink-2);}
-.loop-step:not(:last-child)::after{content:'↓';display:block;text-align:center;margin-top:8px;color:var(--stone);font-size:10px;}
-@media(min-width:768px){
-  .loop-strip{flex-wrap:nowrap;align-items:center;}
-  .loop-step:not(:last-child)::after{content:'→';display:inline;margin-top:0;margin-inline-start:10px;}
-}
-.on-dark .loop-step{color:#E8EAEC;border-color:rgba(255,255,255,0.12);}
-.on-dark .loop-step:not(:last-child)::after{color:#8A9096;}
-.pillar-grid{display:grid;gap:16px;margin-top:40px;}
-@media(min-width:768px){.pillar-grid{grid-template-columns:1fr 1fr;}}
-.pillar-card{padding:22px 24px;border:1px solid var(--hairline);border-radius:var(--radius-md);background:#fff;}
-.pillar-card h3{font-size:1.05rem;margin-bottom:6px;}
-.pillar-card p{font-size:14px;color:var(--stone-2);line-height:1.6;}
-.ai-examples{margin-top:32px;display:flex;flex-direction:column;gap:10px;}
-.ai-example{font-size:15px;color:#C5C9CE;padding:12px 16px;border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-sm);font-family:var(--font-serif);font-style:italic;}
-html[lang="ar"] .ai-example{font-family:var(--font-ar-display);font-style:normal;}
-.commerce-eq{margin-top:40px;text-align:center;font-family:var(--font-mono);font-size:clamp(1.1rem,2.5vw,1.5rem);letter-spacing:0.08em;color:#E8EAEC;line-height:1.8;}
-.final-cta{padding:120px 0 140px;text-align:center;}
-.final-cta h2{max-width:18ch;margin-inline:auto;font-size:clamp(2rem,5vw,3.25rem);}
-.final-cta .sub{margin-top:20px;color:var(--stone-2);max-width:44ch;margin-inline:auto;font-size:clamp(1.05rem,2vw,1.2rem);line-height:1.65;}
-.final-cta .ctas{margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
-.final-tagline{margin-top:32px;font-family:var(--font-serif);font-style:italic;font-size:clamp(1.05rem,2vw,1.25rem);color:var(--stone);}
-html[lang="ar"] .final-tagline{font-family:var(--font-ar-display);font-style:normal;}
-.system-chips .frag-chip{font-size:11px;}
+/* ============================================================
+   FOUNDING + FINAL CTA (merged)
+   ============================================================ */
+.closing{position:relative;overflow:hidden;}
+.closing-inner{display:grid;gap:40px;align-items:center;}
+@media(min-width:960px){.closing-inner{grid-template-columns:auto 1fr;gap:56px;}}
+.closing-num{font-family:var(--font-mono);font-size:clamp(4.5rem,13vw,7rem);font-weight:500;line-height:.85;letter-spacing:-.05em;color:var(--paper);flex:none;}
+.closing-copy h2{color:var(--paper);}
+.closing-copy .sub{margin-top:14px;font-size:15.5px;color:#A8ADB3;max-width:48ch;line-height:1.6;}
+.closing-ctas{margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;}
+.closing-tag{margin-top:18px;font-family:var(--font-serif);font-style:italic;font-size:clamp(1rem,1.8vw,1.15rem);color:#C5C9CE;}
+html[lang="ar"] .closing-tag{font-family:var(--font-ar-display);font-style:normal;}
 
-footer.band-footer{
-  margin-top:-56px;
-  margin-bottom:0;
-  padding:88px 0 36px;
-  z-index:3;
-  color:#8A9096;
-}
-@media(max-width:768px){
-  footer.band-footer{
-    margin-top:-40px;
-    padding:72px 0 28px;
-  }
-}
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
 .footer-brand{display:flex;align-items:center;gap:14px;}
-.footer-brand .logo-img{height:22px;opacity:1;}
-.footer-bottom{display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:14px;align-items:center;}
+.footer-brand .logo-img{height:22px;}
+.footer-bottom{display:flex;justify-content:space-between;font-size:12px;flex-wrap:wrap;gap:14px;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid var(--hairline-dark);}
 .footer-legal{display:flex;gap:8px;flex-wrap:wrap;}
-.footer-legal a{
-  padding:8px 12px;
-  border-radius:var(--radius-pill);
-  transition:color 400ms ease, background 400ms var(--ease);
+.footer-legal a{padding:8px 12px;border-radius:var(--radius-pill);transition:color 300ms ease,background 300ms var(--ease);}
+.footer-legal a:hover{color:var(--paper);background:rgba(255,255,255,.05);}
+
+/* reveal-on-scroll (restrained: headers + hero mockup only) */
+.reveal{opacity:1;}
+@media(prefers-reduced-motion:no-preference){
+  html.js .reveal-init{opacity:0;transform:translateY(16px);}
 }
-.footer-legal a:hover{color:var(--paper);background:rgba(255,255,255,0.05);}
-.footer-legal a:focus-visible{box-shadow:var(--ring);}
 </style>
 </head>
 <body>
 <a class="skip" href="#hero" data-i18n="skip">Skip to content</a>
-
-<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-  <defs>
-    <clipPath id="bandClip" clipPathUnits="objectBoundingBox">
-      <path d="M0 0.09 C0.22 0 0.78 0 1 0.09 L1 0.91 C0.78 1 0.22 1 0 0.91 Z"/>
-    </clipPath>
-    <clipPath id="bandClipSm" clipPathUnits="objectBoundingBox">
-      <path d="M0 0.05 C0.28 0.01 0.72 0.01 1 0.05 L1 0.95 C0.72 0.99 0.28 0.99 0 0.95 Z"/>
-    </clipPath>
-  </defs>
-</svg>
-
-<header class="site-nav" id="siteNav">
-  <div class="wrap">
-    <div class="nav-inner">
-    <a href="index.html" class="logo-lockup" aria-label="OMINO">
-      <img class="logo-img logo-on-light" src="img/omino-lockup-ink.png" alt="" width="683" height="235">
-      <img class="logo-img logo-on-dark" src="img/omino-lockup-paper.png" alt="" width="685" height="235">
-    </a>
-      <nav class="nav-links" aria-label="Primary">
-      <a class="en" href="#system" data-i18n="nav.product">Product</a>
-      <a class="en" href="#intelligence" data-i18n="nav.ai">AI</a>
-      <a class="en" href="#pricing" data-i18n="nav.pricing">Pricing</a>
-      <a class="en" href="about.html" data-i18n="nav.about">About</a>
-      <a class="en" href="/login" data-i18n="nav.login">Login</a>
-    </nav>
-    <div class="nav-actions">
-      <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
-      <a href="/signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-        <span></span><span></span>
-      </button>
-    </div>
-    </div>
-  </div>
-</header>
-
 <aside class="orbit" id="orbit" role="progressbar" aria-label="Page progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
   <div class="orbit-field" id="orbitField">
-    <div class="orbit-beam" id="orbitBeam" aria-hidden="true"></div>
-    <div class="orbit-nodes" id="orbitNodes"></div>
     <div class="orbit-seed" id="orbitSeed">
       <svg class="orbit-ring" viewBox="0 0 40 40" aria-hidden="true">
         <circle class="orbit-ring-track" cx="20" cy="20" r="18"/>
         <circle class="orbit-ring-value" id="orbitRing" cx="20" cy="20" r="18"/>
       </svg>
-      <span class="orbit-wake" id="orbitWake" aria-hidden="true"></span>
       <span class="orbit-core">
         <img src="img/omino-mark-paper.png" alt="" width="240" height="244">
       </span>
@@ -1273,57 +457,56 @@ footer.band-footer{
   </div>
 </aside>
 
+<header class="site-nav" id="siteNav">
+  <div class="wrap">
+    <div class="nav-inner">
+      <a href="index.html" class="logo-lockup" aria-label="OMINO">
+        <img class="logo-img logo-on-light" src="img/omino-lockup-ink.png" alt="" width="683" height="235">
+        <img class="logo-img logo-on-dark" src="img/omino-lockup-paper.png" alt="" width="685" height="235">
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="en" href="#solution" data-i18n="nav.product">Product</a>
+        <a class="en" href="#ai" data-i18n="nav.ai">AI</a>
+        <a class="en" href="#pricing" data-i18n="nav.pricing">Pricing</a>
+        <a class="en" href="about.html" data-i18n="nav.about">About</a>
+        <a class="en" href="/login" data-i18n="nav.login">Login</a>
+      </nav>
+      <div class="nav-actions">
+        <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
+        <a href="/signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
 <div class="menu-shell" id="mobileMenu" aria-hidden="true" inert>
   <button type="button" class="menu-scrim" id="menuScrim" tabindex="-1" aria-label="Close menu"></button>
-  <aside class="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menuKicker">
+  <aside class="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menuTag">
     <div class="menu-drawer-top">
-      <p class="idx menu-kicker" id="menuKicker" data-i18n="menu.kicker">Menu / 00</p>
-      <p class="menu-tag" data-i18n="menu.tag">AI Business OS</p>
+      <p class="menu-tag" id="menuTag" data-i18n="menu.tag">AI Business OS</p>
     </div>
     <nav class="menu-nav" aria-label="Mobile">
-      <a class="menu-link" href="#system">
-        <span class="menu-idx">01</span>
-        <span class="menu-name" data-i18n="nav.product">Product</span>
-      </a>
-      <a class="menu-link" href="#intelligence">
-        <span class="menu-idx">02</span>
-        <span class="menu-name" data-i18n="nav.ai">AI</span>
-      </a>
-      <a class="menu-link" href="#pricing">
-        <span class="menu-idx">03</span>
-        <span class="menu-name" data-i18n="nav.pricing">Pricing</span>
-      </a>
-      <a class="menu-link" href="about.html">
-        <span class="menu-idx">04</span>
-        <span class="menu-name" data-i18n="nav.about">About</span>
-      </a>
-      <a class="menu-link" href="/login">
-        <span class="menu-idx">05</span>
-        <span class="menu-name" data-i18n="nav.login">Login</span>
-      </a>
+      <a class="menu-link" href="#solution"><span class="menu-name" data-i18n="nav.product">Product</span></a>
+      <a class="menu-link" href="#ai"><span class="menu-name" data-i18n="nav.ai">AI</span></a>
+      <a class="menu-link" href="#pricing"><span class="menu-name" data-i18n="nav.pricing">Pricing</span></a>
+      <a class="menu-link" href="about.html"><span class="menu-name" data-i18n="nav.about">About</span></a>
+      <a class="menu-link" href="/login"><span class="menu-name" data-i18n="nav.login">Login</span></a>
     </nav>
-    <div class="menu-cta">
-      <a href="/signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
-    </div>
+    <div class="menu-cta"><a href="/signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a></div>
     <div class="menu-foot">
       <span class="menu-connect" data-i18n="menu.connect">Connect</span>
       <div class="socials">
         <a class="social" href="https://www.instagram.com/omino.ps/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-            <rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/>
-            <circle cx="12" cy="12" r="4.1"/>
-            <circle cx="17.4" cy="6.6" r="1.05" fill="currentColor" stroke="none"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.4" cy="6.6" r="1.05" fill="currentColor" stroke="none"/></svg>
         </a>
         <a class="social" href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M14.2 8.2H17V4.7h-2.8c-2.9 0-5 2.2-5 5.1v2.5H6.4v3.6h2.8V22h3.7v-6.1h3.1l.6-3.6h-3.7V9.9c0-.9.5-1.7 1.3-1.7z"/>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.2 8.2H17V4.7h-2.8c-2.9 0-5 2.2-5 5.1v2.5H6.4v3.6h2.8V22h3.7v-6.1h3.1l.6-3.6h-3.7V9.9c0-.9.5-1.7 1.3-1.7z"/></svg>
         </a>
-        <a class="social" data-wa href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M19.1 4.9A9.9 9.9 0 0 0 12.05 2C6.5 2 2 6.5 2 12.05c0 1.77.46 3.5 1.34 5.02L2 22l5.08-1.33A10 10 0 0 0 12.05 22C17.6 22 22.1 17.5 22.1 12.05c0-2.66-1.04-5.16-3-7.15zM12.05 20.2c-1.52 0-3.01-.4-4.3-1.17l-.31-.18-3.16.83.85-3.08-.2-.32A8.2 8.2 0 0 1 3.8 12.05c0-4.55 3.7-8.25 8.25-8.25 2.2 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.55-3.7 8.15-8.25 8.15zm4.52-6.16c-.25-.13-1.48-.73-1.7-.81-.23-.09-.4-.13-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.06-.39-2.02-1.24-.75-.67-1.25-1.48-1.4-1.73-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.34-.76-1.84-.2-.48-.4-.41-.56-.42h-.47c-.16 0-.43.06-.66.31-.22.25-.86.84-.86 2.05s.88 2.38 1 2.56c.12.17 1.73 2.64 4.2 3.7.59.25 1.05.4 1.4.51.6.19 1.14.16 1.57.1.48-.07 1.47-.6 1.68-1.18.2-.58.2-1.07.14-1.17-.06-.12-.22-.18-.47-.3z"/>
-          </svg>
+        <a class="social" href="https://wa.me/" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.1 4.9A9.9 9.9 0 0 0 12.05 2C6.5 2 2 6.5 2 12.05c0 1.77.46 3.5 1.34 5.02L2 22l5.08-1.33A10 10 0 0 0 12.05 22C17.6 22 22.1 17.5 22.1 12.05c0-2.66-1.04-5.16-3-7.15zM12.05 20.2c-1.52 0-3.01-.4-4.3-1.17l-.31-.18-3.16.83.85-3.08-.2-.32A8.2 8.2 0 0 1 3.8 12.05c0-4.55 3.7-8.25 8.25-8.25 2.2 0 4.28.86 5.84 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.55-3.7 8.15-8.25 8.15z"/></svg>
         </a>
       </div>
     </div>
@@ -1331,343 +514,326 @@ footer.band-footer{
 </div>
 
 <main>
-<section class="hero" id="hero">
-  <div class="wrap">
-    <div class="hero-top">
-      <p class="hero-index idx" id="heroIndex" data-i18n="hero.idx">AI BUSINESS OS / 001</p>
-      <h1 id="heroTitle">
-        <span class="hero-line"><span data-i18n="hero.line1">Run your entire business</span></span>
-        <span class="hero-line"><span data-i18n="hero.line2">from one intelligent system.</span></span>
-      </h1>
-      <p class="sub" id="heroSub" data-i18n="hero.sub">OMINO connects your store, POS, inventory, customers, payments, analytics, and AI — giving you one clear view of your business and helping you know what to do next.</p>
-      <div class="hero-ctas" id="heroCtas">
-        <a href="/signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
-        <a href="#system" class="btn btn-ghost" data-i18n="cta.fit">Explore OMINO</a>
-      </div>
-      <p class="hero-micro" data-i18n="hero.micro">No credit card required.</p>
-      <p class="hero-fine" id="heroFine" data-i18n="hero.fine">Founding pricing is available to the first 50 businesses.</p>
-    </div>
-  </div>
-</section>
 
-<section class="band band-center on-dark" id="system">
-  <div class="band-fill" aria-hidden="true"></div>
-  <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="problem.idx">The problem / 002</p>
-    <h2 class="section-head reveal" data-i18n-html="problem.title">Your business shouldn’t live<br>in five different places.</h2>
-    <p class="section-sub reveal" style="text-align:center;margin-inline:auto;" data-i18n="problem.sub">Sales in one system. Inventory in another. Customers somewhere else. Payments somewhere else. Reports you have to piece together yourself.</p>
-    <p class="problem-shift reveal" data-i18n="problem.shift">The problem isn’t a lack of data. It’s that your data doesn’t work together.</p>
-    <div class="problem-visual">
-      <div class="frag-row" id="fragRow">
-        <div class="frag-chip en">POS</div>
-        <div class="frag-chip en">Store</div>
-        <div class="frag-chip en">Inventory</div>
-        <div class="frag-chip en">Payments</div>
-        <div class="frag-chip en">Customers</div>
-        <div class="frag-chip en">Analytics</div>
+<!-- ============ HERO — the product itself, in seconds ============ -->
+<section class="hero" id="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1 id="heroTitle" data-i18n-html="hero.title">Your business has data.<br>OMINO turns it into decisions.</h1>
+      <p class="sub" data-i18n="hero.sub">One system for your store, POS, inventory, customers, and payments — with AI that tells you what matters today and what to do next.</p>
+      <div class="hero-ctas">
+        <a href="/signup" class="btn btn-primary btn-lg" data-i18n="cta.start">Start for free</a>
+        <a href="#solution" class="btn btn-ghost btn-lg" data-i18n="cta.see">See how it works</a>
       </div>
-      <p class="merge-connect reveal" data-i18n="problem.connect">OMINO connects them into one business system.</p>
-      <div class="merge-arrow">
-        <svg width="18" height="34" viewBox="0 0 18 34" fill="none" aria-hidden="true"><path d="M9 0V32M9 32L2 25M9 32L16 25" stroke="#8A9096" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="hero-badges">
+        <span class="hero-badge"><i></i><span data-i18n="hero.b1">No credit card required</span></span>
+        <span class="hero-badge"><i></i><span data-i18n="hero.b2">Arabic &amp; English, mobile-first</span></span>
       </div>
-      <div class="merge-into" id="mergeInto">
-        <div class="merge-lock" id="mergeLock" aria-label="OMINO">
-          <span class="merge-mark" aria-hidden="true">
-            <span class="merge-mark-live">
-            <svg viewBox="560 540 940 980" focusable="false">
-              <path fill="currentColor" d="M999.452 583.377C1002.55 582.864 1011.79 582.534 1015.45 582.52C1124.57 582.099 1238.99 628.369 1317.19 703.496C1404.53 787.545 1455.19 902.654 1458.17 1023.83C1459.59 1107.13 1419.3 1182.53 1345.73 1222.97C1309.27 1243.01 1279.13 1246.95 1238.7 1247.38C1238.42 1265.6 1237.68 1283.5 1233.94 1301.39C1214.83 1392.95 1141.63 1453.75 1050.25 1464.47C1047.01 1465.05 1037.72 1465.39 1033.89 1465.44C950.752 1466.53 864.349 1439.48 795.274 1393.52C772.236 1378.19 747.765 1357.32 728.1 1338.27C641.587 1254.46 594.019 1140.41 592.025 1020.18C591.024 959.834 610.557 907.971 652.127 864.289C695.119 819.111 748.835 802.174 809.971 800.894C808.405 683.74 882.351 597.052 999.452 583.377z"/>
-              <path class="void" d="M810.758 800.525C836.938 798.78 871.66 800.025 898.336 799.863C938.965 800.75 979.686 798.785 1020.3 799.771C1138.95 802.654 1237.7 897.607 1237.85 1017.49C1237.94 1095.14 1239.45 1171.02 1237.99 1247.5L1031.78 1247.12C968.782 1246.94 918.661 1225.44 873.509 1181.59C804.097 1114.17 810.901 1033.82 810.516 946.11L810.758 800.525z"/>
-            </svg>
-            </span>
-          </span>
-          <span class="merge-word" aria-hidden="true">
-            <span class="merge-letter"><span class="merge-glyph">O</span></span><span class="merge-letter"><span class="merge-glyph">M</span></span><span class="merge-letter"><span class="merge-glyph">I</span></span><span class="merge-letter"><span class="merge-glyph">N</span></span><span class="merge-letter"><span class="merge-glyph">O</span></span>
-          </span>
+      <p class="hero-fine" data-i18n="hero.fine">Founding pricing for the first 50 businesses.</p>
+    </div>
+    <div class="mock reveal reveal-init">
+      <div class="mock-glow" aria-hidden="true"></div>
+      <div class="mock-card">
+        <div class="mock-top">
+          <span class="who"><span class="mock-dot"></span><span data-i18n="mock.top">Today</span></span>
+          <span class="mock-live en" data-i18n="mock.live">● Live</span>
+        </div>
+        <div class="mock-stats">
+          <div class="mock-stat">
+            <div class="k" data-i18n="mock.revenue">Revenue</div>
+            <div class="v">$2,480</div>
+            <div class="d">+18%</div>
+          </div>
+          <div class="mock-stat">
+            <div class="k" data-i18n="mock.orders">Orders</div>
+            <div class="v">34</div>
+            <div class="d down">−4%</div>
+          </div>
+        </div>
+        <div class="mock-alert">
+          <i></i>
+          <p data-i18n="mock.alertText">Rose Oud Perfume — 3 left in stock<span data-i18n="mock.alertSpan">Restock before the weekend</span></p>
+        </div>
+        <div class="mock-ai">
+          <div class="rk en" data-i18n="mock.aiLabel">OMINO Insight</div>
+          <p data-i18n="mock.aiText">Discounting is eroding margin on 3 products this week — worth a look.</p>
         </div>
       </div>
-      <p class="merge-caption reveal" data-i18n="problem.caption">One business. One system. One clear picture.</p>
-      <p class="problem-lead reveal" data-i18n="system.sub">OMINO connects the everyday operations of your business into one intelligent operating system — from the first sale to the next decision.</p>
-      <div class="frag-row system-chips reveal" style="margin-top:32px;">
-        <div class="frag-chip en">POS</div>
-        <div class="frag-chip en">Online Store</div>
-        <div class="frag-chip en">Products</div>
-        <div class="frag-chip en">Inventory</div>
-        <div class="frag-chip en">Orders</div>
-        <div class="frag-chip en">Payments</div>
-        <div class="frag-chip en">Customers</div>
-        <div class="frag-chip en">Analytics</div>
-        <div class="frag-chip en">AI</div>
-        <div class="frag-chip en">Automations</div>
-        <div class="frag-chip en">Marketing</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROBLEM -> SOLUTION (merged) ============ -->
+<section class="section on-dark" id="solution">
+  <div class="wrap center">
+    <p class="section-index" data-i18n="solution.idx">The shift</p>
+    <h2 class="section-head reveal reveal-init" data-i18n-html="solution.title">Your business is connected. Your tools aren't — until now.</h2>
+    <p class="section-sub" data-i18n="solution.sub">Most businesses run on disconnected pieces. OMINO replaces them with one system that talks to itself.</p>
+
+    <div class="shift">
+      <div class="shift-col before">
+        <div class="shift-label en" data-i18n="solution.before.label">Before</div>
+        <div class="shift-chips">
+          <span class="shift-chip en">POS</span>
+          <span class="shift-chip en">Spreadsheets</span>
+          <span class="shift-chip en">WhatsApp orders</span>
+          <span class="shift-chip en">Store</span>
+          <span class="shift-chip en">Paper stock lists</span>
+        </div>
+        <p class="shift-note" data-i18n="solution.before.note">Manual re-entry. Numbers that don't match. Decisions made on guesses.</p>
+      </div>
+      <div class="shift-arrow" aria-hidden="true">→</div>
+      <div class="shift-col after">
+        <div class="shift-label en" data-i18n="solution.after.label">With OMINO</div>
+        <div class="shift-chips">
+          <span class="shift-chip en">Store</span>
+          <span class="shift-chip en">POS</span>
+          <span class="shift-chip en">Inventory</span>
+          <span class="shift-chip en">Customers</span>
+          <span class="shift-chip en">AI</span>
+        </div>
+        <p class="shift-note" data-i18n="solution.after.note">One record of truth. Every part of the business stays in sync automatically.</p>
       </div>
     </div>
-  </div>
-</section>
 
-<section class="section-pad section-flow" id="connected">
-  <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="connected.idx">The system / 003</p>
-    <h2 class="section-head reveal" data-i18n-html="connected.title">Every action makes<br>the whole system smarter.</h2>
-    <p class="section-sub reveal" data-i18n="connected.sub">A sale shouldn’t end when the payment is complete. It should update your inventory, customer history, analytics, and business intelligence automatically.</p>
-    <div class="story-flow reveal">
-      <div class="story-step" data-i18n="flow.1">Customer buys</div>
-      <div class="story-step" data-i18n="flow.2">Order created</div>
-      <div class="story-step" data-i18n="flow.3">Payment recorded</div>
-      <div class="story-step" data-i18n="flow.4">Inventory updated</div>
-      <div class="story-step" data-i18n="flow.5">Customer profile updated</div>
-      <div class="story-step" data-i18n="flow.6">Analytics updated</div>
-      <div class="story-step" data-i18n="flow.7">Business intelligence updated</div>
-      <div class="story-step" data-i18n="flow.8">OMINO recommends the next move</div>
+    <div class="flow-strip" aria-label="What happens on one sale">
+      <span class="flow-step" data-i18n="flow.0">Customer buys</span><span class="flow-sep" aria-hidden="true">→</span>
+      <span class="flow-step" data-i18n="flow.1">Inventory updates</span><span class="flow-sep" aria-hidden="true">→</span>
+      <span class="flow-step" data-i18n="flow.2">Customer record updates</span><span class="flow-sep" aria-hidden="true">→</span>
+      <span class="flow-step" data-i18n="flow.3">OMINO surfaces what matters next</span>
     </div>
   </div>
 </section>
 
-<section class="section-pad section-flow" id="business">
+<!-- ============ OMNICHANNEL + INDUSTRIES (merged) ============ -->
+<section class="section section-tight" id="everywhere">
   <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="business.idx">Built around your business / 004</p>
-    <h2 class="section-head reveal" data-i18n-html="business.title">Your business is unique.<br>Your operating system should be too.</h2>
-    <p class="section-sub reveal" data-i18n="business.sub">OMINO adapts to the way your business operates — whether you sell products, serve customers, run a restaurant, or manage multiple locations. One platform. Different businesses. Same clarity.</p>
-    <div class="cat-tabs" id="catTabs"></div>
-    <div class="cat-panel">
-      <div class="cat-metrics" id="catMetrics"></div>
+    <p class="section-index" data-i18n="ev.idx">Everywhere you sell</p>
+    <h2 class="section-head reveal reveal-init" data-i18n-html="ev.title">Sell online. Sell in-store. Run it from one place.</h2>
+    <p class="section-sub" data-i18n="ev.sub">One customer, one order history, one inventory — whether they bought on your site or walked into your shop.</p>
+    <div class="truth-row">
+      <span data-i18n="ev.t1">One customer record</span>
+      <span data-i18n="ev.t2">One order history</span>
+      <span data-i18n="ev.t3">One inventory</span>
+      <span data-i18n="ev.t4">One source of truth</span>
+    </div>
+    <div class="industry-rail" aria-label="Industries">
+      <span class="industry-pill" data-i18n="ind.1">Retail</span>
+      <span class="industry-pill" data-i18n="ind.2">Fashion</span>
+      <span class="industry-pill" data-i18n="ind.3">Beauty &amp; Perfume</span>
+      <span class="industry-pill" data-i18n="ind.4">Cafés &amp; Restaurants</span>
+      <span class="industry-pill" data-i18n="ind.5">Electronics</span>
+      <span class="industry-pill" data-i18n="ind.6">Services</span>
+      <span class="industry-pill" data-i18n="ind.7">Wholesale</span>
     </div>
   </div>
 </section>
 
-<section class="band band-asymmetric on-dark" id="intelligence">
-  <div class="band-fill" aria-hidden="true"></div>
-  <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="intel.idx">Business intelligence / 005</p>
-    <h2 class="section-head reveal" data-i18n-html="ai.title">Don’t just see what happened.<br>Understand why.</h2>
-    <p class="section-sub reveal" data-i18n="ai.sub">OMINO turns your business data into clear answers — revealing what changed, why it changed, and what deserves your attention next.</p>
-
-    <div class="ai-wrap">
-      <div class="ai-glow" aria-hidden="true"></div>
-      <div class="chat-shell">
-        <div class="chat-top"><span class="ai-dot"></span><span data-i18n="chat.top">Profit analysis</span></div>
-        <div class="chat-body">
-          <div class="msg user"><div class="bubble" data-i18n="chat.user">Why did my profit drop this month?</div></div>
-          <div class="msg ai">
-            <div class="bubble" data-i18n-html="chat.ai">Revenue grew 8%.<br>Gross profit fell 4%.</div>
-            <div class="reveal-list" id="revealList">
-              <div class="reveal-item"><span class="m">01</span><span data-i18n="chat.1">Product costs increased 7%</span></div>
-              <div class="reveal-item"><span class="m">02</span><span data-i18n="chat.2">Two high-volume products lost margin</span></div>
-              <div class="reveal-item"><span class="m">03</span><span data-i18n="chat.3">Discounts increased 18%</span></div>
-            </div>
-            <div class="rec-box" id="recBox">
-              <div class="rk en" data-i18n="chat.rk">Next move</div>
-              <div class="rv" data-i18n="chat.rec">Reduce discounting on Product A and increase Product B by 4%.</div>
-            </div>
+<!-- ============ AI ============ -->
+<section class="section on-dark" id="ai">
+  <div class="wrap ai-layout">
+    <div>
+      <p class="section-index" data-i18n="ai.idx">AI for your business</p>
+      <h2 class="section-head reveal reveal-init" data-i18n-html="ai.title">Numbers tell you what happened. OMINO tells you why — and what's next.</h2>
+      <p class="section-sub" data-i18n="ai.sub">Ask about products, orders, customers, and performance — OMINO answers with your real business context, not generic advice.</p>
+      <div class="ai-prompts">
+        <p class="ai-prompt"><span class="qm en">?</span><span data-i18n="ai.ex1">Which products are losing margin?</span></p>
+        <p class="ai-prompt"><span class="qm en">?</span><span data-i18n="ai.ex2">What should I restock this week?</span></p>
+        <p class="ai-prompt"><span class="qm en">?</span><span data-i18n="ai.ex3">Which customers are becoming inactive?</span></p>
+      </div>
+    </div>
+    <div class="chat-shell">
+      <div class="chat-top"><span class="mock-dot"></span><span data-i18n="chat.top">Profit analysis</span></div>
+      <div class="chat-body">
+        <div class="msg user"><div class="bubble" data-i18n="chat.user">Why did my profit drop this month?</div></div>
+        <div class="msg ai">
+          <div class="bubble" data-i18n-html="chat.ai">Costs increased.<br>Margins fell on 3 key products.<br>Discounting went up.</div>
+          <div class="reveal-list"><div class="reveal-item"><span class="m">01</span><span data-i18n="chat.1">These products carry more volume with less profit.</span></div></div>
+          <div class="rec-box">
+            <div class="rk en" data-i18n="chat.rk">Recommended next step</div>
+            <div class="rv" data-i18n="chat.rec">Review margin on top sellers and tighten discounting where it's eroding profit.</div>
           </div>
         </div>
       </div>
-      <p class="ai-note" data-i18n="ai.note">You stay in control. OMINO recommends. You decide.</p>
     </div>
   </div>
 </section>
 
-<section class="section-pad section-flow" id="loop">
+<!-- ============ TRUST + AUTOMATION ============ -->
+<section class="section on-dark" id="trust">
   <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="loop.idx">Intelligence loop / 006</p>
-    <h2 class="section-head reveal" data-i18n="loop.title">From data to decisions.</h2>
-    <p class="section-sub reveal" data-i18n="loop.sub">OMINO doesn’t just show you numbers. It connects the signals behind them so you can make better decisions with less guesswork.</p>
-    <div class="loop-strip reveal">
-      <span class="loop-step en" data-i18n="loop.see">See</span>
-      <span class="loop-step en" data-i18n="loop.understand">Understand</span>
-      <span class="loop-step en" data-i18n="loop.decide">Decide</span>
-      <span class="loop-step en" data-i18n="loop.act">Act</span>
-      <span class="loop-step en" data-i18n="loop.learn">Learn</span>
+    <p class="section-index" data-i18n="trust.idx">Automation, with control</p>
+    <h2 class="section-head reveal reveal-init" data-i18n-html="trust.title">Intelligent enough to help. Controlled enough to trust.</h2>
+    <p class="section-sub" data-i18n="trust.sub">OMINO detects, recommends, and automates routine work. Important decisions stay yours.</p>
+    <div class="auto-rail" aria-label="Automation examples">
+      <div class="auto-row">
+        <div class="auto-col"><div class="k" data-i18n="auto.k">Event</div><div class="v" data-i18n="auto.r1.e">Low stock detected</div></div>
+        <div class="auto-arrow" aria-hidden="true">→</div>
+        <div class="auto-col"><div class="k" data-i18n="auto.a">OMINO action</div><div class="v" data-i18n="auto.r1.act">Flags the product</div></div>
+        <div class="auto-arrow" aria-hidden="true">→</div>
+        <div class="auto-col"><div class="k" data-i18n="auto.o">Outcome</div><div class="v" data-i18n="auto.r1.out">Restocked before lost sales</div></div>
+      </div>
+      <div class="auto-row">
+        <div class="auto-col"><div class="k" data-i18n="auto.k">Event</div><div class="v" data-i18n="auto.r2.e">Order completed</div></div>
+        <div class="auto-arrow" aria-hidden="true">→</div>
+        <div class="auto-col"><div class="k" data-i18n="auto.a">OMINO action</div><div class="v" data-i18n="auto.r2.act">Updates the customer's history</div></div>
+        <div class="auto-arrow" aria-hidden="true">→</div>
+        <div class="auto-col"><div class="k" data-i18n="auto.o">Outcome</div><div class="v" data-i18n="auto.r2.out">Records stay current, no manual entry</div></div>
+      </div>
+      <div class="auto-row">
+        <div class="auto-col"><div class="k" data-i18n="auto.k">Event</div><div class="v" data-i18n="auto.r3.e">Customer goes inactive</div></div>
+        <div class="auto-arrow" aria-hidden="true">→</div>
+        <div class="auto-col"><div class="k" data-i18n="auto.a">OMINO action</div><div class="v" data-i18n="auto.r3.act">Surfaces the opportunity</div></div>
+        <div class="auto-arrow" aria-hidden="true">→</div>
+        <div class="auto-col"><div class="k" data-i18n="auto.o">Outcome</div><div class="v" data-i18n="auto.r3.out">You decide whether to follow up</div></div>
+      </div>
     </div>
+    <ul class="trust-points">
+      <li data-i18n="trust.1">Nothing important happens without your approval.</li>
+      <li data-i18n="trust.2">Refunds and financial actions always require confirmation.</li>
+      <li data-i18n="trust.3">You see what changed, who approved it, and why.</li>
+    </ul>
   </div>
 </section>
 
-<section class="band band-center on-dark" id="ai">
-  <div class="band-fill" aria-hidden="true"></div>
+<!-- ============ PRICING — normal flowing section ============ -->
+<section class="section" id="pricing">
   <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="ai.idx">AI / 007</p>
-    <h2 class="section-head reveal" data-i18n-html="ai.agent.title">AI that understands<br>your business.</h2>
-    <p class="section-sub reveal" data-i18n="ai.agent.sub">OMINO AI works with your business context — your products, orders, customers, inventory, analytics, and operations — to help you understand and operate your business.</p>
-    <div class="ai-examples reveal">
-      <p class="ai-example" data-i18n="ai.ex1">Which products are losing margin?</p>
-      <p class="ai-example" data-i18n="ai.ex2">What should I restock this week?</p>
-      <p class="ai-example" data-i18n="ai.ex3">Which customers are becoming inactive?</p>
-      <p class="ai-example" data-i18n="ai.ex4">What changed in my sales this month?</p>
-      <p class="ai-example" data-i18n="ai.ex5">Show me where I’m losing money.</p>
-    </div>
-    <p class="section-sub reveal" style="margin-top:32px;" data-i18n="ai.agent.note">AI should understand the business — not just the question.</p>
-  </div>
-</section>
+    <p class="section-index" data-i18n="pricing.idx">Plans</p>
+    <h2 class="section-head reveal reveal-init" data-i18n-html="pricing.title">Start simple. Grow without rebuilding your business.</h2>
+    <p class="section-sub" data-i18n="pricing.sub">Replace scattered POS, spreadsheet inventory, and paper reports — store, sales, stock, and intelligence in one place.</p>
 
-<section class="section-pad section-flow" id="control">
-  <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="control.idx">Trust / 008</p>
-    <h2 class="section-head reveal" data-i18n-html="control.title">Intelligent enough to help.<br>Controlled enough to trust.</h2>
-    <p class="section-sub reveal" data-i18n="control.sub">OMINO can identify opportunities, prepare actions, and automate routine work — while keeping important decisions in your hands.</p>
-    <div class="reveal-list" style="margin-top:40px;">
-      <div class="reveal-item"><span class="m">—</span><span data-i18n="control.1">Nothing important happens without your approval.</span></div>
-      <div class="reveal-item"><span class="m">—</span><span data-i18n="control.2">Refunds, inventory adjustments, and financial actions require confirmation.</span></div>
-      <div class="reveal-item"><span class="m">—</span><span data-i18n="control.3">You see what changed, who approved it, and why.</span></div>
-    </div>
-  </div>
-</section>
-
-<section class="band band-asymmetric on-dark" id="automation">
-  <div class="band-fill" aria-hidden="true"></div>
-  <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="auto.idx">Automation / 009</p>
-    <h2 class="section-head reveal" data-i18n="auto.title">Stop repeating work your business already knows how to do.</h2>
-    <p class="section-sub reveal" data-i18n="auto.sub">Connect events to actions and let OMINO handle routine operations automatically.</p>
-    <div class="reveal-list" id="autoList" style="margin-top:40px;">
-      <div class="reveal-item"><span class="m">→</span><span data-i18n="auto.1">Low stock → Flag product</span></div>
-      <div class="reveal-item"><span class="m">→</span><span data-i18n="auto.2">New customer → Add segment</span></div>
-      <div class="reveal-item"><span class="m">→</span><span data-i18n="auto.3">Order completed → Update customer history</span></div>
-      <div class="reveal-item"><span class="m">→</span><span data-i18n="auto.4">Payment received → Update business metrics</span></div>
-      <div class="reveal-item"><span class="m">→</span><span data-i18n="auto.5">Customer inactive → Prepare a marketing opportunity</span></div>
-    </div>
-    <p class="section-sub reveal" style="margin-top:28px;" data-i18n="auto.note">Automate the routine. Stay in control of the important.</p>
-  </div>
-</section>
-
-<section class="section-pad section-flow" id="growth">
-  <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="growth.idx">Growth / 010</p>
-    <h2 class="section-head reveal" data-i18n="growth.title">Turn business data into better growth decisions.</h2>
-    <p class="section-sub reveal" data-i18n="growth.sub">Know who your customers are, what they buy, what they respond to, and where your next opportunity is. Growth shouldn’t live in a separate system from the business itself.</p>
-    <p class="section-sub reveal" data-i18n="growth.path">Customers → Analytics → Marketing → Automation → AI</p>
-  </div>
-</section>
-
-<section class="band band-center on-dark" id="commerce">
-  <div class="band-fill" aria-hidden="true"></div>
-  <div class="wrap" style="text-align:center;">
-    <p class="section-index idx reveal" data-i18n="commerce.idx">Commerce / 011</p>
-    <h2 class="section-head reveal" data-i18n="commerce.title">Sell anywhere. Stay connected everywhere.</h2>
-    <p class="section-sub reveal" style="margin-inline:auto;" data-i18n="commerce.sub">Whether a customer buys in your store or online, OMINO keeps orders, payments, inventory, and customer information connected.</p>
-    <p class="commerce-eq reveal" data-i18n-html="commerce.eq">IN STORE<br>+<br>ONLINE<br>=<br>ONE BUSINESS</p>
-  </div>
-</section>
-
-<section class="section-pad section-flow" id="analytics">
-  <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="analytics.idx">Analytics / 012</p>
-    <h2 class="section-head reveal" data-i18n="analytics.title">A dashboard that tells you something.</h2>
-    <p class="section-sub reveal" data-i18n="analytics.sub">See revenue, orders, customers, products, inventory, and performance — then move from numbers to meaning. Less reporting. More understanding.</p>
-  </div>
-</section>
-
-<section class="section-pad section-flow" id="pricing">
-  <div class="wrap">
-    <p class="section-index idx reveal" data-i18n="pricing.idx">Plans / 013</p>
-    <h2 class="section-head reveal" data-i18n-html="pricing.title">Start simple.<br>Grow without rebuilding your business.</h2>
-
-    <div class="price-toggle">
-      <button class="active" id="toggleMonthly" data-i18n="bill.month">Monthly</button>
-      <button id="toggleYearly" data-i18n="bill.year">Yearly</button>
-      <span class="save en">Save 2 mo</span>
+    <div class="price-toggle-wrap">
+      <div class="price-toggle" role="group" aria-label="Billing period">
+        <button class="active" id="toggleMonthly" data-i18n="bill.month">Monthly</button>
+        <button id="toggleYearly" data-i18n="bill.year">Yearly</button>
+      </div>
+      <span class="save en" data-i18n="bill.save">Save 2 mo</span>
     </div>
 
     <div class="plans">
       <div class="plan">
         <div class="plan-name en" data-i18n="plan.s.name">Run</div>
         <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="9" data-yearly="7.5">9</span><span class="per">/ month</span></div>
-        <div class="plan-desc" data-i18n="plan.s.desc">For businesses getting started with OMINO.</div>
+        <div class="plan-save" data-save="58" aria-hidden="true"></div>
+        <div class="plan-desc" data-i18n="plan.s.desc">Everything you need to sell — online and in-store.</div>
         <div class="plan-feats">
-          <div data-i18n="plan.s.1">OMINO Intelligence</div>
-          <div data-i18n="plan.s.2">Basic insights</div>
+          <div data-i18n="plan.s.1">Online store + POS</div>
+          <div data-i18n="plan.s.2">Products, orders &amp; inventory</div>
+          <div data-i18n="plan.s.3">Customers &amp; basic analytics</div>
+          <div data-i18n="plan.s.4">Essential AI insights</div>
+          <div data-i18n="plan.s.5">Unlimited products</div>
         </div>
-        <a href="checkout.html?plan=starter&billing=monthly" class="btn btn-ghost plan-go" data-plan="starter" data-i18n="plan.s.cta">Start Starter</a>
+        <a href="checkout.html?plan=starter&amp;billing=monthly" class="btn btn-ghost plan-go" data-plan="starter" data-i18n="plan.s.cta">Start with Run</a>
       </div>
-
       <div class="plan pro">
-        <div class="plan-tab en">Most popular</div>
+        <div class="plan-tab en" data-i18n="plan.p.badge">Most popular</div>
         <div class="plan-name en" data-i18n="plan.p.name">Grow</div>
-        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="24" data-yearly="20">24</span><span class="per">/ month</span></div>
-        <div class="plan-desc" data-i18n="plan.p.desc">For businesses ready for deeper intelligence and automation.</div>
+        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="29" data-yearly="24.2">29</span><span class="per">/ month</span></div>
+        <div class="plan-save" data-save="118" aria-hidden="true"></div>
+        <div class="plan-desc" data-i18n="plan.p.desc">For owners who want clarity — not more spreadsheets.</div>
         <div class="plan-feats">
-          <div data-i18n="plan.p.1">Advanced AI insights</div>
-          <div data-i18n="plan.p.2">Recommendations</div>
-          <div data-i18n="plan.p.3">Forecasting</div>
+          <div data-i18n="plan.p.1">Everything in Run</div>
+          <div data-i18n="plan.p.2">AI insights &amp; recommendations</div>
+          <div data-i18n="plan.p.3">Sales &amp; demand forecasting</div>
+          <div data-i18n="plan.p.4">Customer segmentation</div>
+          <div data-i18n="plan.p.5">Profit &amp; margin analysis</div>
         </div>
-        <a href="checkout.html?plan=pro&billing=monthly" class="btn btn-primary plan-go" data-plan="pro" data-i18n="plan.p.cta">Start Pro</a>
+        <a href="checkout.html?plan=pro&amp;billing=monthly" class="btn btn-primary plan-go" data-plan="pro" data-i18n="plan.p.cta">Start with Grow</a>
       </div>
-
       <div class="plan">
         <div class="plan-name en" data-i18n="plan.b.name">Scale</div>
-        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="49" data-yearly="40.8">49</span><span class="per">/ month</span></div>
-        <div class="plan-desc" data-i18n="plan.b.desc">For businesses operating at greater complexity.</div>
+        <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="59" data-yearly="49.2">59</span><span class="per">/ month</span></div>
+        <div class="plan-save" data-save="238" aria-hidden="true"></div>
+        <div class="plan-desc" data-i18n="plan.b.desc">For teams operating at higher complexity.</div>
         <div class="plan-feats">
-          <div data-i18n="plan.b.1">AI Business Agent</div>
-          <div data-i18n="plan.b.2">Automation</div>
-          <div data-i18n="plan.b.3">Advanced intelligence</div>
+          <div data-i18n="plan.b.1">Everything in Grow</div>
+          <div data-i18n="plan.b.2">AI Business Agent</div>
+          <div data-i18n="plan.b.3">Agentic workflows</div>
+          <div data-i18n="plan.b.4">Advanced team &amp; permissions</div>
+          <div data-i18n="plan.b.5">Priority support</div>
         </div>
-        <a href="checkout.html?plan=business&billing=monthly" class="btn btn-ghost plan-go" data-plan="business" data-i18n="plan.b.cta">Start Business</a>
+        <a href="checkout.html?plan=business&amp;billing=monthly" class="btn btn-ghost plan-go" data-plan="business" data-i18n="plan.b.cta">Start with Scale</a>
       </div>
     </div>
 
-    <div class="founding-box">
-      <div class="num">50</div>
-      <div>
-        <h3 data-i18n="founding.title">Be one of the first 50.</h3>
-        <p data-i18n="founding">OMINO is being built with businesses, not just for them. The first 50 businesses become part of the founding group and lock in founding pricing for as long as they stay on OMINO.</p>
-        <a href="/signup" class="btn btn-primary" style="margin-top:20px;display:inline-flex;" data-i18n="founding.cta">Start building with OMINO</a>
-      </div>
+    <p class="pricing-note" data-i18n="pricing.note">Shopify Basic is ~$39/mo before apps and POS add-ons. OMINO Run includes store, POS, inventory, and intelligence from $9.</p>
+
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th scope="col" data-i18n="cmp.col.feature">Capability</th>
+            <th scope="col" data-i18n="plan.s.name">Run</th>
+            <th scope="col" class="col-hero" data-i18n="plan.p.name">Grow</th>
+            <th scope="col" data-i18n="plan.b.name">Scale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row" data-i18n="cmp.r1">Online store + POS</th><td data-i18n="cmp.yes">✓</td><td class="col-hero" data-i18n="cmp.yes">✓</td><td data-i18n="cmp.yes">✓</td></tr>
+          <tr><th scope="row" data-i18n="cmp.r3">AI insights</th><td data-i18n="cmp.l.basic">Basic</td><td class="col-hero" data-i18n="cmp.l.advanced">Advanced</td><td data-i18n="cmp.l.agent">Agent</td></tr>
+          <tr><th scope="row" data-i18n="cmp.r5">Forecasting &amp; segments</th><td data-i18n="cmp.no">—</td><td class="col-hero" data-i18n="cmp.yes">✓</td><td data-i18n="cmp.yes">✓</td></tr>
+          <tr><th scope="row" data-i18n="cmp.r6">AI Business Agent</th><td data-i18n="cmp.no">—</td><td class="col-hero" data-i18n="cmp.no">—</td><td data-i18n="cmp.yes">✓</td></tr>
+          <tr><th scope="row" data-i18n="cmp.r8">Priority support</th><td data-i18n="cmp.no">—</td><td class="col-hero" data-i18n="cmp.no">—</td><td data-i18n="cmp.yes">✓</td></tr>
+        </tbody>
+      </table>
     </div>
 
     <div class="fee-note">
       <div>
         <h4 data-i18n="fee.title">Payments</h4>
-        <p data-i18n="fee">OMINO platform fee of 0.3%–0.5% on every successful online payment, plus the payment provider’s own fees.</p>
+        <p data-i18n="fee">Small OMINO platform fee on online payments. Transparent pricing, no hidden costs.</p>
       </div>
-      <div class="pct">0.3%–0.5%</div>
     </div>
   </div>
 </section>
 
-<section class="final-cta" id="final">
+<!-- ============ FOUNDING + FINAL CTA (merged) ============ -->
+<section class="section closing on-dark" id="final">
   <div class="wrap">
-    <h2 class="reveal" data-i18n-html="final.title">Your business already has the data.</h2>
-    <p class="sub reveal" data-i18n="final.sub">Now give it a system that understands it. Bring your business together with OMINO.</p>
-    <div class="ctas reveal">
-      <a href="/signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
-      <a href="#system" class="btn btn-ghost" data-i18n="cta.fit">Explore OMINO</a>
+    <div class="closing-inner">
+      <div class="closing-num" aria-hidden="true">50</div>
+      <div class="closing-copy">
+        <h2 class="reveal reveal-init" data-i18n-html="final.title">The first 50 businesses build OMINO with us.</h2>
+        <p class="sub" data-i18n="final.sub">Lock in founding pricing for as long as you stay on OMINO — and help shape what comes next.</p>
+        <div class="closing-ctas">
+          <a href="/signup" class="btn btn-primary btn-lg" data-i18n="final.cta">Become a founding business</a>
+          <a href="#solution" class="btn btn-ghost btn-lg" data-i18n="cta.fit">Explore OMINO</a>
+        </div>
+        <p class="closing-tag" data-i18n="final.tag">One business. One system. One clear picture.</p>
+      </div>
     </div>
-    <p class="final-tagline reveal" data-i18n="final.tag">One business. One system. One clear picture.</p>
   </div>
 </section>
+
 </main>
 
-<footer class="band band-footer on-dark">
-  <div class="band-fill" aria-hidden="true"></div>
-  <div class="wrap footer-bottom">
+<footer class="band-footer">
+  <div class="wrap">
     <div class="footer-brand">
       <img class="logo-img" src="img/omino-lockup-paper.png" alt="OMINO" width="685" height="235" loading="lazy" decoding="async">
       <span data-i18n="footer.copy">© 2026 OMINO. All rights reserved.</span>
     </div>
-    <div class="footer-legal">
-      <a href="privacy.html" data-i18n="foot.privacy">Privacy</a>
-      <a href="terms.html" data-i18n="foot.terms">Terms</a>
-      <a href="faq.html" data-i18n="foot.faq">FAQ</a>
-      <a href="contact.html" data-i18n="foot.contact">Contact</a>
-      <a href="#cookies" data-cookie-settings data-i18n="foot.cookies">Cookies</a>
+    <div class="footer-bottom">
+      <span data-i18n="final.brand">The intelligent operating system for your business.</span>
+      <div class="footer-legal">
+        <a href="privacy.html" data-i18n="foot.privacy">Privacy</a>
+        <a href="terms.html" data-i18n="foot.terms">Terms</a>
+        <a href="faq.html" data-i18n="foot.faq">FAQ</a>
+        <a href="contact.html" data-i18n="foot.contact">Contact</a>
+      </div>
     </div>
   </div>
 </footer>
 
-<script src="js/config.js"></script>
 <script>
-gsap.registerPlugin(ScrollTrigger, CustomEase);
-CustomEase.create('fluid','0.22, 1, 0.36, 1');
-CustomEase.create('dock','M0,0 C0.16,1.18 0.32,1.02 1,1');
-CustomEase.create('drift','M0,0 C0.4,0 0.18,1 1,1');
+document.documentElement.classList.add('js');
+gsap.registerPlugin(ScrollTrigger);
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const fluidEase = 'fluid';
 
+/* ---------- nav + orbit scroll progress ---------- */
 const nav = document.getElementById('siteNav');
 const orbit = document.getElementById('orbit');
-const orbitField = document.getElementById('orbitField');
-const orbitSeed = document.getElementById('orbitSeed');
-const orbitBeam = document.getElementById('orbitBeam');
-const orbitWake = document.getElementById('orbitWake');
 const orbitIdx = document.getElementById('orbitIdx');
 const orbitRing = document.getElementById('orbitRing');
 const orbitRingLen = 2 * Math.PI * 18;
@@ -1675,18 +841,7 @@ if(orbitRing){
   orbitRing.setAttribute('stroke-dasharray', orbitRingLen + ' ' + orbitRingLen);
   orbitRing.setAttribute('stroke-dashoffset', String(orbitRingLen));
 }
-const orbitNodes = document.getElementById('orbitNodes');
-const orbitCompact = window.matchMedia('(max-width: 859px)');
-const orbitFine = window.matchMedia('(hover: hover) and (pointer: fine)');
-const orbitChapters = [
-  { sel: '#hero', idx: '001' },
-  { sel: '#system', idx: '002' },
-  { sel: '#connected', idx: '003' },
-  { sel: '#business', idx: '004' },
-  { sel: '#intelligence', idx: '005' },
-  { sel: '#pricing', idx: '006' }
-];
-let orbitP = 0, orbitNow = 0, orbitVel = 0, orbitRaf = 0, orbitIdle = 0, orbitDrag = false;
+let orbitP = 0, orbitNow = 0, orbitRaf = 0, orbitIdle = 0;
 
 function scrollMax(){
   return Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
@@ -1694,64 +849,20 @@ function scrollMax(){
 function scrollProgress(){
   return Math.min(1, Math.max(0, window.scrollY / scrollMax()));
 }
-function placeOrbitNodes(){
-  const max = scrollMax();
-  const h = orbitField.clientHeight;
-  orbitNodes.replaceChildren();
-  orbitChapters.forEach(item => {
-    const el = document.querySelector(item.sel);
-    if(!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY;
-    const t = Math.min(1, Math.max(0, top / max));
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'orbit-node';
-    btn.style.top = (t * h) + 'px';
-    btn.innerHTML = '<i></i>';
-    btn.setAttribute('aria-label', 'Section ' + item.idx);
-    btn.tabIndex = -1;
-    btn._t = t;
-    btn._idx = item.idx;
-    btn.addEventListener('click', () => {
-      el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-    });
-    orbitNodes.appendChild(btn);
-  });
-}
 function applyOrbit(){
-  const h = orbitField.clientHeight || 1;
-  const y = orbitNow * h;
-  const stretch = Math.min(78, Math.abs(orbitVel) * 1600);
   const pct = Math.round(orbitNow * 100);
-  orbit.style.setProperty('--p', (orbitNow * 100).toFixed(2));
   orbitIdx.textContent = pct + '%';
   orbit.setAttribute('aria-valuenow', String(pct));
-  if(orbitRing){
-    orbitRing.setAttribute('stroke-dashoffset', String(orbitRingLen * (1 - orbitNow)));
-  }
-  if(!orbitCompact.matches){
-    orbitSeed.style.top = y + 'px';
-    orbitIdx.style.top = y + 'px';
-    orbitBeam.style.height = y + 'px';
-  }
-  orbitWake.style.height = stretch + 'px';
-  orbitWake.style.opacity = String(Math.min(0.75, Math.abs(orbitVel) * 20));
-  orbitWake.style.top = orbitVel >= 0 ? 'calc(50% - ' + stretch + 'px)' : '50%';
-  orbitNodes.querySelectorAll('.orbit-node').forEach(btn => {
-    btn.classList.toggle('is-here', Math.abs(orbitNow - btn._t) < 0.075);
-  });
+  if(orbitRing) orbitRing.setAttribute('stroke-dashoffset', String(orbitRingLen * (1 - orbitNow)));
   nav.classList.toggle('scrolled', window.scrollY > 40);
 }
 function drawOrbit(){
-  const prev = orbitNow;
   orbitNow += (orbitP - orbitNow) * (reduceMotion ? 1 : 0.16);
-  orbitVel = orbitNow - prev;
   applyOrbit();
   if(Math.abs(orbitP - orbitNow) > 0.00035){
     orbitRaf = requestAnimationFrame(drawOrbit);
   } else {
     orbitNow = orbitP;
-    orbitVel = 0;
     applyOrbit();
     orbitRaf = 0;
   }
@@ -1767,616 +878,213 @@ function onOrbitScroll(){
   pulseOrbit();
   if(!orbitRaf) orbitRaf = requestAnimationFrame(drawOrbit);
 }
-function bindOrbitDrag(){
-  if(!orbitFine.matches) return;
-  const fromY = clientY => {
-    const rect = orbitField.getBoundingClientRect();
-    const t = Math.min(1, Math.max(0, (clientY - rect.top) / Math.max(1, rect.height)));
-    window.scrollTo(0, t * scrollMax());
-  };
-  orbitField.addEventListener('pointerdown', e => {
-    if(e.target.closest('.orbit-node')) return;
-    orbitDrag = true;
-    orbitField.setPointerCapture(e.pointerId);
-    fromY(e.clientY);
-    e.preventDefault();
-  });
-  orbitField.addEventListener('pointermove', e => { if(orbitDrag) fromY(e.clientY); });
-  const end = () => { orbitDrag = false; };
-  orbitField.addEventListener('pointerup', end);
-  orbitField.addEventListener('pointercancel', end);
-}
-placeOrbitNodes();
-bindOrbitDrag();
 onOrbitScroll();
 window.addEventListener('scroll', onOrbitScroll, {passive:true});
-window.addEventListener('resize', () => { placeOrbitNodes(); onOrbitScroll(); });
-window.addEventListener('load', () => { placeOrbitNodes(); onOrbitScroll(); });
+window.addEventListener('resize', onOrbitScroll);
 
+/* ---------- mobile menu ---------- */
 const menuBtn = document.getElementById('menuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
-const langToggle = document.getElementById('langToggle');
-
-const copy = {
-  en: {
-    title: 'OMINO — The Intelligent Operating System for Your Business',
-    'nav.product': 'Product', 'nav.ai': 'AI', 'nav.pricing': 'Pricing', 'nav.about': 'About', 'nav.login': 'Login',
-    'cta.start': 'Start for free', 'cta.fit': 'Explore OMINO',
-    'menu.open': 'Open menu', 'menu.close': 'Close menu',
-    'menu.kicker': 'Menu / 00',
-    'menu.tag': 'AI Business OS',
-    'menu.connect': 'Connect',
-    skip: 'Skip to content',
-    'hero.idx': 'AI BUSINESS OS / 001',
-    'hero.line1': 'Run your entire business',
-    'hero.line2': 'from one intelligent system.',
-    'hero.sub': 'OMINO connects your store, POS, inventory, customers, payments, analytics, and AI — giving you one clear view of your business and helping you know what to do next.',
-    'hero.micro': 'No credit card required.',
-    'hero.fine': 'Founding pricing is available to the first 50 businesses.',
-    'problem.idx': 'The problem / 002',
-    'problem.title': 'Your business shouldn’t live<br>in five different places.',
-    'problem.sub': 'Sales in one system. Inventory in another. Customers somewhere else. Payments somewhere else. Reports you have to piece together yourself.',
-    'problem.shift': 'The problem isn’t a lack of data. It’s that your data doesn’t work together.',
-    'problem.connect': 'OMINO connects them into one business system.',
-    'problem.caption': 'One business. One system. One clear picture.',
-    'system.sub': 'OMINO connects the everyday operations of your business into one intelligent operating system — from the first sale to the next decision.',
-    'connected.idx': 'The system / 003',
-    'connected.title': 'Every action makes<br>the whole system smarter.',
-    'connected.sub': 'A sale shouldn’t end when the payment is complete. It should update your inventory, customer history, analytics, and business intelligence automatically.',
-    'flow.1': 'Customer buys',
-    'flow.2': 'Order created',
-    'flow.3': 'Payment recorded',
-    'flow.4': 'Inventory updated',
-    'flow.5': 'Customer profile updated',
-    'flow.6': 'Analytics updated',
-    'flow.7': 'Business intelligence updated',
-    'flow.8': 'OMINO recommends the next move',
-    'business.idx': 'Built around your business / 004',
-    'business.title': 'Your business is unique.<br>Your operating system should be too.',
-    'business.sub': 'OMINO adapts to the way your business operates — whether you sell products, serve customers, run a restaurant, or manage multiple locations. One platform. Different businesses. Same clarity.',
-    'intel.idx': 'Business intelligence / 005',
-    'ai.title': 'Don’t just see what happened.<br>Understand why.',
-    'ai.sub': 'OMINO turns your business data into clear answers — revealing what changed, why it changed, and what deserves your attention next.',
-    'chat.top': 'Profit analysis',
-    'chat.user': 'Why did my profit drop this month?',
-    'chat.ai': 'Revenue grew 8%.<br>Gross profit fell 4%.',
-    'chat.1': 'Product costs increased 7%',
-    'chat.2': 'Two high-volume products lost margin',
-    'chat.3': 'Discounts increased 18%',
-    'chat.rk': 'Next move',
-    'chat.rec': 'Reduce discounting on Product A and increase Product B by 4%.',
-    'ai.note': 'You stay in control. OMINO recommends. You decide.',
-    'loop.idx': 'Intelligence loop / 006',
-    'loop.title': 'From data to decisions.',
-    'loop.sub': 'OMINO doesn’t just show you numbers. It connects the signals behind them so you can make better decisions with less guesswork.',
-    'loop.see': 'See',
-    'loop.understand': 'Understand',
-    'loop.decide': 'Decide',
-    'loop.act': 'Act',
-    'loop.learn': 'Learn',
-    'ai.idx': 'AI / 007',
-    'ai.agent.title': 'AI that understands<br>your business.',
-    'ai.agent.sub': 'OMINO AI works with your business context — your products, orders, customers, inventory, analytics, and operations — to help you understand and operate your business.',
-    'ai.ex1': 'Which products are losing margin?',
-    'ai.ex2': 'What should I restock this week?',
-    'ai.ex3': 'Which customers are becoming inactive?',
-    'ai.ex4': 'What changed in my sales this month?',
-    'ai.ex5': 'Show me where I’m losing money.',
-    'ai.agent.note': 'AI should understand the business — not just the question.',
-    'control.idx': 'Trust / 008',
-    'control.title': 'Intelligent enough to help.<br>Controlled enough to trust.',
-    'control.sub': 'OMINO can identify opportunities, prepare actions, and automate routine work — while keeping important decisions in your hands.',
-    'control.1': 'Nothing important happens without your approval.',
-    'control.2': 'Refunds, inventory adjustments, and financial actions require confirmation.',
-    'control.3': 'You see what changed, who approved it, and why.',
-    'auto.idx': 'Automation / 009',
-    'auto.title': 'Stop repeating work your business already knows how to do.',
-    'auto.sub': 'Connect events to actions and let OMINO handle routine operations automatically.',
-    'auto.1': 'Low stock → Flag product',
-    'auto.2': 'New customer → Add segment',
-    'auto.3': 'Order completed → Update customer history',
-    'auto.4': 'Payment received → Update business metrics',
-    'auto.5': 'Customer inactive → Prepare a marketing opportunity',
-    'auto.note': 'Automate the routine. Stay in control of the important.',
-    'growth.idx': 'Growth / 010',
-    'growth.title': 'Turn business data into better growth decisions.',
-    'growth.sub': 'Know who your customers are, what they buy, what they respond to, and where your next opportunity is. Growth shouldn’t live in a separate system from the business itself.',
-    'growth.path': 'Customers → Analytics → Marketing → Automation → AI',
-    'commerce.idx': 'Commerce / 011',
-    'commerce.title': 'Sell anywhere. Stay connected everywhere.',
-    'commerce.sub': 'Whether a customer buys in your store or online, OMINO keeps orders, payments, inventory, and customer information connected.',
-    'commerce.eq': 'IN STORE<br>+<br>ONLINE<br>=<br>ONE BUSINESS',
-    'analytics.idx': 'Analytics / 012',
-    'analytics.title': 'A dashboard that tells you something.',
-    'analytics.sub': 'See revenue, orders, customers, products, inventory, and performance — then move from numbers to meaning. Less reporting. More understanding.',
-    'pricing.idx': 'Plans / 013',
-    'pricing.title': 'Start simple.<br>Grow without rebuilding your business.',
-    'bill.month': 'Monthly', 'bill.year': 'Yearly',
-    'bill.per': '/ month', 'bill.perY': '/ month, billed yearly',
-    'plan.s.name': 'Run',
-    'plan.s.desc': 'For businesses getting started with OMINO.',
-    'plan.s.1': 'OMINO Intelligence', 'plan.s.2': 'Basic insights', 'plan.s.cta': 'Start Run',
-    'plan.p.name': 'Grow',
-    'plan.p.desc': 'For businesses ready for deeper intelligence and automation.',
-    'plan.p.1': 'Advanced AI insights', 'plan.p.2': 'Recommendations', 'plan.p.3': 'Forecasting', 'plan.p.cta': 'Start Grow',
-    'plan.b.name': 'Scale',
-    'plan.b.desc': 'For businesses operating at greater complexity.',
-    'plan.b.1': 'AI Business Agent', 'plan.b.2': 'Automation', 'plan.b.3': 'Advanced intelligence', 'plan.b.cta': 'Start Scale',
-    'founding.title': 'Be one of the first 50.',
-    founding: 'OMINO is being built with businesses, not just for them. The first 50 businesses become part of the founding group and lock in founding pricing for as long as they stay on OMINO.',
-    'founding.cta': 'Start building with OMINO',
-    'final.title': 'Your business already has the data.',
-    'final.sub': 'Now give it a system that understands it. Bring your business together with OMINO.',
-    'final.tag': 'One business. One system. One clear picture.',
-    'fee.title': 'Payments',
-    fee: 'OMINO platform fee of 0.3%–0.5% on every successful online payment, plus the payment provider’s own fees.',
-    'footer.copy': '© 2026 OMINO. All rights reserved.',
-    'foot.privacy': 'Privacy', 'foot.terms': 'Terms', 'foot.faq': 'FAQ', 'foot.contact': 'Contact', 'foot.cookies': 'Cookies'
-  },
-  ar: {
-    title: 'OMINO — نظام التشغيل الذكي لأعمالك',
-    'nav.product': 'المنتج', 'nav.ai': 'AI', 'nav.pricing': 'التسعير', 'nav.about': 'عن OMINO', 'nav.login': 'دخول',
-    'cta.start': 'ابدأ مجاناً', 'cta.fit': 'استكشف OMINO',
-    'menu.open': 'فتح القائمة', 'menu.close': 'إغلاق القائمة',
-    'menu.kicker': 'Menu / 00',
-    'menu.tag': 'نظام تشغيل الأعمال',
-    'menu.connect': 'تواصل',
-    skip: 'تخطي إلى المحتوى',
-    'hero.idx': 'نظام تشغيل الأعمال بالذكاء الاصطناعي / 001',
-    'hero.line1': 'شغّل عملك بالكامل',
-    'hero.line2': 'من نظام ذكي واحد.',
-    'hero.sub': 'OMINO يربط متجرك، ونقطة البيع، والمخزون، والعملاء، والمدفوعات، والتحليلات، والذكاء الاصطناعي — ليعطيك صورة واضحة عن عملك ويساعدك تعرف ماذا تفعل بعد ذلك.',
-    'hero.micro': 'لا حاجة لبطاقة ائتمان.',
-    'hero.fine': 'تسعير المؤسسين متاح لأول 50 نشاطاً.',
-    'problem.idx': 'المشكلة / 002',
-    'problem.title': 'عملك ما المفروض يتوزع<br>على خمسة أماكن مختلفة.',
-    'problem.sub': 'المبيعات في نظام. المخزون في آخر. العملاء في مكان ثالث. المدفوعات في مكان رابع. والتقارير تجمعها بنفسك.',
-    'problem.shift': 'المشكلة ليست نقص البيانات. المشكلة أن بياناتك لا تعمل معاً.',
-    'problem.connect': 'OMINO يربطها في نظام أعمال واحد.',
-    'problem.caption': 'عمل واحد. نظام واحد. صورة واضحة.',
-    'system.sub': 'OMINO يربط عمليات نشاطك اليومية في نظام تشغيل ذكي واحد — من أول عملية بيع إلى القرار التالي.',
-    'connected.idx': 'النظام / 003',
-    'connected.title': 'كل إجراء يجعل<br>النظام بأكمله أذكى.',
-    'connected.sub': 'البيع ما ينتهي لما تكتمل الدفعة. لازم يحدّث المخزون، وسجل العميل، والتحليلات، وذكاء الأعمال تلقائياً.',
-    'flow.1': 'العميل يشتري',
-    'flow.2': 'يُنشأ الطلب',
-    'flow.3': 'تُسجَّل الدفعة',
-    'flow.4': 'يُحدَّث المخزون',
-    'flow.5': 'يُحدَّث ملف العميل',
-    'flow.6': 'تُحدَّث التحليلات',
-    'flow.7': 'يُحدَّث ذكاء الأعمال',
-    'flow.8': 'OMINO يقترح الخطوة التالية',
-    'business.idx': 'مصمم حول عملك / 004',
-    'business.title': 'عملك فريد.<br>ونظام التشغيل لازم يكون كذلك.',
-    'business.sub': 'OMINO يتكيّف مع طريقة عملك — سواء كنت تبيع منتجات، تخدم عملاء، تدير مطعماً، أو تشرف على عدة فروع. منصة واحدة. أعمال مختلفة. وضوح واحد.',
-    'intel.idx': 'ذكاء الأعمال / 005',
-    'ai.title': 'لا تكتفي بمعرفة ما حدث.<br>افهم السبب.',
-    'ai.sub': 'OMINO يحوّل بيانات نشاطك إلى إجابات واضحة — يوضح ما تغيّر، ولماذا تغيّر، وما يستحق انتباهك بعد ذلك.',
-    'chat.top': 'تحليل الربح',
-    'chat.user': 'ليش الربح نزل هذا الشهر؟',
-    'chat.ai': 'الإيرادات نمت 8%.<br>الربح الإجمالي نزل 4%.',
-    'chat.1': 'تكلفة المنتجات ارتفعت 7%',
-    'chat.2': 'منتجان عاليان الحجم فقدا الهامش',
-    'chat.3': 'الخصومات زادت 18%',
-    'chat.rk': 'الخطوة التالية',
-    'chat.rec': 'قلّل الخصم على المنتج أ، وارفع المنتج ب بنسبة 4%.',
-    'ai.note': 'أنت تبقى مسيطراً. OMINO يقترح. وأنت تقرر.',
-    'loop.idx': 'حلقة الذكاء / 006',
-    'loop.title': 'من البيانات إلى القرارات.',
-    'loop.sub': 'OMINO لا يعرض أرقاماً فقط. يربط الإشارات وراءها لتتخذ قرارات أفضل بأقل تخمين.',
-    'loop.see': 'شاهد',
-    'loop.understand': 'افهم',
-    'loop.decide': 'قرّر',
-    'loop.act': 'نفّذ',
-    'loop.learn': 'تعلّم',
-    'ai.idx': 'AI / 007',
-    'ai.agent.title': 'ذكاء اصطناعي يفهم<br>عملك.',
-    'ai.agent.sub': 'OMINO AI يعمل مع سياق نشاطك — منتجاتك، طلباتك، عملاءك، مخزونك، تحليلاتك، وعملياتك — ليساعدك تفهم وتدير عملك.',
-    'ai.ex1': 'أي المنتجات تفقد الهامش؟',
-    'ai.ex2': 'ماذا أعيد تخزينه هذا الأسبوع؟',
-    'ai.ex3': 'أي العملاء يصبحون غير نشطين؟',
-    'ai.ex4': 'ما الذي تغيّر في مبيعاتي هذا الشهر؟',
-    'ai.ex5': 'أرني أين أفقد المال.',
-    'ai.agent.note': 'الذكاء الاصطناعي يفهم العمل — لا السؤال فقط.',
-    'control.idx': 'الثقة / 008',
-    'control.title': 'ذكي بما يكفي للمساعدة.<br>ومضبوط بما يكفي للثقة.',
-    'control.sub': 'OMINO يحدد الفرص، ويجهّز الإجراءات، ويؤتمت العمل الروتيني — مع إبقاء القرارات المهمة بيدك.',
-    'control.1': 'لا يحدث شيء مهم بدون موافقتك.',
-    'control.2': 'المبالغ المستردة، وتعديلات المخزون، والإجراءات المالية تحتاج تأكيداً.',
-    'control.3': 'ترى ما تغيّر، ومن وافق، ولماذا.',
-    'auto.idx': 'الأتمتة / 009',
-    'auto.title': 'توقف عن تكرار عمل يعرفه نشاطك مسبقاً.',
-    'auto.sub': 'اربط الأحداث بالإجراءات ودع OMINO يتولى العمليات الروتينية تلقائياً.',
-    'auto.1': 'مخزون منخفض ← تنبيه المنتج',
-    'auto.2': 'عميل جديد ← إضافة شريحة',
-    'auto.3': 'طلب مكتمل ← تحديث سجل العميل',
-    'auto.4': 'دفعة مستلمة ← تحديث مؤشرات الأعمال',
-    'auto.5': 'عميل غير نشط ← تجهيز فرصة تسويقية',
-    'auto.note': 'أتمت الروتين. وابقَ مسيطراً على المهم.',
-    'growth.idx': 'النمو / 010',
-    'growth.title': 'حوّل بيانات الأعمال إلى قرارات نمو أفضل.',
-    'growth.sub': 'اعرف من هم عملاؤك، وماذا يشترون، وماذا يستجيبون له، وأين فرصتك التالية. النمو ما لازم يعيش في نظام منفصل عن العمل نفسه.',
-    'growth.path': 'العملاء ← التحليلات ← التسويق ← الأتمتة ← AI',
-    'commerce.idx': 'التجارة / 011',
-    'commerce.title': 'بِع في أي مكان. وابقَ متصلاً في كل مكان.',
-    'commerce.sub': 'سواء اشترى العميل من متجرك أو أونلاين، OMINO يبقي الطلبات والمدفوعات والمخزون ومعلومات العملاء متصلة.',
-    'commerce.eq': 'في المتجر<br>+<br>أونلاين<br>=<br>عمل واحد',
-    'analytics.idx': 'التحليلات / 012',
-    'analytics.title': 'لوحة تحكم تقول لك شيئاً.',
-    'analytics.sub': 'شاهد الإيرادات والطلبات والعملاء والمنتجات والمخزون والأداء — ثم انتقل من الأرقام إلى المعنى. تقارير أقل. فهم أكثر.',
-    'pricing.idx': 'الباقات / 013',
-    'pricing.title': 'ابدأ ببساطة.<br>ونمُ دون إعادة بناء عملك.',
-    'bill.month': 'شهري', 'bill.year': 'سنوي',
-    'bill.per': '/ شهر', 'bill.perY': '/ شهر، سنوياً',
-    'plan.s.name': 'Run',
-    'plan.s.desc': 'للأنشطة التي تبدأ مع OMINO.',
-    'plan.s.1': 'OMINO Intelligence', 'plan.s.2': 'رؤى أساسية', 'plan.s.cta': 'ابدأ Run',
-    'plan.p.name': 'Grow',
-    'plan.p.desc': 'للأنشطة الجاهزة لذكاء أعمق وأتمتة أكثر.',
-    'plan.p.1': 'رؤى ذكاء متقدمة', 'plan.p.2': 'توصيات', 'plan.p.3': 'توقعات', 'plan.p.cta': 'ابدأ Grow',
-    'plan.b.name': 'Scale',
-    'plan.b.desc': 'للأنشطة ذات التعقيد الأعلى.',
-    'plan.b.1': 'AI Business Agent', 'plan.b.2': 'أتمتة', 'plan.b.3': 'ذكاء متقدم', 'plan.b.cta': 'ابدأ Scale',
-    'founding.title': 'كن من أوائل الـ 50.',
-    founding: 'OMINO يُبنى مع الأعمال، لا لها فقط. أول 50 نشاطاً يصبحون جزءاً من مجموعة المؤسسين ويثبتون تسعير المؤسسين طالما بقوا على OMINO.',
-    'founding.cta': 'ابدأ البناء مع OMINO',
-    'final.title': 'عملك يملك البيانات أصلاً.',
-    'final.sub': 'الآن أعطه نظاماً يفهمها. اجمع عملك مع OMINO.',
-    'final.tag': 'عمل واحد. نظام واحد. صورة واضحة.',
-    'fee.title': 'المدفوعات',
-    fee: 'رسوم منصة OMINO 0.3%–0.5% على كل دفعة إلكترونية ناجحة، بالإضافة إلى رسوم مزود الدفع نفسه.',
-    'footer.copy': '© 2026 OMINO. All rights reserved.',
-    'foot.privacy': 'الخصوصية', 'foot.terms': 'الشروط', 'foot.faq': 'أسئلة', 'foot.contact': 'تواصل', 'foot.cookies': 'الكوكيز'
-  }
-};
-
-const cats = {
-  en: {
-    Retail:[["Today's revenue","$4,280"],["Units sold","312"],["Margin","38%"],["Repeat customers","61%"],["Low stock","9"]],
-    Fashion:[["Today's revenue","$3,910"],["Best seller","Linen shirt"],["Return rate","6.2%"],["Repeat customers","54%"],["Low stock","14"]],
-    Beauty:[["Today's revenue","$2,640"],["Top category","Skincare"],["Margin","44%"],["Loyalty redemptions","28"],["Low stock","5"]],
-    Perfume:[["Best seller","Oud Rose 50ml"],["Stock","82%"],["Margin","51%"],["Repeat customers","47%"],["Pending orders","12"]],
-    Cafés:[["Today's revenue","$1,860"],["Avg. ticket","$6.40"],["Top item","Iced latte"],["Tables turned","5.2x"],["Waste flagged","3"]],
-    Restaurants:[["Today's revenue","$6,120"],["Tables","18 / 24"],["Orders","96"],["Low ingredients","4"],["Popular dish","Grilled kofta"]],
-    Electronics:[["Today's revenue","$9,340"],["Units","54"],["Warranty claims","2"],["Repeat customers","33%"],["Low stock","7"]],
-    Services:[["Bookings today","22"],["Utilization","78%"],["Avg. ticket","$41"],["Repeat clients","66%"],["No-shows","1"]],
-    Wholesale:[["Open orders","31"],["Avg. order","$1,240"],["Fulfillment","1.4d"],["Active accounts","58"],["Backorders","6"]]
-  },
-  ar: {
-    'تجزئة':[['إيراد اليوم','$4,280'],['وحدات مباعة','312'],['الهامش','38%'],['عملاء متكررون','61%'],['نواقص','9']],
-    'أزياء':[['إيراد اليوم','$3,910'],['الأكثر مبيعاً','Linen shirt'],['مرتجعات','6.2%'],['عملاء متكررون','54%'],['نواقص','14']],
-    'جمال':[['إيراد اليوم','$2,640'],['الفئة الأعلى','Skincare'],['الهامش','44%'],['استبدال الولاء','28'],['نواقص','5']],
-    'عطور':[['الأكثر مبيعاً','Oud Rose 50ml'],['المخزون','82%'],['الهامش','51%'],['عملاء متكررون','47%'],['طلبات معلّقة','12']],
-    'مقاهي':[['إيراد اليوم','$1,860'],['متوسط التذكرة','$6.40'],['الأعلى طلباً','Iced latte'],['دوران الطاولات','5.2x'],['هدر','3']],
-    'مطاعم':[['إيراد اليوم','$6,120'],['طاولات','18 / 24'],['طلبات','96'],['نواقص مطبخ','4'],['الأشهر','كفتة مشوية']],
-    'إلكترونيات':[['إيراد اليوم','$9,340'],['وحدات','54'],['ضمانات','2'],['عملاء متكررون','33%'],['نواقص','7']],
-    'خدمات':[['حجوزات اليوم','22'],['الإشغال','78%'],['متوسط التذكرة','$41'],['عملاء متكررون','66%'],['غياب','1']],
-    'جملة':[['طلبات مفتوحة','31'],['متوسط الطلب','$1,240'],['وقت التلبية','1.4d'],['حسابات نشطة','58'],['متأخر','6']]
-  }
-};
-
-let lang = 'en';
-let billing = 'monthly';
-
-function t(key){ return copy[lang][key]; }
-
-function applyCopy(){
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const v = t(el.dataset.i18n);
-    if(v != null) el.textContent = v;
-  });
-  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
-    const v = t(el.dataset.i18nHtml);
-    if(v != null) el.innerHTML = v;
-  });
-  document.title = t('title');
-  setBilling(billing);
-}
-
-let menuAnim;
 let lockY = 0;
 function lockPage(){
   lockY = window.scrollY || document.documentElement.scrollTop || 0;
   document.documentElement.classList.add('menu-open');
-  document.documentElement.style.overflow = 'hidden';
-  document.body.style.overflow = 'hidden';
-  document.body.style.position = 'fixed';
-  document.body.style.top = '-' + lockY + 'px';
-  document.body.style.left = '0';
-  document.body.style.right = '0';
-  document.body.style.width = '100%';
+  document.body.style.position='fixed';document.body.style.top='-'+lockY+'px';
+  document.body.style.left='0';document.body.style.right='0';document.body.style.width='100%';
 }
 function unlockPage(){
   document.documentElement.classList.remove('menu-open');
-  document.documentElement.style.overflow = '';
-  document.body.style.overflow = '';
-  document.body.style.position = '';
-  document.body.style.top = '';
-  document.body.style.left = '';
-  document.body.style.right = '';
-  document.body.style.width = '';
+  document.body.style.position='';document.body.style.top='';document.body.style.left='';document.body.style.right='';document.body.style.width='';
   window.scrollTo(0, lockY);
 }
-function trapScroll(e){
-  if(!document.documentElement.classList.contains('menu-open')) return;
-  if(e.target.closest && e.target.closest('.menu-nav')) return;
-  e.preventDefault();
-}
-document.addEventListener('touchmove', trapScroll, {passive:false});
-document.addEventListener('wheel', trapScroll, {passive:false});
 function setMenu(open){
-  const drawer = mobileMenu.querySelector('.menu-drawer');
-  const scrim = document.getElementById('menuScrim');
-  const items = mobileMenu.querySelectorAll('.menu-drawer-top, .menu-link, .menu-cta, .menu-foot');
-  const offX = document.documentElement.dir === 'rtl' ? '-100%' : '100%';
-  const isOpen = mobileMenu.classList.contains('open');
-
-  menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-  menuBtn.setAttribute('aria-label', open ? t('menu.close') : t('menu.open'));
-  scrim.setAttribute('aria-label', t('menu.close'));
-
-  if(open === isOpen && !menuAnim) return;
-  if(menuAnim){ menuAnim.kill(); menuAnim = null; }
-
+  menuBtn.setAttribute('aria-expanded', open?'true':'false');
   if(open){
-    mobileMenu.classList.add('open');
-    lockPage();
-    mobileMenu.setAttribute('aria-hidden', 'false');
-    mobileMenu.inert = false;
-    if(reduceMotion){
-      gsap.set(scrim, {opacity:1});
-      gsap.set(drawer, {x:0});
-      gsap.set(items, {opacity:1, y:0});
-      return;
-    }
-    gsap.set(scrim, {opacity:0});
-    gsap.set(drawer, {x:offX});
-    gsap.set(items, {opacity:0, y:16});
-    menuAnim = gsap.timeline({defaults:{ease:fluidEase}, onComplete:()=>{ menuAnim = null; }})
-      .to(scrim, {opacity:1, duration:.45}, 0)
-      .to(drawer, {x:0, duration:.65}, 0)
-      .to(items, {opacity:1, y:0, duration:.5, stagger:.07}, 0.14);
-    return;
+    mobileMenu.classList.add('open'); lockPage();
+    mobileMenu.setAttribute('aria-hidden','false'); mobileMenu.inert=false;
+    gsap.fromTo(mobileMenu.querySelector('.menu-drawer'),{x: document.documentElement.dir==='rtl'?'-100%':'100%'},{x:0,duration:reduceMotion?0:.55,ease:'power3.out'});
+    gsap.fromTo(mobileMenu.querySelector('.menu-scrim'),{opacity:0},{opacity:1,duration:reduceMotion?0:.4});
+  } else {
+    mobileMenu.classList.remove('open'); unlockPage();
+    mobileMenu.setAttribute('aria-hidden','true'); mobileMenu.inert=true;
   }
-
-  const finish = ()=>{
-    mobileMenu.classList.remove('open');
-    unlockPage();
-    mobileMenu.setAttribute('aria-hidden', 'true');
-    mobileMenu.inert = true;
-    gsap.set([scrim, drawer, items], {clearProps:'all'});
-    menuAnim = null;
-  };
-
-  if(reduceMotion || !isOpen){
-    finish();
-    return;
-  }
-
-  menuAnim = gsap.timeline({onComplete:finish})
-    .to(items, {opacity:0, y:12, duration:.32, stagger:{each:.045, from:'end'}, ease:'power3.in'}, 0)
-    .to(drawer, {x:offX, duration:.55, ease:'power3.inOut'}, 0.08)
-    .to(scrim, {opacity:0, duration:.4, ease:'power2.in'}, 0.1);
 }
-menuBtn.addEventListener('click', ()=> setMenu(menuBtn.getAttribute('aria-expanded') !== 'true'));
+menuBtn.addEventListener('click', ()=> setMenu(menuBtn.getAttribute('aria-expanded')!=='true'));
 document.getElementById('menuScrim').addEventListener('click', ()=> setMenu(false));
 mobileMenu.querySelectorAll('.menu-link, .menu-cta a').forEach(a=>a.addEventListener('click', ()=> setMenu(false)));
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && mobileMenu.classList.contains('open')) setMenu(false); });
 
-function armOpening(){
-  if(reduceMotion) return;
-  gsap.set('#siteNav', {opacity:0, y:-18});
-  gsap.set('#orbit', {opacity:0});
-  gsap.set('#heroIndex', {opacity:0, y:12});
-  gsap.set('.hero-line > span', {opacity:0, y:'108%'});
-  gsap.set('#heroSub', {opacity:0, y:18});
-  gsap.set('#heroCtas', {opacity:0, y:16});
-  gsap.set('.hero-micro', {opacity:0, y:10});
-  gsap.set('#heroFine', {opacity:0, y:10});
-}
-function playOpening(cinematic){
-  document.documentElement.classList.remove('await-open');
-  if(reduceMotion){
-    gsap.set('#siteNav, #orbit, #heroIndex, .hero-line > span, #heroSub, #heroCtas, .hero-micro, #heroFine', {
-      clearProps:'all'
-    });
-    return;
-  }
-  armOpening();
-  const full = cinematic !== false;
-  const tl = gsap.timeline({
-    defaults:{ease:fluidEase},
-    delay: full ? 0.18 : 0,
-    onComplete(){
-      gsap.set('.hero-line > span, #siteNav, #orbit', {clearProps:'willChange'});
-    }
-  });
-  tl.to('#siteNav', {opacity:1, y:0, duration:full ? 0.85 : 0.55}, 0)
-    .to('#heroIndex', {opacity:1, y:0, duration:full ? 0.7 : 0.45}, full ? 0.12 : 0.04)
-    .to('.hero-line > span', {
-      opacity:1, y:'0%', duration:full ? 0.95 : 0.6, stagger:full ? 0.11 : 0.07, ease:'power3.out'
-    }, full ? 0.22 : 0.1)
-    .to('#orbit', {opacity:1, duration:full ? 0.9 : 0.5}, full ? 0.28 : 0.12)
-    .to('#heroSub', {opacity:1, y:0, duration:full ? 0.8 : 0.5}, full ? 0.58 : 0.28)
-    .to('#heroCtas', {opacity:1, y:0, duration:full ? 0.72 : 0.46}, full ? 0.74 : 0.38)
-    .to('.hero-micro', {opacity:1, y:0, duration:full ? 0.55 : 0.38}, full ? 0.82 : 0.42)
-    .to('#heroFine', {opacity:1, y:0, duration:full ? 0.6 : 0.4}, full ? 0.92 : 0.48);
-}
-armOpening();
-if(window.OminoLoader){
-  OminoLoader.onReady(playOpening);
-} else {
-  playOpening(true);
-}
-
+/* ---------- restrained scroll reveal (headers + hero mockup only) ---------- */
 if(!reduceMotion){
-  gsap.utils.toArray('.band').forEach(sec=>{
-    const fill = sec.querySelector('.band-fill');
-    if(!fill) return;
-    gsap.fromTo(fill,{opacity:0.45, scale:0.985},{
-      opacity:1, scale:1, duration:.85, ease:fluidEase,
-      scrollTrigger:{trigger:sec, start:'top 88%'}
-    });
+  gsap.utils.toArray('.reveal-init').forEach(el=>{
+    gsap.to(el,{opacity:1,y:0,duration:.8,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 85%'}});
   });
-  gsap.utils.toArray('.reveal').forEach(el=>{
-    gsap.fromTo(el,{opacity:0,y:16},{
-      opacity:1,y:0,duration:.85,ease:fluidEase,
-      scrollTrigger:{trigger:el,start:'top 85%'}
-    });
-  });
-  gsap.utils.toArray('.frag-chip').forEach((chip,i)=>{
-    gsap.fromTo(chip,{opacity:0,y:10},{opacity:1,y:0,duration:.6,delay:i*0.05,ease:fluidEase,
-      scrollTrigger:{trigger:'#fragRow',start:'top 85%'}
-    });
-  });
-  const mergeLock = document.getElementById('mergeLock');
-  const mergeMark = mergeLock && mergeLock.querySelector('.merge-mark');
-  const mergeMarkLive = mergeLock && mergeLock.querySelector('.merge-mark-live');
-  const mergeLetters = mergeLock ? gsap.utils.toArray(mergeLock.querySelectorAll('.merge-letter')) : [];
-  const mergeGlyphs = mergeLock ? gsap.utils.toArray(mergeLock.querySelectorAll('.merge-glyph')) : [];
-  if(mergeMark && mergeLetters.length){
-    mergeLock.classList.add('is-gsap');
-    const useBlur = window.matchMedia('(min-width: 700px)').matches;
-    const from = [
-      {x:-36, y:-62, r:-22, s:.68},
-      {x:22, y:58, r:14, s:.74},
-      {x:4, y:-72, r:10, s:.62},
-      {x:58, y:40, r:24, s:.7},
-      {x:86, y:-34, r:-16, s:.72}
-    ];
-    const away = [
-      {x:-42, y:46, r:16, s:.7},
-      {x:-12, y:-54, r:-12, s:.68},
-      {x:16, y:62, r:-18, s:.66},
-      {x:54, y:-46, r:20, s:.72},
-      {x:78, y:42, r:-14, s:.7}
-    ];
-    const blurIn = useBlur ? 'blur(10px)' : 'blur(0px)';
-    const blurOut = useBlur ? 'blur(8px)' : 'blur(0px)';
-    gsap.set(mergeMark,{opacity:0, x:-48, y:12, rotation:-28, scale:.64, filter:blurIn});
-    mergeLetters.forEach((letter,i)=>{
-      const p = from[i];
-      gsap.set(letter,{opacity:0, x:p.x, y:p.y, rotation:p.r, scale:p.s, filter:blurIn});
-    });
-    mergeGlyphs.forEach((glyph,i)=>{
-      gsap.to(glyph,{
-        y: i % 2 ? 3.5 : -3.5,
-        rotation: i % 2 ? 1.4 : -1.4,
-        duration: 1.7 + i * 0.16,
-        yoyo:true,
-        repeat:-1,
-        ease:'sine.inOut',
-        delay: i * 0.11
-      });
-    });
-    if(mergeMarkLive){
-      gsap.to(mergeMarkLive,{
-        y:-3,
-        rotation:2.2,
-        duration:2.4,
-        yoyo:true,
-        repeat:-1,
-        ease:'sine.inOut'
-      });
-    }
-    const mergeTl = gsap.timeline({
-      repeat:-1,
-      defaults:{ease:'dock'}
-    });
-    mergeTl
-      .to(mergeMark,{opacity:1, x:0, y:0, rotation:0, scale:1.06, filter:'blur(0px)', duration:1.08})
-      .to(mergeMark,{scale:1, duration:.4, ease:fluidEase},'-=.2')
-      .addLabel('letters', 0.38);
-    mergeLetters.forEach((letter,i)=>{
-      mergeTl.to(letter,{
-        opacity:1, x:0, y:0, rotation:0, scale:1.06, filter:'blur(0px)', duration:1
-      }, 'letters+=' + (i * 0.1));
-      mergeTl.to(letter,{scale:1, duration:.34, ease:fluidEase},'-=0.26');
-    });
-    mergeTl
-      .to({}, {duration:2.2})
-      .addLabel('break');
-    mergeLetters.forEach((letter,i)=>{
-      const p = away[i];
-      mergeTl.to(letter,{
-        opacity:0, x:p.x, y:p.y, rotation:p.r, scale:p.s, filter:blurOut,
-        duration:.88, ease:'drift'
-      }, 'break+=' + (i * 0.07));
-    });
-    mergeTl.to(mergeMark,{
-      opacity:0, x:-32, y:-16, rotation:18, scale:.76, filter:blurOut,
-      duration:.92, ease:'drift'
-    }, 'break+=.1')
-    .to({}, {duration:.48});
-  }
-  gsap.timeline({scrollTrigger:{trigger:'#revealList',start:'top 80%'}})
-    .from('#revealList .reveal-item',{opacity:0,y:8,duration:.55,stagger:.16,ease:fluidEase})
-    .from('#recBox',{opacity:0,y:8,duration:.55,ease:fluidEase},'-=.15');
+  gsap.from('.hero-copy h1',{opacity:0,y:14,duration:.8,ease:'power3.out',delay:.1});
+  gsap.from('.hero-copy .sub, .hero-ctas, .hero-badges, .hero-fine',{opacity:0,y:12,duration:.7,ease:'power3.out',stagger:.08,delay:.25});
+} else {
+  document.querySelectorAll('.reveal-init').forEach(el=>{el.style.opacity=1;el.style.transform='none';});
 }
 
-const catTabs = document.getElementById('catTabs');
-const catMetrics = document.getElementById('catMetrics');
-function renderCats(){
-  const map = cats[lang];
-  const names = Object.keys(map);
-  catTabs.innerHTML = '';
-  names.forEach((cat,i)=>{
-    const tab = document.createElement('button');
-    tab.className = 'cat-tab' + (i===0?' active':'');
-    tab.textContent = cat;
-    tab.addEventListener('click', ()=>{
-      catTabs.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      renderMetrics(cat);
-    });
-    catTabs.appendChild(tab);
-  });
-  renderMetrics(names[0]);
-}
-function renderMetrics(cat){
-  catMetrics.innerHTML='';
-  cats[lang][cat].forEach(([k,v])=>{
-    const el = document.createElement('div');
-    el.className='cat-metric';
-    el.innerHTML = `<div class="k">${k}</div><div class="v">${v}</div>`;
-    catMetrics.appendChild(el);
-  });
-}
-
+/* ---------- pricing toggle ---------- */
 const toggleMonthly = document.getElementById('toggleMonthly');
 const toggleYearly = document.getElementById('toggleYearly');
 function setBilling(mode){
-  billing = mode;
   toggleMonthly.classList.toggle('active', mode==='monthly');
   toggleYearly.classList.toggle('active', mode==='yearly');
-  document.querySelectorAll('.pval').forEach(el=>{
-    el.textContent = mode==='monthly' ? el.dataset.monthly : el.dataset.yearly;
+  document.querySelectorAll('.pval').forEach(el=>{ el.textContent = mode==='monthly'? el.dataset.monthly : el.dataset.yearly; });
+  document.querySelectorAll('.plan-price .per').forEach(el=>{ el.textContent = t(mode==='monthly'?'bill.per':'bill.perY'); });
+  document.querySelectorAll('.plan-save').forEach(el=>{
+    const n = el.dataset.save;
+    el.textContent = mode==='yearly' && n ? t('bill.savePlan').replace('${n}', n) : '';
   });
-  document.querySelectorAll('.plan-price .per').forEach(el=>{
-    el.textContent = mode==='monthly' ? t('bill.per') : t('bill.perY');
-  });
-  document.querySelectorAll('.plan-go').forEach(a=>{
-    a.href = 'checkout.html?plan=' + a.dataset.plan + '&billing=' + mode;
-  });
+  document.querySelectorAll('.plan-go').forEach(a=>{ a.href = 'checkout.html?plan='+a.dataset.plan+'&billing='+mode; });
 }
 toggleMonthly.addEventListener('click', ()=>setBilling('monthly'));
 toggleYearly.addEventListener('click', ()=>setBilling('yearly'));
 
+/* ---------- i18n ---------- */
+const copy = {
+  en: {
+    title:'OMINO — The Intelligent Operating System for Your Business',
+    skip:'Skip to content',
+    'nav.product':'Product','nav.ai':'AI','nav.pricing':'Pricing','nav.about':'About','nav.login':'Login',
+    'cta.start':'Start for free','cta.see':'See how it works','cta.fit':'Explore OMINO',
+    'menu.tag':'AI Business OS','menu.connect':'Connect',
+    'hero.title':'Your business has data.<br>OMINO turns it into decisions.',
+    'hero.sub':'One system for your store, POS, inventory, customers, and payments — with AI that tells you what matters today and what to do next.',
+    'hero.b1':'No credit card required','hero.b2':'Arabic & English, mobile-first',
+    'hero.fine':'Founding pricing for the first 50 businesses.',
+    'mock.top':'Today','mock.live':'● Live','mock.revenue':'Revenue','mock.orders':'Orders',
+    'mock.alertText':'Rose Oud Perfume — 3 left in stock','mock.alertSpan':'Restock before the weekend',
+    'mock.aiLabel':'OMINO Insight','mock.aiText':'Discounting is eroding margin on 3 products this week — worth a look.',
+    'solution.idx':'The shift','solution.title':'Your business is connected. Your tools aren\'t — until now.',
+    'solution.sub':'Most businesses run on disconnected pieces. OMINO replaces them with one system that talks to itself.',
+    'solution.before.label':'Before','solution.before.note':'Manual re-entry. Numbers that don\'t match. Decisions made on guesses.',
+    'solution.after.label':'With OMINO','solution.after.note':'One record of truth. Every part of the business stays in sync automatically.',
+    'flow.0':'Customer buys','flow.1':'Inventory updates','flow.2':'Customer record updates','flow.3':'OMINO surfaces what matters next',
+    'ev.idx':'Everywhere you sell','ev.title':'Sell online. Sell in-store. Run it from one place.',
+    'ev.sub':'One customer, one order history, one inventory — whether they bought on your site or walked into your shop.',
+    'ev.t1':'One customer record','ev.t2':'One order history','ev.t3':'One inventory','ev.t4':'One source of truth',
+    'ind.1':'Retail','ind.2':'Fashion','ind.3':'Beauty & Perfume','ind.4':'Cafés & Restaurants','ind.5':'Electronics','ind.6':'Services','ind.7':'Wholesale',
+    'ai.idx':'AI for your business','ai.title':'Numbers tell you what happened. OMINO tells you why — and what\'s next.',
+    'ai.sub':'Ask about products, orders, customers, and performance — OMINO answers with your real business context, not generic advice.',
+    'ai.ex1':'Which products are losing margin?','ai.ex2':'What should I restock this week?','ai.ex3':'Which customers are becoming inactive?',
+    'chat.top':'Profit analysis','chat.user':'Why did my profit drop this month?',
+    'chat.ai':'Costs increased.<br>Margins fell on 3 key products.<br>Discounting went up.',
+    'chat.1':'These products carry more volume with less profit.',
+    'chat.rk':'Recommended next step','chat.rec':'Review margin on top sellers and tighten discounting where it\'s eroding profit.',
+    'trust.idx':'Automation, with control','trust.title':'Intelligent enough to help. Controlled enough to trust.',
+    'trust.sub':'OMINO detects, recommends, and automates routine work. Important decisions stay yours.',
+    'auto.k':'Event','auto.a':'OMINO action','auto.o':'Outcome',
+    'auto.r1.e':'Low stock detected','auto.r1.act':'Flags the product','auto.r1.out':'Restocked before lost sales',
+    'auto.r2.e':'Order completed','auto.r2.act':'Updates the customer\'s history','auto.r2.out':'Records stay current, no manual entry',
+    'auto.r3.e':'Customer goes inactive','auto.r3.act':'Surfaces the opportunity','auto.r3.out':'You decide whether to follow up',
+    'trust.1':'Nothing important happens without your approval.',
+    'trust.2':'Refunds and financial actions always require confirmation.',
+    'trust.3':'You see what changed, who approved it, and why.',
+    'pricing.idx':'Plans','pricing.title':'Start simple. Grow without rebuilding your business.',
+    'pricing.sub':'Replace scattered POS, spreadsheet inventory, and paper reports — store, sales, stock, and intelligence in one place.',
+    'pricing.note':'Shopify Basic is ~$39/mo before apps and POS add-ons. OMINO Run includes store, POS, inventory, and intelligence from $9.',
+    'bill.month':'Monthly','bill.year':'Yearly','bill.per':'/ month','bill.perY':'/ month, billed yearly','bill.save':'Save 2 mo','bill.savePlan':'Save ${n}/yr',
+    'plan.s.name':'Run','plan.s.desc':'Everything you need to sell — online and in-store.',
+    'plan.s.1':'Online store + POS','plan.s.2':'Products, orders & inventory','plan.s.3':'Customers & basic analytics','plan.s.4':'Essential AI insights','plan.s.5':'Unlimited products','plan.s.cta':'Start with Run',
+    'plan.p.name':'Grow','plan.p.badge':'Most popular','plan.p.desc':'For owners who want clarity — not more spreadsheets.',
+    'plan.p.1':'Everything in Run','plan.p.2':'AI insights & recommendations','plan.p.3':'Sales & demand forecasting','plan.p.4':'Customer segmentation','plan.p.5':'Profit & margin analysis','plan.p.cta':'Start with Grow',
+    'plan.b.name':'Scale','plan.b.desc':'For teams operating at higher complexity.',
+    'plan.b.1':'Everything in Grow','plan.b.2':'AI Business Agent','plan.b.3':'Agentic workflows','plan.b.4':'Advanced team & permissions','plan.b.5':'Priority support','plan.b.cta':'Start with Scale',
+    'cmp.col.feature':'Capability','cmp.r1':'Online store + POS','cmp.r3':'AI insights','cmp.r5':'Forecasting & segments','cmp.r6':'AI Business Agent','cmp.r8':'Priority support',
+    'cmp.yes':'✓','cmp.no':'—','cmp.l.basic':'Basic','cmp.l.advanced':'Advanced','cmp.l.agent':'Agent',
+    'fee.title':'Payments','fee':'Small OMINO platform fee on online payments. Transparent pricing, no hidden costs.',
+    'final.title':'The first 50 businesses build OMINO with us.',
+    'final.sub':'Lock in founding pricing for as long as you stay on OMINO — and help shape what comes next.',
+    'final.cta':'Become a founding business','final.tag':'One business. One system. One clear picture.',
+    'final.brand':'The intelligent operating system for your business.',
+    'footer.copy':'© 2026 OMINO. All rights reserved.',
+    'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact'
+  },
+  ar: {
+    title:'OMINO — نظام التشغيل الذكي لأعمالك',
+    skip:'تخطي إلى المحتوى',
+    'nav.product':'المنتج','nav.ai':'AI','nav.pricing':'التسعير','nav.about':'عن OMINO','nav.login':'دخول',
+    'cta.start':'ابدأ مجاناً','cta.see':'شاهد كيف يعمل','cta.fit':'استكشف OMINO',
+    'menu.tag':'نظام تشغيل الأعمال','menu.connect':'تواصل',
+    'hero.title':'عملك يملك البيانات.<br>OMINO يحوّلها إلى قرارات.',
+    'hero.sub':'نظام واحد لمتجرك ونقطة البيع والمخزون والعملاء والمدفوعات — مع ذكاء اصطناعي يقولك شو المهم اليوم وشو الخطوة الجاية.',
+    'hero.b1':'لا حاجة لبطاقة ائتمان','hero.b2':'عربي وإنجليزي، مصمم للجوال أولاً',
+    'hero.fine':'تسعير المؤسسين لأول 50 نشاطاً تجارياً.',
+    'mock.top':'اليوم','mock.live':'● مباشر','mock.revenue':'الإيرادات','mock.orders':'الطلبات',
+    'mock.alertText':'عطر Rose Oud — تبقّى 3 قطع بالمخزون','mock.alertSpan':'أعِد التخزين قبل نهاية الأسبوع',
+    'mock.aiLabel':'رؤية OMINO','mock.aiText':'الخصومات بتاكل من هامش الربح على 3 منتجات هالأسبوع — يستاهل تراجعها.',
+    'solution.idx':'التحوّل','solution.title':'عملك متصل. أدواتك ما كانت — لهلق.',
+    'solution.sub':'معظم الأعمال بتشتغل على أدوات متفرقة. OMINO بيستبدلها بنظام واحد بيحكي مع نفسه.',
+    'solution.before.label':'قبل','solution.before.note':'إدخال يدوي مكرر. أرقام ما بتتطابق. قرارات مبنية على تخمين.',
+    'solution.after.label':'مع OMINO','solution.after.note':'سجل واحد للحقيقة. كل جزء من العمل بيبقى متزامن تلقائياً.',
+    'flow.0':'العميل يشتري','flow.1':'المخزون يتحدّث','flow.2':'سجل العميل يتحدّث','flow.3':'OMINO يُبرز الأهم',
+    'ev.idx':'بكل مكان تبيع فيه','ev.title':'بِع أونلاين. بِع من المحل. أدر كل شيء من مكان واحد.',
+    'ev.sub':'عميل واحد، سجل طلبات واحد، مخزون واحد — سواء اشترى من موقعك أو من محلك.',
+    'ev.t1':'سجل عميل واحد','ev.t2':'سجل طلبات واحد','ev.t3':'مخزون واحد','ev.t4':'مصدر حقيقة واحد',
+    'ind.1':'تجزئة','ind.2':'أزياء','ind.3':'جمال وعطور','ind.4':'مقاهي ومطاعم','ind.5':'إلكترونيات','ind.6':'خدمات','ind.7':'جملة',
+    'ai.idx':'الذكاء الاصطناعي لعملك','ai.title':'الأرقام تقول شو صار. OMINO يقول ليش — وشو الخطوة الجاية.',
+    'ai.sub':'اسأل عن المنتجات والطلبات والعملاء والأداء — OMINO بيجاوب بسياق عملك الحقيقي، مش نصائح عامة.',
+    'ai.ex1':'أي المنتجات تخسر هامشها؟','ai.ex2':'شو أعيد تخزينه هالأسبوع؟','ai.ex3':'أي العملاء صاروا غير نشطين؟',
+    'chat.top':'تحليل الربح','chat.user':'ليش انخفض ربحي هالشهر؟',
+    'chat.ai':'التكاليف ارتفعت.<br>الهوامش انخفضت على 3 منتجات أساسية.<br>الخصومات زادت.',
+    'chat.1':'هاي المنتجات بتحمل حجم مبيعات أكبر بربح أقل.',
+    'chat.rk':'الخطوة المقترحة','chat.rec':'راجع هامش أكثر منتجاتك مبيعاً وقلّل الخصومات حيث بتآكل الربح.',
+    'trust.idx':'أتمتة، بتحكّم كامل','trust.title':'ذكي بما يكفي للمساعدة. مضبوط بما يكفي للثقة.',
+    'trust.sub':'OMINO يكتشف، يوصي، ويؤتمت الروتين. القرارات المهمة تبقى لك.',
+    'auto.k':'حدث','auto.a':'إجراء OMINO','auto.o':'النتيجة',
+    'auto.r1.e':'مخزون منخفض','auto.r1.act':'ينبّه على المنتج','auto.r1.out':'إعادة تخزين قبل خسارة مبيعات',
+    'auto.r2.e':'طلب مكتمل','auto.r2.act':'يحدّث سجل العميل','auto.r2.out':'السجلات تبقى محدّثة بدون إدخال يدوي',
+    'auto.r3.e':'عميل أصبح غير نشط','auto.r3.act':'يُبرز الفرصة','auto.r3.out':'أنت تقرر إذا بدك تتابع',
+    'trust.1':'لا شيء مهم يحدث بدون موافقتك.',
+    'trust.2':'المبالغ المستردة والإجراءات المالية دائماً تحتاج تأكيداً.',
+    'trust.3':'ترى شو تغيّر، ومين وافق، وليش.',
+    'pricing.idx':'الباقات','pricing.title':'ابدأ ببساطة. انمُ دون إعادة بناء عملك.',
+    'pricing.sub':'استبدل نقاط البيع المتفرقة والمخزون على إكسل والتقارير الورقية — متجر ومبيعات ومخزون وذكاء في مكان واحد.',
+    'pricing.note':'Shopify Basic حوالي 39$/شهر قبل الإضافات. OMINO Run يشمل المتجر ونقطة البيع والمخزون والذكاء من 9$.',
+    'bill.month':'شهري','bill.year':'سنوي','bill.per':'/ شهر','bill.perY':'/ شهر، سنوياً','bill.save':'وفّر شهرين','bill.savePlan':'وفّر ${n}$/سنة',
+    'plan.s.name':'Run','plan.s.desc':'كل ما تحتاجه للبيع — أونلاين ومن المحل.',
+    'plan.s.1':'متجر أونلاين + نقطة بيع','plan.s.2':'منتجات وطلبات ومخزون','plan.s.3':'عملاء وتحليلات أساسية','plan.s.4':'رؤى ذكاء اصطناعي أساسية','plan.s.5':'منتجات بلا حدود','plan.s.cta':'ابدأ مع Run',
+    'plan.p.name':'Grow','plan.p.badge':'الأكثر شعبية','plan.p.desc':'للتاجر اللي بدو وضوح — مش جداول إكسل أكثر.',
+    'plan.p.1':'كل ما في Run','plan.p.2':'رؤى وتوصيات ذكاء اصطناعي','plan.p.3':'توقعات المبيعات والطلب','plan.p.4':'تقسيم العملاء','plan.p.5':'تحليل الربح والهامش','plan.p.cta':'ابدأ مع Grow',
+    'plan.b.name':'Scale','plan.b.desc':'للفرق اللي بتشتغل بتعقيد أعلى.',
+    'plan.b.1':'كل ما في Grow','plan.b.2':'AI Business Agent','plan.b.3':'سير عمل ذكي (Agentic)','plan.b.4':'فريق وصلاحيات متقدمة','plan.b.5':'دعم أولوية','plan.b.cta':'ابدأ مع Scale',
+    'cmp.col.feature':'القدرة','cmp.r1':'متجر أونلاين + نقطة بيع','cmp.r3':'رؤى الذكاء الاصطناعي','cmp.r5':'توقعات وتقسيم العملاء','cmp.r6':'AI Business Agent','cmp.r8':'دعم أولوية',
+    'cmp.yes':'✓','cmp.no':'—','cmp.l.basic':'أساسي','cmp.l.advanced':'متقدم','cmp.l.agent':'وكيل',
+    'fee.title':'المدفوعات','fee':'رسوم منصة بسيطة على المدفوعات أونلاين. تسعير شفاف، بدون تكاليف خفية.',
+    'final.title':'أول 50 نشاطاً يبنون OMINO معنا.',
+    'final.sub':'ثبّت تسعير المؤسسين طالما بقيت على OMINO — وساهم في تشكيل الخطوة الجاية.',
+    'final.cta':'كن من نشاطات المؤسسين','final.tag':'عمل واحد. نظام واحد. صورة واضحة.',
+    'final.brand':'نظام التشغيل الذكي لأعمالك.',
+    'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.',
+    'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل'
+  }
+};
+let lang = 'en', billing = 'monthly';
+function t(key){ return copy[lang][key]; }
+function applyCopy(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ const v=t(el.dataset.i18n); if(v!=null) el.textContent=v; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{ const v=t(el.dataset.i18nHtml); if(v!=null) el.innerHTML=v; });
+  document.title = t('title');
+  setBilling(billing);
+}
+const langToggle = document.getElementById('langToggle');
 function setLang(next){
   lang = next;
   document.documentElement.lang = next;
-  document.documentElement.dir = next === 'ar' ? 'rtl' : 'ltr';
-  langToggle.textContent = next === 'ar' ? 'EN' : 'AR';
-  langToggle.setAttribute('aria-label', next === 'ar' ? 'English' : 'العربية');
-  localStorage.setItem('omino-lang', next);
+  document.documentElement.dir = next==='ar' ? 'rtl' : 'ltr';
+  langToggle.textContent = next==='ar' ? 'EN' : 'AR';
+  langToggle.setAttribute('aria-label', next==='ar' ? 'English' : 'العربية');
+  try{ localStorage.setItem('omino-lang', next); }catch(e){}
   applyCopy();
-  renderCats();
   setMenu(false);
-  placeOrbitNodes();
-  onOrbitScroll();
 }
-langToggle.addEventListener('click', ()=> setLang(lang === 'en' ? 'ar' : 'en'));
-setLang(localStorage.getItem('omino-lang') === 'ar' ? 'ar' : 'en');
+langToggle.addEventListener('click', ()=> setLang(lang==='en' ? 'ar' : 'en'));
+let savedLang = 'en';
+try{ savedLang = localStorage.getItem('omino-lang')==='ar' ? 'ar' : 'en'; }catch(e){}
+setLang(savedLang);
+document.documentElement.classList.remove('await-open');
 </script>
 </body>
 </html>

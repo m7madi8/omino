@@ -17,9 +17,13 @@ import {
   defaultExperienceDocument,
   defaultHomepageSections,
 } from '@/types/store-experience';
+import { inferLayoutId } from '@/lib/design/layouts/registry';
+import { inferStyleId } from '@/lib/design/styles/registry';
+import { designExperienceToCssVars } from '@/lib/design/resolve-design-experience';
 import { DEFAULT_THEME_ID, getTheme, presetToThemeId } from '@/lib/themes/registry';
-import { themeToCssVars as buildThemeCssVars } from '@/lib/themes/tokens';
 import type { StoreThemeId } from '@/lib/themes/types';
+import type { StoreLayoutId } from '@/lib/design/layouts/registry';
+import type { StoreStyleId } from '@/lib/design/styles/types';
 
 export const STYLE_PRESETS: Record<
   StoreStylePreset,
@@ -128,7 +132,19 @@ function parseAppearance(raw: unknown): StoreAppearanceConfig {
   const themeVersion =
     typeof a.themeVersion === 'string' ? a.themeVersion : getTheme(themeId).version;
 
-  return { themeId, themeVersion, preset, typography, radius };
+  const styleId = inferStyleId({
+    styleId: typeof a.styleId === 'string' ? a.styleId : undefined,
+    preset,
+    themeId,
+  });
+  const layoutId = inferLayoutId({
+    layoutId: typeof a.layoutId === 'string' ? a.layoutId : undefined,
+    themeProductGrid: getTheme(themeId).variants.productGrid,
+  });
+  const spacing =
+    a.spacing === 'compact' || a.spacing === 'generous' ? a.spacing : 'balanced';
+
+  return { themeId, themeVersion, styleId, layoutId, preset, typography, radius, spacing };
 }
 
 function parseSeo(raw: unknown): StoreSeoConfig {
@@ -250,12 +266,22 @@ export function applyTheme(
   current?: Partial<StoreAppearanceConfig>
 ): StoreAppearanceConfig {
   const theme = getTheme(themeId);
+  const styleId =
+    current?.styleId ??
+    inferStyleId({ preset: current?.preset, themeId });
+  const layoutId =
+    current?.layoutId ??
+    inferLayoutId({ themeProductGrid: theme.variants.productGrid });
+
   return {
     themeId,
     themeVersion: theme.version,
+    styleId,
+    layoutId,
     preset: current?.preset,
     typography: current?.typography || DEFAULT_APPEARANCE.typography,
     radius: current?.radius || DEFAULT_APPEARANCE.radius,
+    spacing: current?.spacing || DEFAULT_APPEARANCE.spacing,
   };
 }
 
@@ -264,7 +290,7 @@ export function experienceToCssVars(
   primaryColor?: string | null,
   secondaryColor?: string | null
 ): Record<string, string> {
-  return buildThemeCssVars(config, primaryColor, secondaryColor);
+  return designExperienceToCssVars(config, primaryColor, secondaryColor);
 }
 
 export function publishDraft(doc: StoreExperienceDocument): StoreExperienceDocument {

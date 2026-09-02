@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { X } from 'lucide-react';
+import { useStorefrontLocale } from '@/components/providers/storefront-locale-provider';
 import type { StoreAnnouncementConfig } from '@/types/store-experience';
 
 export function AnnouncementBar({
@@ -12,6 +13,7 @@ export function AnnouncementBar({
   storeSlug: string;
   config: StoreAnnouncementConfig;
 }) {
+  const { t } = useStorefrontLocale();
   const storageKey = `omino-announcement-${storeSlug}`;
   const [dismissed, setDismissed] = useState(false);
 
@@ -33,7 +35,7 @@ export function AnnouncementBar({
       className="relative text-center text-sm px-4 py-2.5 min-h-[44px] flex items-center justify-center gap-3"
       style={style}
       role="region"
-      aria-label="Store announcement"
+      aria-label={t('sf.announcement.dismiss')}
     >
       <p className="flex-1 min-w-0">
         <span>{config.message}</span>
@@ -44,7 +46,7 @@ export function AnnouncementBar({
               href={config.link}
               className="underline underline-offset-2 font-medium hover:opacity-90"
             >
-              {config.linkLabel || 'Learn more'}
+              {config.linkLabel || t('sf.learnMore')}
             </Link>
           </>
         )}
@@ -57,7 +59,7 @@ export function AnnouncementBar({
             setDismissed(true);
             window.localStorage.setItem(storageKey, '1');
           }}
-          aria-label="Dismiss announcement"
+          aria-label={t('sf.announcement.dismiss')}
         >
           <X className="w-4 h-4" />
         </button>

@@ -34,6 +34,7 @@ export type StorefrontStore = {
   experience: import('@/types/store-experience').StoreExperienceConfig;
   publishedAt: string | null;
   hasUnpublishedChanges: boolean;
+  locale: 'ar' | 'en';
 };
 
 export type StorefrontProductListItem = {

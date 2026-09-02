@@ -53,7 +53,7 @@ export function AuthShell({
         <p className="relative z-10 text-xs text-stone">© OMINO</p>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 bg-paper">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 bg-paper text-ink">
         <div className="w-full max-w-md">
           <div className="lg:hidden mb-8">
             <Link href="/main" aria-label="OMINO">

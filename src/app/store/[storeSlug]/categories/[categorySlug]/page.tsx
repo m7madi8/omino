@@ -5,7 +5,7 @@ import {
   resolveStoreByPublicSlug,
   toStorefrontStore,
 } from '@/server/services/storefront-service';
-import { ProductBentoGrid } from '@/components/storefront/product-bento-grid';
+import { ThemedProductGrid } from '@/components/storefront/themes/themed-product-grid';
 import { CategoryChips } from '@/components/storefront/category-chips';
 
 export default async function CategoryPage({
@@ -42,7 +42,7 @@ export default async function CategoryPage({
         </div>
         <CategoryChips categories={categories} storeSlug={storeSlug} />
       </div>
-      <ProductBentoGrid products={items} storeSlug={storeSlug} currency={store.currency} layoutId />
+      <ThemedProductGrid products={items} storeSlug={storeSlug} currency={store.currency} layoutId />
       {!items.length && <p className="text-center sf-muted py-12">No products in this category.</p>}
     </div>
   );

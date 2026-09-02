@@ -67,7 +67,7 @@ export function ProductCard({
     }
   }
 
-  const { themeId } = useStoreTheme();
+  const { themeId, styleId } = useStoreTheme();
 
   const themeShellClass = {
     aura: 'rounded-[var(--store-radius-lg)]',
@@ -76,6 +76,17 @@ export function ProductCard({
     atelier: 'rounded-[var(--store-radius-sm)]',
     pulse: 'rounded-[var(--store-radius-lg)] shadow-[var(--store-shadow-card)]',
   }[themeId];
+
+  const styleShellClass = {
+    minimal: 'sf-style-minimal',
+    editorial: 'sf-style-editorial',
+    luxury: 'sf-style-luxury',
+    bold: 'sf-style-bold',
+    organic: 'sf-style-organic',
+    modern: 'sf-style-modern',
+    classic: 'sf-style-classic',
+    experimental: 'sf-style-experimental',
+  }[styleId];
 
   const imageLayoutId = layoutId ? `product-image-${product.id}` : undefined;
 
@@ -94,6 +105,7 @@ export function ProductCard({
           className={cn(
             'relative overflow-hidden bg-[var(--sf-surface-elevated)] w-full rounded-sm',
             themeShellClass,
+            styleShellClass,
             size === 'hero' && 'sf-product-image--hero sf-product-image',
             size === 'compact' && 'sf-product-image--compact sf-product-image',
             size === 'tall' && 'min-h-[20rem] sm:min-h-[24rem]',

@@ -1,4 +1,5 @@
 import { ProductBentoGrid } from '@/components/storefront/product-bento-grid';
+import { ThemedProductGrid } from '@/components/storefront/themes/themed-product-grid';
 import { RevealOnScroll } from '@/components/storefront/reveal-on-scroll';
 import type { StorefrontProductListItem } from '@/types/storefront';
 
@@ -30,7 +31,12 @@ export function CollectionProductsView({
 
       {products.length ? (
         <RevealOnScroll>
-          <ProductBentoGrid products={products} storeSlug={storeSlug} currency={currency} layoutId />
+          <ThemedProductGrid
+            products={products}
+            storeSlug={storeSlug}
+            currency={currency}
+            layoutId
+          />
         </RevealOnScroll>
       ) : (
         <p className="text-center sf-muted py-16">No products in this collection yet.</p>

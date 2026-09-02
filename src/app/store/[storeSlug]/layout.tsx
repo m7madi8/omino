@@ -7,15 +7,15 @@ import {
   toStorefrontStore,
 } from '@/server/services/storefront-service';
 import {
-  experienceToCssVars,
   getDraftExperience,
 } from '@/lib/storefront/store-experience-engine';
 import { getStorefrontPreviewSession } from '@/lib/storefront/preview-session';
-import { resolveThemeId } from '@/lib/themes/tokens';
-import type { StoreThemeId } from '@/lib/themes/types';
+import { resolveDesignExperience } from '@/lib/design/resolve-design-experience';
 import { getTheme } from '@/lib/themes/registry';
 import { STORE_THEME_IDS } from '@/lib/themes/types';
+import type { StoreThemeId } from '@/lib/themes/types';
 import { StorefrontShell } from '@/components/storefront/storefront-shell';
+import { t, getDir } from '@/lib/i18n';
 
 export async function generateMetadata({
   params,
@@ -81,15 +81,25 @@ export default async function StoreLayout({
     };
   }
 
-  const themeId = resolveThemeId(experience);
   const storefrontStore = { ...store, experience, hero: experience.hero };
 
+  const resolved = resolveDesignExperience(
+    experience,
+    storefrontStore.primaryColor,
+    storefrontStore.secondaryColor
+  );
+
   if (store.status === 'MAINTENANCE') {
+    const locale = store.locale === 'ar' ? 'ar' : 'en';
     return (
-      <div className="min-h-screen bg-paper flex items-center justify-center p-6">
+      <div
+        className={`min-h-screen bg-paper flex items-center justify-center p-6 ${locale === 'ar' ? 'font-ar' : 'font-body'}`}
+        lang={locale}
+        dir={getDir(locale)}
+      >
         <div className="text-center max-w-md">
           <h1 className="text-2xl font-display">{store.name}</h1>
-          <p className="mt-3 text-stone-2">We&apos;re performing maintenance. Please check back soon.</p>
+          <p className="mt-3 text-stone-2">{t('sf.maintenance', locale)}</p>
         </div>
       </div>
     );
@@ -97,19 +107,19 @@ export default async function StoreLayout({
 
   return (
     <div
+      lang={store.locale}
+      dir={getDir(store.locale)}
       data-storefront
-      data-theme={themeId}
+      data-theme={resolved.dataAttributes.theme}
+      data-style={resolved.dataAttributes.style}
+      data-layout={resolved.dataAttributes.layout}
       data-preview={preview ? 'true' : undefined}
       className="min-h-screen flex flex-col"
-      style={
-        {
-          ...experienceToCssVars(experience, storefrontStore.primaryColor, storefrontStore.secondaryColor),
-        } as CSSProperties
-      }
+      style={resolved.cssVars as CSSProperties}
     >
       {preview && (
         <div className="bg-ink text-paper text-center text-xs py-2 px-4 font-mono tracking-wide">
-          Theme preview — changes are not live until you publish
+          {t('sf.preview.banner', store.locale)}
         </div>
       )}
       <StorefrontShell store={storefrontStore} storeSlug={storeSlug} categories={categories}>

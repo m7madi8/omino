@@ -16,12 +16,20 @@ export function ThemedProductGrid({
   currency: string;
   layoutId?: boolean;
 }) {
-  const { theme } = useStoreTheme();
+  const { theme, styleId } = useStoreTheme();
   const gridType = theme.variants.productGrid;
+
+  const cardSize: 'default' | 'compact' =
+    styleId === 'minimal' || styleId === 'luxury' || gridType === 'compact'
+      ? 'compact'
+      : 'default';
 
   if (gridType === 'uniform' || gridType === 'compact') {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div
+        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5"
+        data-style-grid={styleId}
+      >
         {products.map((product, index) => (
           <ProductCard
             key={product.id}
@@ -29,7 +37,7 @@ export function ThemedProductGrid({
             storeSlug={storeSlug}
             currency={currency}
             index={index}
-            size="compact"
+            size={cardSize}
             layoutId={layoutId}
           />
         ))}

@@ -51,7 +51,7 @@ export async function resolveStoreByPublicSlug(publicSlug: string) {
   const store = await prisma.store.findUnique({
     where: { publicSlug },
     include: {
-      organization: { select: { id: true, currency: true, name: true } },
+      organization: { select: { id: true, currency: true, name: true, locale: true } },
       branches: { where: { isDefault: true }, take: 1 },
     },
   });
@@ -75,7 +75,7 @@ export function toStorefrontStore(store: {
   contactPhone: string | null;
   socialLinks?: unknown;
   themeSettings?: unknown;
-  organization: { currency: string };
+  organization: { currency: string; locale?: string };
 }): StorefrontStore {
   const socialLinks = parseSocialLinks(store.socialLinks);
   const experienceDoc = parseExperienceDocument(store.themeSettings);
@@ -105,6 +105,7 @@ export function toStorefrontStore(store: {
     publishedAt: experienceDoc.publishedAt,
     hasUnpublishedChanges:
       JSON.stringify(experienceDoc.live) !== JSON.stringify(experienceDoc.draft),
+    locale: store.organization.locale === 'ar' ? 'ar' : 'en',
   };
 }
 

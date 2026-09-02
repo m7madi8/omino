@@ -1,7 +1,5 @@
 {
   "framework": "nextjs",
   "buildCommand": "npm run build",
-  "rewrites": [
-    { "source": "/main/:path*", "destination": "/main/:path*" }
-  ]
+  "installCommand": "npm install"
 }

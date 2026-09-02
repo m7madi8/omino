@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "prisma generate",
     "predev": "node scripts/sync-main.mjs",
     "prebuild": "node scripts/sync-main.mjs",
     "dev": "next dev",

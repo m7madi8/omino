@@ -40,11 +40,11 @@ type PendingAction = {
 };
 
 const SUGGESTED_PROMPTS = [
-  'How is my business doing?',
-  'What sold best this month?',
-  'Show me low-stock products.',
-  'Who are my best customers?',
-  'What should I focus on this week?',
+  'كيف أداء أعمالي هذا الشهر؟',
+  'ما أكثر المنتجات مبيعاً؟',
+  'أي منتجات على وشك النفاد؟',
+  'من أفضل عملائي؟',
+  'ما الذي يجب أن أركز عليه هذا الأسبوع؟',
 ];
 
 const AGENT_LABELS: Record<string, string> = {
@@ -78,6 +78,11 @@ export function AiChat({ user }: { user: SessionUser }) {
   const [statusText, setStatusText] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [agentType, setAgentType] = useState<string | null>(null);
+  const [aiStatus, setAiStatus] = useState<{
+    provider: string;
+    model: string;
+    isLive: boolean;
+  } | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const canExecute = user.permissions.includes('ai.execute');
 
@@ -105,6 +110,18 @@ export function AiChat({ user }: { user: SessionUser }) {
 
   useEffect(() => {
     loadConversations();
+    fetch('/api/ai/memories')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.provider) {
+          setAiStatus({
+            provider: data.provider,
+            model: data.model,
+            isLive: data.isLive,
+          });
+        }
+      })
+      .catch(() => {});
   }, [loadConversations]);
 
   useEffect(() => {
@@ -340,6 +357,14 @@ export function AiChat({ user }: { user: SessionUser }) {
               <p className="text-xs text-muted">
                 {agentType ? AGENT_LABELS[agentType] ?? agentType : 'Business AI'}
                 {user.storeName ? ` · ${user.storeName}` : ''}
+                {aiStatus && (
+                  <span className={aiStatus.isLive ? ' text-accent' : ' text-warning'}>
+                    {' · '}
+                    {aiStatus.isLive
+                      ? `${aiStatus.model}`
+                      : 'وضع تجريبي (Mock)'}
+                  </span>
+                )}
               </p>
             </div>
           </div>
@@ -364,9 +389,9 @@ export function AiChat({ user }: { user: SessionUser }) {
           {messages.length === 0 && !loading && (
             <div className="max-w-lg mx-auto text-center pt-12">
               <Sparkles className="h-10 w-10 text-accent mx-auto mb-4" />
-              <h2 className="text-lg font-medium mb-2">Ask OMINO anything about your business</h2>
+              <h2 className="text-lg font-medium mb-2">اسأل OMINO عن أعمالك</h2>
               <p className="text-sm text-muted mb-8">
-                Real data from sales, inventory, customers, and orders — never guesses.
+                بيانات حقيقية من المبيعات والمخزون والعملاء — بدون تخمين.
               </p>
               <div className="flex flex-wrap gap-2 justify-center">
                 {SUGGESTED_PROMPTS.map((prompt) => (
@@ -464,7 +489,7 @@ export function AiChat({ user }: { user: SessionUser }) {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about sales, inventory, customers…"
+              placeholder="اسأل عن المبيعات، المخزون، العملاء…"
               disabled={loading}
               className="flex-1 h-11 px-4 rounded-sm border border-hairline bg-paper text-sm focus:outline-none focus:ring-2 focus:ring-accent/30"
             />

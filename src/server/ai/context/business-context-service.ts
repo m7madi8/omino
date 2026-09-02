@@ -102,8 +102,8 @@ export function contextToSystemPrompt(ctx: BusinessContextSnapshot): string {
 }
 
 export function inferContextIntent(message: string): 'sales' | 'inventory' | 'customers' | 'general' {
-  if (/stock|inventory|low/i.test(message)) return 'inventory';
-  if (/customer|who/i.test(message)) return 'customers';
-  if (/sales|revenue|order/i.test(message)) return 'sales';
+  if (/stock|inventory|low|مخزون|نفد/i.test(message)) return 'inventory';
+  if (/customer|who|عميل|زبون|عملاء/i.test(message)) return 'customers';
+  if (/sales|revenue|order|مبيعات|إيراد|طلب/i.test(message)) return 'sales';
   return 'general';
 }

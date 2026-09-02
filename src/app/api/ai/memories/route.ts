@@ -8,10 +8,12 @@ import {
 } from '@/server/ai/memory-service';
 import { getUsageSummary } from '@/server/ai/usage-service';
 import { isAiConfigured } from '@/server/ai/config';
+import { getAiConfig } from '@/lib/ai/config';
 
 export async function GET() {
   try {
     const ctx = await requireTenantContext('ai.use');
+    const config = getAiConfig();
     const [memories, usage] = await Promise.all([
       listMemories(ctx.organizationId, ctx.userId),
       getUsageSummary(ctx.organizationId),
@@ -20,6 +22,9 @@ export async function GET() {
       memories,
       usage,
       configured: isAiConfigured(),
+      provider: config.provider,
+      model: config.model,
+      isLive: config.provider !== 'mock',
     });
   } catch (err) {
     return handleApiError(err);

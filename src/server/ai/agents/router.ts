@@ -6,21 +6,23 @@ const ROUTING_RULES: Array<{ agent: AiAgentType; patterns: RegExp[] }> = [
     patterns: [
       /sales|revenue|how (am i|are we)|metric|trend|compare|refund|channel|doing/i,
       /this month|last month|week|period/i,
+      /مبيعات|إيراد|أداء|شهري|أسبوع|قارن|طلبات/i,
     ],
   },
   {
     agent: 'OPERATIONS',
     patterns: [
       /inventory|stock|low|product|order|sku|restock|price|adjust/i,
+      /مخزون|نفد|منتج|طلب|سعر/i,
     ],
   },
   {
     agent: 'CUSTOMER',
-    patterns: [/customer|who are|best customer|crm|client/i],
+    patterns: [/customer|who are|best customer|crm|client/i, /عميل|زبون|عملاء/i],
   },
   {
     agent: 'GROWTH',
-    patterns: [/grow|opportunit|increase|focus|should i|recommend|promote/i],
+    patterns: [/grow|opportunit|increase|focus|should i|recommend|promote/i, /نمو|فرص|ركز|اقترح|حسّن/i],
   },
 ];
 

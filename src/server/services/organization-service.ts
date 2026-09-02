@@ -65,8 +65,9 @@ export async function createOrganizationWithDefaults(input: {
     slug = uniqueSlug(input.name, String(attempt));
   }
 
-  return prisma.$transaction(async (tx) => {
-    await ensurePermissions(tx);
+  return prisma.$transaction(
+    async (tx) => {
+      await ensurePermissions(tx);
 
     const org = await tx.organization.create({
       data: {
@@ -142,7 +143,9 @@ export async function createOrganizationWithDefaults(input: {
     });
 
     return { organization: org, store, branch };
-  });
+    },
+    { timeout: 30_000 }
+  );
 }
 
 export async function updateUserContext(

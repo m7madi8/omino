@@ -14,19 +14,23 @@ export default async function OverviewPage() {
 
   let overview = null;
   if (canViewAnalytics && user.organizationId) {
-    overview = await getAnalyticsOverview({
-      organizationId: user.organizationId,
-      storeId: user.storeId ?? undefined,
-      branchId: user.branchId ?? undefined,
-      preset: 'last_30_days',
-      currency: 'USD',
-    });
-    const { prisma } = await import('@/lib/db');
-    const org = await prisma.organization.findUnique({
-      where: { id: user.organizationId },
-      select: { currency: true },
-    });
-    overview.currency = org?.currency || overview.currency;
+    try {
+      overview = await getAnalyticsOverview({
+        organizationId: user.organizationId,
+        storeId: user.storeId ?? undefined,
+        branchId: user.branchId ?? undefined,
+        preset: 'last_30_days',
+        currency: 'USD',
+      });
+      const { prisma } = await import('@/lib/db');
+      const org = await prisma.organization.findUnique({
+        where: { id: user.organizationId },
+        select: { currency: true },
+      });
+      overview.currency = org?.currency || overview.currency;
+    } catch (err) {
+      console.error('[overview/analytics]', err);
+    }
   }
 
   return (

@@ -10,9 +10,14 @@ export function isPlatformAdminEmail(email: string | null | undefined): boolean 
   return PLATFORM_ADMIN_EMAILS.includes(email.toLowerCase().trim());
 }
 
-export function resolvePlatformAdmin(
-  email: string,
-  dbFlag: boolean | null | undefined
-): boolean {
-  return Boolean(dbFlag) || isPlatformAdminEmail(email);
+/** Prefer session flag; fall back to env allowlist (works without DB migration). */
+export function sessionIsPlatformAdmin(user: {
+  email: string;
+  isPlatformAdmin?: boolean;
+}): boolean {
+  return Boolean(user.isPlatformAdmin) || isPlatformAdminEmail(user.email);
+}
+
+export function resolvePlatformAdmin(email: string): boolean {
+  return isPlatformAdminEmail(email);
 }

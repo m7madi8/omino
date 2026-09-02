@@ -54,7 +54,7 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
     user.memberships[0];
 
   if (!membership) {
-    const isPlatformAdmin = resolvePlatformAdmin(user.email, user.isPlatformAdmin);
+    const isPlatformAdmin = resolvePlatformAdmin(user.email);
     return {
       id: user.id,
       email: user.email,
@@ -115,7 +115,7 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
     org.name && org.country && org.currency && storeId && branchId
   );
 
-  const isPlatformAdmin = resolvePlatformAdmin(user.email, user.isPlatformAdmin);
+  const isPlatformAdmin = resolvePlatformAdmin(user.email);
 
   return {
     id: user.id,

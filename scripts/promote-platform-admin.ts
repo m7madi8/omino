@@ -4,27 +4,17 @@ import { slugify } from '@/lib/utils';
 const email = process.argv[2];
 if (!email) {
   console.error('Usage: npx tsx scripts/promote-platform-admin.ts <email>');
+  console.error('Also set PLATFORM_ADMIN_EMAILS in .env (comma-separated).');
   process.exit(1);
 }
 
 async function main() {
   const normalized = email.toLowerCase().trim();
-
-  await prisma.$executeRawUnsafe(`
-    ALTER TABLE users
-    ADD COLUMN IF NOT EXISTS is_platform_admin BOOLEAN NOT NULL DEFAULT false;
-  `);
-
   const user = await prisma.user.findUnique({ where: { email: normalized } });
   if (!user) {
     console.error('User not found:', normalized);
     process.exit(1);
   }
-
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { isPlatformAdmin: true, fullName: user.fullName ?? 'OMINO Owner' },
-  });
 
   const membership = await prisma.membership.findFirst({
     where: { userId: user.id },
@@ -59,8 +49,7 @@ async function main() {
       {
         ok: true,
         email: normalized,
-        isPlatformAdmin: true,
-        role: 'PLATFORM_ADMIN',
+        note: 'Add this email to PLATFORM_ADMIN_EMAILS in production env',
         organization: membership ? 'OMINO' : null,
       },
       null,

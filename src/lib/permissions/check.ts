@@ -1,3 +1,4 @@
+import { sessionIsPlatformAdmin } from '@/lib/platform/admin';
 import type { PermissionKey } from '@/lib/permissions/constants';
 import type { SessionUser } from '@/types';
 
@@ -6,7 +7,7 @@ export function sessionHasPermission(
   permission: PermissionKey
 ): boolean {
   if (!session) return false;
-  if (session.isPlatformAdmin || session.roleSlug === 'OWNER') return true;
+  if (sessionIsPlatformAdmin(session) || session.roleSlug === 'OWNER') return true;
   return session.permissions.includes(permission);
 }
 
@@ -23,7 +24,7 @@ export function assertOrgAccess(
   session: SessionUser | null | undefined,
   organizationId: string
 ): void {
-  if (session?.isPlatformAdmin) return;
+  if (session && sessionIsPlatformAdmin(session)) return;
   if (!session || session.organizationId !== organizationId) {
     throw new Error('FORBIDDEN');
   }

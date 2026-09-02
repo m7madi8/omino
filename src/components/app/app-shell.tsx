@@ -29,6 +29,7 @@ import { AppRoutePrefetch } from '@/components/app/app-route-prefetch';
 import { NavigationProgress } from '@/components/app/navigation-progress';
 import { MODULE_NAV } from '@/lib/permissions/constants';
 import { sessionHasPermission } from '@/lib/permissions/check';
+import { sessionIsPlatformAdmin } from '@/lib/platform/admin';
 import { cn } from '@/lib/utils';
 import type { SessionUser } from '@/types';
 
@@ -71,7 +72,8 @@ export function AppShell({
     await signOut({ callbackUrl: '/main' });
   }
 
-  const roleLabel = user.isPlatformAdmin ? 'OMINO Platform Owner' : user.roleSlug;
+  const isPlatformAdmin = sessionIsPlatformAdmin(user);
+  const roleLabel = isPlatformAdmin ? 'OMINO Platform Owner' : user.roleSlug;
 
   return (
     <div className="min-h-svh bg-paper flex">
@@ -113,7 +115,7 @@ export function AppShell({
           </button>
         </div>
 
-        {user.isPlatformAdmin && (
+        {isPlatformAdmin && (
           <div className="mx-3 mt-3 px-3 py-2 rounded-sm bg-accent/20 border border-accent/30 text-[11px] font-mono uppercase tracking-wider text-accent-soft">
             Platform Owner
           </div>

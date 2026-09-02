@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+import { sessionIsPlatformAdmin } from '@/lib/platform/admin';
 
 type MiddlewareToken = {
   sub?: string;
   sessionUser?: {
+    email?: string;
     onboardingComplete?: boolean;
     isPlatformAdmin?: boolean;
   };
@@ -20,7 +22,12 @@ export async function middleware(request: NextRequest) {
 
   const isAuthed = Boolean(token?.sub);
   const onboardingComplete = token?.sessionUser?.onboardingComplete ?? false;
-  const isPlatformAdmin = token?.sessionUser?.isPlatformAdmin ?? false;
+  const isPlatformAdmin = token?.sessionUser
+    ? sessionIsPlatformAdmin({
+        email: token.sessionUser.email ?? '',
+        isPlatformAdmin: token.sessionUser.isPlatformAdmin,
+      })
+    : false;
 
   if (pathname.startsWith('/app')) {
     if (!isAuthed) {

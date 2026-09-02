@@ -7,13 +7,17 @@ export function getSupabaseUrl(): string | undefined {
   return process.env.NEXT_PUBLIC_SUPABASE_URL;
 }
 
+/** Browser-safe key — publishable (sb_publishable_*) or legacy anon (eyJ*). */
 export function getSupabaseAnonKey(): string | undefined {
-  return process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  return (
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
 }
 
-/** Server-only — never import from client components. */
+/** Server-only — secret (sb_secret_*) or legacy service_role (eyJ*). */
 export function getSupabaseServiceRoleKey(): string | undefined {
-  return process.env.SUPABASE_SERVICE_ROLE_KEY;
+  return process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
 }
 
 /** Server-only — used to sign realtime JWTs for NextAuth sessions. */

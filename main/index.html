@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OMINO</title>
+<meta name="description" content="OMINO connects your POS, online store, inventory, customers, payments, analytics, AI, and automation into one intelligent business system.">
+<meta property="og:title" content="OMINO — The Intelligent Operating System for Your Business">
+<meta property="og:description" content="OMINO connects your POS, online store, inventory, customers, payments, analytics, AI, and automation into one intelligent business system.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OMINO — The Intelligent Operating System for Your Business">
+<meta name="twitter:description" content="One business. One system. One clear picture.">
+<link rel="canonical" href="/main/index.html">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://api.fontshare.com">
@@ -722,8 +730,7 @@ h2.section-head{
 }
 html[lang="ar"] h2.section-head{line-height:1.12;max-width:18ch;}
 @media(max-width:768px){
-  html[lang="ar"] h2.section-head,
-  html[lang="ar"] .hero-top h1{max-width:none;}
+  html[lang="ar"] h2.section-head{max-width:none;}
 }
 p.section-sub{
   font-size:17px;
@@ -741,13 +748,28 @@ p.section-sub{
 @media(max-width:768px){.hero{padding:148px 0 88px;}}
 .hero-top{max-width:none;}
 .hero-top h1{
-  font-size:clamp(4.25rem,11vw,8.5rem);
-  line-height:0.92;
-  max-width:16ch;
+  font-size:clamp(2.35rem,10vw + 0.65rem,8.5rem);
+  line-height:1;
+  max-width:20ch;
+  overflow-wrap:break-word;
 }
-html[lang="ar"] .hero-top h1{line-height:1.08;max-width:12ch;}
-@media(max-width:640px){
-  .hero-top h1{font-size:clamp(3.1rem,15vw,4.6rem);}
+html[lang="ar"] .hero-top h1{line-height:1.12;max-width:14ch;}
+@media(max-width:768px){
+  .hero-top h1{
+    font-size:clamp(2.2rem,11.2vw,3.45rem);
+    line-height:1.04;
+    max-width:none;
+    letter-spacing:-0.02em;
+  }
+  html[lang="ar"] .hero-top h1{
+    font-size:clamp(2.35rem,11.5vw,3.55rem);
+    line-height:1.14;
+    max-width:none;
+  }
+}
+@media(max-width:380px){
+  .hero-top h1{font-size:clamp(2rem,10.5vw,2.75rem);}
+  html[lang="ar"] .hero-top h1{font-size:clamp(2.1rem,10.8vw,2.85rem);}
 }
 .hero-index{
   margin:0 0 28px;
@@ -757,10 +779,14 @@ html[lang="ar"] .hero-top h1{line-height:1.08;max-width:12ch;}
 .hero-line{
   display:block;
   overflow:hidden;
+  padding-bottom:0.08em;
 }
 .hero-line > span{
   display:block;
   will-change:transform,opacity;
+}
+@media(max-width:768px){
+  .hero-line{padding-bottom:0.1em;}
 }
 .hero-top p.sub{
   font-size:17px;
@@ -1130,6 +1156,39 @@ html[lang="ar"] .plan-price .per{font-family:var(--font-ar);font-size:13px;lette
 }
 .founding-box .num{font-family:var(--font-mono);font-size:clamp(4.5rem,9vw,7rem);font-weight:500;flex:none;letter-spacing:-0.06em;line-height:0.9;direction:ltr;font-variant-numeric:tabular-nums;}
 .founding-box p{max-width:420px;font-size:16px;color:var(--stone-2);}
+.founding-box h3{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:12px;max-width:20ch;}
+.hero-micro{font-size:14px;color:var(--stone);margin-top:14px;}
+.problem-lead{margin-top:20px;font-size:clamp(1rem,1.8vw,1.15rem);line-height:1.65;color:#A8ADB3;max-width:48ch;margin-inline:auto;text-align:center;}
+.problem-shift{margin-top:16px;font-size:clamp(1.05rem,2vw,1.25rem);line-height:1.6;color:#C5C9CE;max-width:44ch;margin-inline:auto;text-align:center;font-family:var(--font-serif);font-style:italic;}
+html[lang="ar"] .problem-shift{font-family:var(--font-ar-display);font-style:normal;}
+.story-flow{margin-top:48px;display:flex;flex-direction:column;gap:0;max-width:540px;margin-inline:auto;}
+.story-step{padding:13px 0;border-bottom:1px solid rgba(215,218,221,0.9);font-size:15px;color:var(--ink-2);}
+.story-step:last-child{border-bottom:none;font-weight:500;color:var(--ink);}
+.loop-strip{display:flex;flex-wrap:wrap;gap:10px;margin-top:40px;justify-content:center;}
+.loop-step{font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:10px 14px;border:1px solid var(--hairline);border-radius:var(--radius-pill);color:var(--ink-2);}
+.loop-step:not(:last-child)::after{content:'↓';display:block;text-align:center;margin-top:8px;color:var(--stone);font-size:10px;}
+@media(min-width:768px){
+  .loop-strip{flex-wrap:nowrap;align-items:center;}
+  .loop-step:not(:last-child)::after{content:'→';display:inline;margin-top:0;margin-inline-start:10px;}
+}
+.on-dark .loop-step{color:#E8EAEC;border-color:rgba(255,255,255,0.12);}
+.on-dark .loop-step:not(:last-child)::after{color:#8A9096;}
+.pillar-grid{display:grid;gap:16px;margin-top:40px;}
+@media(min-width:768px){.pillar-grid{grid-template-columns:1fr 1fr;}}
+.pillar-card{padding:22px 24px;border:1px solid var(--hairline);border-radius:var(--radius-md);background:#fff;}
+.pillar-card h3{font-size:1.05rem;margin-bottom:6px;}
+.pillar-card p{font-size:14px;color:var(--stone-2);line-height:1.6;}
+.ai-examples{margin-top:32px;display:flex;flex-direction:column;gap:10px;}
+.ai-example{font-size:15px;color:#C5C9CE;padding:12px 16px;border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-sm);font-family:var(--font-serif);font-style:italic;}
+html[lang="ar"] .ai-example{font-family:var(--font-ar-display);font-style:normal;}
+.commerce-eq{margin-top:40px;text-align:center;font-family:var(--font-mono);font-size:clamp(1.1rem,2.5vw,1.5rem);letter-spacing:0.08em;color:#E8EAEC;line-height:1.8;}
+.final-cta{padding:120px 0 140px;text-align:center;}
+.final-cta h2{max-width:18ch;margin-inline:auto;font-size:clamp(2rem,5vw,3.25rem);}
+.final-cta .sub{margin-top:20px;color:var(--stone-2);max-width:44ch;margin-inline:auto;font-size:clamp(1.05rem,2vw,1.2rem);line-height:1.65;}
+.final-cta .ctas{margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.final-tagline{margin-top:32px;font-family:var(--font-serif);font-style:italic;font-size:clamp(1.05rem,2vw,1.25rem);color:var(--stone);}
+html[lang="ar"] .final-tagline{font-family:var(--font-ar-display);font-style:normal;}
+.system-chips .frag-chip{font-size:11px;}
 
 footer.band-footer{
   margin-top:-56px;
@@ -1179,15 +1238,15 @@ footer.band-footer{
       <img class="logo-img logo-on-dark" src="img/omino-lockup-paper.png" alt="" width="685" height="235">
     </a>
       <nav class="nav-links" aria-label="Primary">
-      <a class="en" href="#business" data-i18n="nav.product">Product</a>
-      <a class="en" href="#ai" data-i18n="nav.ai">AI</a>
+      <a class="en" href="#system" data-i18n="nav.product">Product</a>
+      <a class="en" href="#intelligence" data-i18n="nav.ai">AI</a>
       <a class="en" href="#pricing" data-i18n="nav.pricing">Pricing</a>
       <a class="en" href="about.html" data-i18n="nav.about">About</a>
-      <a class="en" href="login.html" data-i18n="nav.login">Login</a>
+      <a class="en" href="/login" data-i18n="nav.login">Login</a>
     </nav>
     <div class="nav-actions">
       <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
-      <a href="login.html#signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
+      <a href="/signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
       <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
         <span></span><span></span>
       </button>
@@ -1222,11 +1281,11 @@ footer.band-footer{
       <p class="menu-tag" data-i18n="menu.tag">AI Business OS</p>
     </div>
     <nav class="menu-nav" aria-label="Mobile">
-      <a class="menu-link" href="#business">
+      <a class="menu-link" href="#system">
         <span class="menu-idx">01</span>
         <span class="menu-name" data-i18n="nav.product">Product</span>
       </a>
-      <a class="menu-link" href="#ai">
+      <a class="menu-link" href="#intelligence">
         <span class="menu-idx">02</span>
         <span class="menu-name" data-i18n="nav.ai">AI</span>
       </a>
@@ -1238,13 +1297,13 @@ footer.band-footer{
         <span class="menu-idx">04</span>
         <span class="menu-name" data-i18n="nav.about">About</span>
       </a>
-      <a class="menu-link" href="login.html">
+      <a class="menu-link" href="/login">
         <span class="menu-idx">05</span>
         <span class="menu-name" data-i18n="nav.login">Login</span>
       </a>
     </nav>
     <div class="menu-cta">
-      <a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
+      <a href="/signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
     </div>
     <div class="menu-foot">
       <span class="menu-connect" data-i18n="menu.connect">Connect</span>
@@ -1275,17 +1334,18 @@ footer.band-footer{
 <section class="hero" id="hero">
   <div class="wrap">
     <div class="hero-top">
-      <p class="hero-index idx" id="heroIndex">AI BUSINESS OS / 001</p>
+      <p class="hero-index idx" id="heroIndex" data-i18n="hero.idx">AI BUSINESS OS / 001</p>
       <h1 id="heroTitle">
-        <span class="hero-line"><span data-i18n="hero.line1">Your business.</span></span>
-        <span class="hero-line"><span data-i18n="hero.line2">One intelligence.</span></span>
+        <span class="hero-line"><span data-i18n="hero.line1">Run your entire business</span></span>
+        <span class="hero-line"><span data-i18n="hero.line2">from one intelligent system.</span></span>
       </h1>
-      <p class="sub" id="heroSub" data-i18n="hero.sub">OMINO brings your store, POS, inventory, customers, payments and analytics into one intelligent business system — so you can see what’s happening, understand why, and know what to do next.</p>
+      <p class="sub" id="heroSub" data-i18n="hero.sub">OMINO connects your store, POS, inventory, customers, payments, analytics, and AI — giving you one clear view of your business and helping you know what to do next.</p>
       <div class="hero-ctas" id="heroCtas">
-        <a href="login.html#signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
+        <a href="/signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
         <a href="#system" class="btn btn-ghost" data-i18n="cta.fit">Explore OMINO</a>
       </div>
-      <p class="hero-fine" id="heroFine" data-i18n="hero.fine">Founding pricing for the first 50 businesses.</p>
+      <p class="hero-micro" data-i18n="hero.micro">No credit card required.</p>
+      <p class="hero-fine" id="heroFine" data-i18n="hero.fine">Founding pricing is available to the first 50 businesses.</p>
     </div>
   </div>
 </section>
@@ -1293,8 +1353,10 @@ footer.band-footer{
 <section class="band band-center on-dark" id="system">
   <div class="band-fill" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="section-index idx reveal">System / 002</p>
-    <h2 class="section-head reveal" data-i18n-html="problem.title">Your business shouldn’t need<br>five systems to run.</h2>
+    <p class="section-index idx reveal" data-i18n="problem.idx">The problem / 002</p>
+    <h2 class="section-head reveal" data-i18n-html="problem.title">Your business shouldn’t live<br>in five different places.</h2>
+    <p class="section-sub reveal" style="text-align:center;margin-inline:auto;" data-i18n="problem.sub">Sales in one system. Inventory in another. Customers somewhere else. Payments somewhere else. Reports you have to piece together yourself.</p>
+    <p class="problem-shift reveal" data-i18n="problem.shift">The problem isn’t a lack of data. It’s that your data doesn’t work together.</p>
     <div class="problem-visual">
       <div class="frag-row" id="fragRow">
         <div class="frag-chip en">POS</div>
@@ -1304,7 +1366,7 @@ footer.band-footer{
         <div class="frag-chip en">Customers</div>
         <div class="frag-chip en">Analytics</div>
       </div>
-      <p class="merge-connect reveal" data-i18n="problem.connect">OMINO connects them into one source of truth.</p>
+      <p class="merge-connect reveal" data-i18n="problem.connect">OMINO connects them into one business system.</p>
       <div class="merge-arrow">
         <svg width="18" height="34" viewBox="0 0 18 34" fill="none" aria-hidden="true"><path d="M9 0V32M9 32L2 25M9 32L16 25" stroke="#8A9096" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
@@ -1324,15 +1386,47 @@ footer.band-footer{
         </div>
       </div>
       <p class="merge-caption reveal" data-i18n="problem.caption">One business. One system. One clear picture.</p>
+      <p class="problem-lead reveal" data-i18n="system.sub">OMINO connects the everyday operations of your business into one intelligent operating system — from the first sale to the next decision.</p>
+      <div class="frag-row system-chips reveal" style="margin-top:32px;">
+        <div class="frag-chip en">POS</div>
+        <div class="frag-chip en">Online Store</div>
+        <div class="frag-chip en">Products</div>
+        <div class="frag-chip en">Inventory</div>
+        <div class="frag-chip en">Orders</div>
+        <div class="frag-chip en">Payments</div>
+        <div class="frag-chip en">Customers</div>
+        <div class="frag-chip en">Analytics</div>
+        <div class="frag-chip en">AI</div>
+        <div class="frag-chip en">Automations</div>
+        <div class="frag-chip en">Marketing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad section-flow" id="connected">
+  <div class="wrap">
+    <p class="section-index idx reveal" data-i18n="connected.idx">The system / 003</p>
+    <h2 class="section-head reveal" data-i18n-html="connected.title">Every action makes<br>the whole system smarter.</h2>
+    <p class="section-sub reveal" data-i18n="connected.sub">A sale shouldn’t end when the payment is complete. It should update your inventory, customer history, analytics, and business intelligence automatically.</p>
+    <div class="story-flow reveal">
+      <div class="story-step" data-i18n="flow.1">Customer buys</div>
+      <div class="story-step" data-i18n="flow.2">Order created</div>
+      <div class="story-step" data-i18n="flow.3">Payment recorded</div>
+      <div class="story-step" data-i18n="flow.4">Inventory updated</div>
+      <div class="story-step" data-i18n="flow.5">Customer profile updated</div>
+      <div class="story-step" data-i18n="flow.6">Analytics updated</div>
+      <div class="story-step" data-i18n="flow.7">Business intelligence updated</div>
+      <div class="story-step" data-i18n="flow.8">OMINO recommends the next move</div>
     </div>
   </div>
 </section>
 
 <section class="section-pad section-flow" id="business">
   <div class="wrap">
-    <p class="section-index idx reveal">Verticals / 003</p>
-    <h2 class="section-head reveal" data-i18n-html="business.title">One system.<br>Built around your business.</h2>
-    <p class="section-sub reveal" data-i18n="business.sub">The dashboard changes with what you sell — not a generic template.</p>
+    <p class="section-index idx reveal" data-i18n="business.idx">Built around your business / 004</p>
+    <h2 class="section-head reveal" data-i18n-html="business.title">Your business is unique.<br>Your operating system should be too.</h2>
+    <p class="section-sub reveal" data-i18n="business.sub">OMINO adapts to the way your business operates — whether you sell products, serve customers, run a restaurant, or manage multiple locations. One platform. Different businesses. Same clarity.</p>
     <div class="cat-tabs" id="catTabs"></div>
     <div class="cat-panel">
       <div class="cat-metrics" id="catMetrics"></div>
@@ -1340,12 +1434,12 @@ footer.band-footer{
   </div>
 </section>
 
-<section class="band band-asymmetric on-dark" id="ai">
+<section class="band band-asymmetric on-dark" id="intelligence">
   <div class="band-fill" aria-hidden="true"></div>
   <div class="wrap">
-    <p class="section-index idx reveal">Intelligence / 004</p>
-    <h2 class="section-head reveal" data-i18n-html="ai.title">Know what happened.<br>Know what to do next.</h2>
-    <p class="section-sub reveal" data-i18n="ai.sub">OMINO turns your business data into decisions — identifying problems, explaining why they happened, and recommending your next move.</p>
+    <p class="section-index idx reveal" data-i18n="intel.idx">Business intelligence / 005</p>
+    <h2 class="section-head reveal" data-i18n-html="ai.title">Don’t just see what happened.<br>Understand why.</h2>
+    <p class="section-sub reveal" data-i18n="ai.sub">OMINO turns your business data into clear answers — revealing what changed, why it changed, and what deserves your attention next.</p>
 
     <div class="ai-wrap">
       <div class="ai-glow" aria-hidden="true"></div>
@@ -1367,15 +1461,104 @@ footer.band-footer{
           </div>
         </div>
       </div>
-      <p class="ai-note" data-i18n="ai.note">Nothing sends or changes without your approval.</p>
+      <p class="ai-note" data-i18n="ai.note">You stay in control. OMINO recommends. You decide.</p>
     </div>
+  </div>
+</section>
+
+<section class="section-pad section-flow" id="loop">
+  <div class="wrap">
+    <p class="section-index idx reveal" data-i18n="loop.idx">Intelligence loop / 006</p>
+    <h2 class="section-head reveal" data-i18n="loop.title">From data to decisions.</h2>
+    <p class="section-sub reveal" data-i18n="loop.sub">OMINO doesn’t just show you numbers. It connects the signals behind them so you can make better decisions with less guesswork.</p>
+    <div class="loop-strip reveal">
+      <span class="loop-step en" data-i18n="loop.see">See</span>
+      <span class="loop-step en" data-i18n="loop.understand">Understand</span>
+      <span class="loop-step en" data-i18n="loop.decide">Decide</span>
+      <span class="loop-step en" data-i18n="loop.act">Act</span>
+      <span class="loop-step en" data-i18n="loop.learn">Learn</span>
+    </div>
+  </div>
+</section>
+
+<section class="band band-center on-dark" id="ai">
+  <div class="band-fill" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="section-index idx reveal" data-i18n="ai.idx">AI / 007</p>
+    <h2 class="section-head reveal" data-i18n-html="ai.agent.title">AI that understands<br>your business.</h2>
+    <p class="section-sub reveal" data-i18n="ai.agent.sub">OMINO AI works with your business context — your products, orders, customers, inventory, analytics, and operations — to help you understand and operate your business.</p>
+    <div class="ai-examples reveal">
+      <p class="ai-example" data-i18n="ai.ex1">Which products are losing margin?</p>
+      <p class="ai-example" data-i18n="ai.ex2">What should I restock this week?</p>
+      <p class="ai-example" data-i18n="ai.ex3">Which customers are becoming inactive?</p>
+      <p class="ai-example" data-i18n="ai.ex4">What changed in my sales this month?</p>
+      <p class="ai-example" data-i18n="ai.ex5">Show me where I’m losing money.</p>
+    </div>
+    <p class="section-sub reveal" style="margin-top:32px;" data-i18n="ai.agent.note">AI should understand the business — not just the question.</p>
+  </div>
+</section>
+
+<section class="section-pad section-flow" id="control">
+  <div class="wrap">
+    <p class="section-index idx reveal" data-i18n="control.idx">Trust / 008</p>
+    <h2 class="section-head reveal" data-i18n-html="control.title">Intelligent enough to help.<br>Controlled enough to trust.</h2>
+    <p class="section-sub reveal" data-i18n="control.sub">OMINO can identify opportunities, prepare actions, and automate routine work — while keeping important decisions in your hands.</p>
+    <div class="reveal-list" style="margin-top:40px;">
+      <div class="reveal-item"><span class="m">—</span><span data-i18n="control.1">Nothing important happens without your approval.</span></div>
+      <div class="reveal-item"><span class="m">—</span><span data-i18n="control.2">Refunds, inventory adjustments, and financial actions require confirmation.</span></div>
+      <div class="reveal-item"><span class="m">—</span><span data-i18n="control.3">You see what changed, who approved it, and why.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="band band-asymmetric on-dark" id="automation">
+  <div class="band-fill" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="section-index idx reveal" data-i18n="auto.idx">Automation / 009</p>
+    <h2 class="section-head reveal" data-i18n="auto.title">Stop repeating work your business already knows how to do.</h2>
+    <p class="section-sub reveal" data-i18n="auto.sub">Connect events to actions and let OMINO handle routine operations automatically.</p>
+    <div class="reveal-list" id="autoList" style="margin-top:40px;">
+      <div class="reveal-item"><span class="m">→</span><span data-i18n="auto.1">Low stock → Flag product</span></div>
+      <div class="reveal-item"><span class="m">→</span><span data-i18n="auto.2">New customer → Add segment</span></div>
+      <div class="reveal-item"><span class="m">→</span><span data-i18n="auto.3">Order completed → Update customer history</span></div>
+      <div class="reveal-item"><span class="m">→</span><span data-i18n="auto.4">Payment received → Update business metrics</span></div>
+      <div class="reveal-item"><span class="m">→</span><span data-i18n="auto.5">Customer inactive → Prepare a marketing opportunity</span></div>
+    </div>
+    <p class="section-sub reveal" style="margin-top:28px;" data-i18n="auto.note">Automate the routine. Stay in control of the important.</p>
+  </div>
+</section>
+
+<section class="section-pad section-flow" id="growth">
+  <div class="wrap">
+    <p class="section-index idx reveal" data-i18n="growth.idx">Growth / 010</p>
+    <h2 class="section-head reveal" data-i18n="growth.title">Turn business data into better growth decisions.</h2>
+    <p class="section-sub reveal" data-i18n="growth.sub">Know who your customers are, what they buy, what they respond to, and where your next opportunity is. Growth shouldn’t live in a separate system from the business itself.</p>
+    <p class="section-sub reveal" data-i18n="growth.path">Customers → Analytics → Marketing → Automation → AI</p>
+  </div>
+</section>
+
+<section class="band band-center on-dark" id="commerce">
+  <div class="band-fill" aria-hidden="true"></div>
+  <div class="wrap" style="text-align:center;">
+    <p class="section-index idx reveal" data-i18n="commerce.idx">Commerce / 011</p>
+    <h2 class="section-head reveal" data-i18n="commerce.title">Sell anywhere. Stay connected everywhere.</h2>
+    <p class="section-sub reveal" style="margin-inline:auto;" data-i18n="commerce.sub">Whether a customer buys in your store or online, OMINO keeps orders, payments, inventory, and customer information connected.</p>
+    <p class="commerce-eq reveal" data-i18n-html="commerce.eq">IN STORE<br>+<br>ONLINE<br>=<br>ONE BUSINESS</p>
+  </div>
+</section>
+
+<section class="section-pad section-flow" id="analytics">
+  <div class="wrap">
+    <p class="section-index idx reveal" data-i18n="analytics.idx">Analytics / 012</p>
+    <h2 class="section-head reveal" data-i18n="analytics.title">A dashboard that tells you something.</h2>
+    <p class="section-sub reveal" data-i18n="analytics.sub">See revenue, orders, customers, products, inventory, and performance — then move from numbers to meaning. Less reporting. More understanding.</p>
   </div>
 </section>
 
 <section class="section-pad section-flow" id="pricing">
   <div class="wrap">
-    <p class="section-index idx reveal">Plans / 005</p>
-    <h2 class="section-head reveal" data-i18n-html="pricing.title">Start with what you need.<br>Grow into everything else.</h2>
+    <p class="section-index idx reveal" data-i18n="pricing.idx">Plans / 013</p>
+    <h2 class="section-head reveal" data-i18n-html="pricing.title">Start simple.<br>Grow without rebuilding your business.</h2>
 
     <div class="price-toggle">
       <button class="active" id="toggleMonthly" data-i18n="bill.month">Monthly</button>
@@ -1385,9 +1568,9 @@ footer.band-footer{
 
     <div class="plans">
       <div class="plan">
-        <div class="plan-name en">Starter</div>
+        <div class="plan-name en" data-i18n="plan.s.name">Run</div>
         <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="9" data-yearly="7.5">9</span><span class="per">/ month</span></div>
-        <div class="plan-desc" data-i18n="plan.s.desc">Run your business.</div>
+        <div class="plan-desc" data-i18n="plan.s.desc">For businesses getting started with OMINO.</div>
         <div class="plan-feats">
           <div data-i18n="plan.s.1">OMINO Intelligence</div>
           <div data-i18n="plan.s.2">Basic insights</div>
@@ -1397,9 +1580,9 @@ footer.band-footer{
 
       <div class="plan pro">
         <div class="plan-tab en">Most popular</div>
-        <div class="plan-name en">Pro</div>
+        <div class="plan-name en" data-i18n="plan.p.name">Grow</div>
         <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="24" data-yearly="20">24</span><span class="per">/ month</span></div>
-        <div class="plan-desc" data-i18n="plan.p.desc">Grow your business.</div>
+        <div class="plan-desc" data-i18n="plan.p.desc">For businesses ready for deeper intelligence and automation.</div>
         <div class="plan-feats">
           <div data-i18n="plan.p.1">Advanced AI insights</div>
           <div data-i18n="plan.p.2">Recommendations</div>
@@ -1409,9 +1592,9 @@ footer.band-footer{
       </div>
 
       <div class="plan">
-        <div class="plan-name en">Business</div>
+        <div class="plan-name en" data-i18n="plan.b.name">Scale</div>
         <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="49" data-yearly="40.8">49</span><span class="per">/ month</span></div>
-        <div class="plan-desc" data-i18n="plan.b.desc">Scale your business.</div>
+        <div class="plan-desc" data-i18n="plan.b.desc">For businesses operating at greater complexity.</div>
         <div class="plan-feats">
           <div data-i18n="plan.b.1">AI Business Agent</div>
           <div data-i18n="plan.b.2">Automation</div>
@@ -1423,7 +1606,11 @@ footer.band-footer{
 
     <div class="founding-box">
       <div class="num">50</div>
-      <p data-i18n="founding">The first 50 businesses lock in founding pricing for as long as they stay on OMINO.</p>
+      <div>
+        <h3 data-i18n="founding.title">Be one of the first 50.</h3>
+        <p data-i18n="founding">OMINO is being built with businesses, not just for them. The first 50 businesses become part of the founding group and lock in founding pricing for as long as they stay on OMINO.</p>
+        <a href="/signup" class="btn btn-primary" style="margin-top:20px;display:inline-flex;" data-i18n="founding.cta">Start building with OMINO</a>
+      </div>
     </div>
 
     <div class="fee-note">
@@ -1433,6 +1620,18 @@ footer.band-footer{
       </div>
       <div class="pct">0.3%–0.5%</div>
     </div>
+  </div>
+</section>
+
+<section class="final-cta" id="final">
+  <div class="wrap">
+    <h2 class="reveal" data-i18n-html="final.title">Your business already has the data.</h2>
+    <p class="sub reveal" data-i18n="final.sub">Now give it a system that understands it. Bring your business together with OMINO.</p>
+    <div class="ctas reveal">
+      <a href="/signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a>
+      <a href="#system" class="btn btn-ghost" data-i18n="cta.fit">Explore OMINO</a>
+    </div>
+    <p class="final-tagline reveal" data-i18n="final.tag">One business. One system. One clear picture.</p>
   </div>
 </section>
 </main>
@@ -1482,9 +1681,10 @@ const orbitFine = window.matchMedia('(hover: hover) and (pointer: fine)');
 const orbitChapters = [
   { sel: '#hero', idx: '001' },
   { sel: '#system', idx: '002' },
-  { sel: '#business', idx: '003' },
-  { sel: '#ai', idx: '004' },
-  { sel: '#pricing', idx: '005' }
+  { sel: '#connected', idx: '003' },
+  { sel: '#business', idx: '004' },
+  { sel: '#intelligence', idx: '005' },
+  { sel: '#pricing', idx: '006' }
 ];
 let orbitP = 0, orbitNow = 0, orbitVel = 0, orbitRaf = 0, orbitIdle = 0, orbitDrag = false;
 
@@ -1599,7 +1799,7 @@ const langToggle = document.getElementById('langToggle');
 
 const copy = {
   en: {
-    title: 'OMINO — AI Business OS',
+    title: 'OMINO — The Intelligent Operating System for Your Business',
     'nav.product': 'Product', 'nav.ai': 'AI', 'nav.pricing': 'Pricing', 'nav.about': 'About', 'nav.login': 'Login',
     'cta.start': 'Start for free', 'cta.fit': 'Explore OMINO',
     'menu.open': 'Open menu', 'menu.close': 'Close menu',
@@ -1607,41 +1807,114 @@ const copy = {
     'menu.tag': 'AI Business OS',
     'menu.connect': 'Connect',
     skip: 'Skip to content',
-    'hero.line1': 'Your business.',
-    'hero.line2': 'One intelligence.',
-    'hero.sub': 'OMINO brings your store, POS, inventory, customers, payments and analytics into one intelligent business system — so you can see what’s happening, understand why, and know what to do next.',
-    'hero.fine': 'Founding pricing for the first 50 businesses.',
-    'problem.title': 'Your business shouldn’t need<br>five systems to run.',
-    'problem.connect': 'OMINO connects them into one source of truth.',
+    'hero.idx': 'AI BUSINESS OS / 001',
+    'hero.line1': 'Run your entire business',
+    'hero.line2': 'from one intelligent system.',
+    'hero.sub': 'OMINO connects your store, POS, inventory, customers, payments, analytics, and AI — giving you one clear view of your business and helping you know what to do next.',
+    'hero.micro': 'No credit card required.',
+    'hero.fine': 'Founding pricing is available to the first 50 businesses.',
+    'problem.idx': 'The problem / 002',
+    'problem.title': 'Your business shouldn’t live<br>in five different places.',
+    'problem.sub': 'Sales in one system. Inventory in another. Customers somewhere else. Payments somewhere else. Reports you have to piece together yourself.',
+    'problem.shift': 'The problem isn’t a lack of data. It’s that your data doesn’t work together.',
+    'problem.connect': 'OMINO connects them into one business system.',
     'problem.caption': 'One business. One system. One clear picture.',
-    'business.title': 'One system.<br>Built around your business.',
-    'business.sub': 'The dashboard changes with what you sell — not a generic template.',
-    'ai.title': 'Know what happened.<br>Know what to do next.',
-    'ai.sub': 'OMINO turns your business data into decisions — identifying problems, explaining why they happened, and recommending your next move.',
+    'system.sub': 'OMINO connects the everyday operations of your business into one intelligent operating system — from the first sale to the next decision.',
+    'connected.idx': 'The system / 003',
+    'connected.title': 'Every action makes<br>the whole system smarter.',
+    'connected.sub': 'A sale shouldn’t end when the payment is complete. It should update your inventory, customer history, analytics, and business intelligence automatically.',
+    'flow.1': 'Customer buys',
+    'flow.2': 'Order created',
+    'flow.3': 'Payment recorded',
+    'flow.4': 'Inventory updated',
+    'flow.5': 'Customer profile updated',
+    'flow.6': 'Analytics updated',
+    'flow.7': 'Business intelligence updated',
+    'flow.8': 'OMINO recommends the next move',
+    'business.idx': 'Built around your business / 004',
+    'business.title': 'Your business is unique.<br>Your operating system should be too.',
+    'business.sub': 'OMINO adapts to the way your business operates — whether you sell products, serve customers, run a restaurant, or manage multiple locations. One platform. Different businesses. Same clarity.',
+    'intel.idx': 'Business intelligence / 005',
+    'ai.title': 'Don’t just see what happened.<br>Understand why.',
+    'ai.sub': 'OMINO turns your business data into clear answers — revealing what changed, why it changed, and what deserves your attention next.',
     'chat.top': 'Profit analysis',
     'chat.user': 'Why did my profit drop this month?',
-    'chat.ai': 'Revenue grew 8%.<br>Gross profit fell 4%.',
     'chat.ai': 'Revenue grew 8%.<br>Gross profit fell 4%.',
     'chat.1': 'Product costs increased 7%',
     'chat.2': 'Two high-volume products lost margin',
     'chat.3': 'Discounts increased 18%',
     'chat.rk': 'Next move',
     'chat.rec': 'Reduce discounting on Product A and increase Product B by 4%.',
-    'ai.note': 'Nothing sends or changes without your approval.',
-    'pricing.title': 'Start with what you need.<br>Grow into everything else.',
+    'ai.note': 'You stay in control. OMINO recommends. You decide.',
+    'loop.idx': 'Intelligence loop / 006',
+    'loop.title': 'From data to decisions.',
+    'loop.sub': 'OMINO doesn’t just show you numbers. It connects the signals behind them so you can make better decisions with less guesswork.',
+    'loop.see': 'See',
+    'loop.understand': 'Understand',
+    'loop.decide': 'Decide',
+    'loop.act': 'Act',
+    'loop.learn': 'Learn',
+    'ai.idx': 'AI / 007',
+    'ai.agent.title': 'AI that understands<br>your business.',
+    'ai.agent.sub': 'OMINO AI works with your business context — your products, orders, customers, inventory, analytics, and operations — to help you understand and operate your business.',
+    'ai.ex1': 'Which products are losing margin?',
+    'ai.ex2': 'What should I restock this week?',
+    'ai.ex3': 'Which customers are becoming inactive?',
+    'ai.ex4': 'What changed in my sales this month?',
+    'ai.ex5': 'Show me where I’m losing money.',
+    'ai.agent.note': 'AI should understand the business — not just the question.',
+    'control.idx': 'Trust / 008',
+    'control.title': 'Intelligent enough to help.<br>Controlled enough to trust.',
+    'control.sub': 'OMINO can identify opportunities, prepare actions, and automate routine work — while keeping important decisions in your hands.',
+    'control.1': 'Nothing important happens without your approval.',
+    'control.2': 'Refunds, inventory adjustments, and financial actions require confirmation.',
+    'control.3': 'You see what changed, who approved it, and why.',
+    'auto.idx': 'Automation / 009',
+    'auto.title': 'Stop repeating work your business already knows how to do.',
+    'auto.sub': 'Connect events to actions and let OMINO handle routine operations automatically.',
+    'auto.1': 'Low stock → Flag product',
+    'auto.2': 'New customer → Add segment',
+    'auto.3': 'Order completed → Update customer history',
+    'auto.4': 'Payment received → Update business metrics',
+    'auto.5': 'Customer inactive → Prepare a marketing opportunity',
+    'auto.note': 'Automate the routine. Stay in control of the important.',
+    'growth.idx': 'Growth / 010',
+    'growth.title': 'Turn business data into better growth decisions.',
+    'growth.sub': 'Know who your customers are, what they buy, what they respond to, and where your next opportunity is. Growth shouldn’t live in a separate system from the business itself.',
+    'growth.path': 'Customers → Analytics → Marketing → Automation → AI',
+    'commerce.idx': 'Commerce / 011',
+    'commerce.title': 'Sell anywhere. Stay connected everywhere.',
+    'commerce.sub': 'Whether a customer buys in your store or online, OMINO keeps orders, payments, inventory, and customer information connected.',
+    'commerce.eq': 'IN STORE<br>+<br>ONLINE<br>=<br>ONE BUSINESS',
+    'analytics.idx': 'Analytics / 012',
+    'analytics.title': 'A dashboard that tells you something.',
+    'analytics.sub': 'See revenue, orders, customers, products, inventory, and performance — then move from numbers to meaning. Less reporting. More understanding.',
+    'pricing.idx': 'Plans / 013',
+    'pricing.title': 'Start simple.<br>Grow without rebuilding your business.',
     'bill.month': 'Monthly', 'bill.year': 'Yearly',
     'bill.per': '/ month', 'bill.perY': '/ month, billed yearly',
-    'plan.s.desc': 'Run your business.', 'plan.s.1': 'OMINO Intelligence', 'plan.s.2': 'Basic insights', 'plan.s.cta': 'Start Starter',
-    'plan.p.desc': 'Grow your business.', 'plan.p.1': 'Advanced AI insights', 'plan.p.2': 'Recommendations', 'plan.p.3': 'Forecasting', 'plan.p.cta': 'Start Pro',
-    'plan.b.desc': 'Scale your business.', 'plan.b.1': 'AI Business Agent', 'plan.b.2': 'Automation', 'plan.b.3': 'Advanced intelligence', 'plan.b.cta': 'Start Business',
-    founding: 'The first 50 businesses lock in founding pricing for as long as they stay on OMINO.',
+    'plan.s.name': 'Run',
+    'plan.s.desc': 'For businesses getting started with OMINO.',
+    'plan.s.1': 'OMINO Intelligence', 'plan.s.2': 'Basic insights', 'plan.s.cta': 'Start Run',
+    'plan.p.name': 'Grow',
+    'plan.p.desc': 'For businesses ready for deeper intelligence and automation.',
+    'plan.p.1': 'Advanced AI insights', 'plan.p.2': 'Recommendations', 'plan.p.3': 'Forecasting', 'plan.p.cta': 'Start Grow',
+    'plan.b.name': 'Scale',
+    'plan.b.desc': 'For businesses operating at greater complexity.',
+    'plan.b.1': 'AI Business Agent', 'plan.b.2': 'Automation', 'plan.b.3': 'Advanced intelligence', 'plan.b.cta': 'Start Scale',
+    'founding.title': 'Be one of the first 50.',
+    founding: 'OMINO is being built with businesses, not just for them. The first 50 businesses become part of the founding group and lock in founding pricing for as long as they stay on OMINO.',
+    'founding.cta': 'Start building with OMINO',
+    'final.title': 'Your business already has the data.',
+    'final.sub': 'Now give it a system that understands it. Bring your business together with OMINO.',
+    'final.tag': 'One business. One system. One clear picture.',
     'fee.title': 'Payments',
     fee: 'OMINO platform fee of 0.3%–0.5% on every successful online payment, plus the payment provider’s own fees.',
     'footer.copy': '© 2026 OMINO. All rights reserved.',
     'foot.privacy': 'Privacy', 'foot.terms': 'Terms', 'foot.faq': 'FAQ', 'foot.contact': 'Contact', 'foot.cookies': 'Cookies'
   },
   ar: {
-    title: 'OMINO — نظام تشغيل الأعمال',
+    title: 'OMINO — نظام التشغيل الذكي لأعمالك',
     'nav.product': 'المنتج', 'nav.ai': 'AI', 'nav.pricing': 'التسعير', 'nav.about': 'عن OMINO', 'nav.login': 'دخول',
     'cta.start': 'ابدأ مجاناً', 'cta.fit': 'استكشف OMINO',
     'menu.open': 'فتح القائمة', 'menu.close': 'إغلاق القائمة',
@@ -1649,17 +1922,36 @@ const copy = {
     'menu.tag': 'نظام تشغيل الأعمال',
     'menu.connect': 'تواصل',
     skip: 'تخطي إلى المحتوى',
-    'hero.line1': 'عملك.',
-    'hero.line2': 'ذكاء واحد.',
-    'hero.sub': 'OMINO يجمع متجرك، ونقطة البيع، والمخزون، والعملاء، والمدفوعات، والتحليلات في نظام أعمال ذكي واحد — لترى ما يحدث، وتفهم السبب، وتعرف ماذا تفعل بعد ذلك.',
-    'hero.fine': 'تسعير المؤسسين لأول 50 نشاطاً.',
-    'problem.title': 'عملك ما يحتاج<br>خمس أنظمة عشان يشتغل.',
-    'problem.connect': 'OMINO يربطها في مصدر واحد للحقيقة.',
+    'hero.idx': 'نظام تشغيل الأعمال بالذكاء الاصطناعي / 001',
+    'hero.line1': 'شغّل عملك بالكامل',
+    'hero.line2': 'من نظام ذكي واحد.',
+    'hero.sub': 'OMINO يربط متجرك، ونقطة البيع، والمخزون، والعملاء، والمدفوعات، والتحليلات، والذكاء الاصطناعي — ليعطيك صورة واضحة عن عملك ويساعدك تعرف ماذا تفعل بعد ذلك.',
+    'hero.micro': 'لا حاجة لبطاقة ائتمان.',
+    'hero.fine': 'تسعير المؤسسين متاح لأول 50 نشاطاً.',
+    'problem.idx': 'المشكلة / 002',
+    'problem.title': 'عملك ما المفروض يتوزع<br>على خمسة أماكن مختلفة.',
+    'problem.sub': 'المبيعات في نظام. المخزون في آخر. العملاء في مكان ثالث. المدفوعات في مكان رابع. والتقارير تجمعها بنفسك.',
+    'problem.shift': 'المشكلة ليست نقص البيانات. المشكلة أن بياناتك لا تعمل معاً.',
+    'problem.connect': 'OMINO يربطها في نظام أعمال واحد.',
     'problem.caption': 'عمل واحد. نظام واحد. صورة واضحة.',
-    'business.title': 'نظام واحد.<br>مصمم حول شغلك.',
-    'business.sub': 'اللوحة تتغيّر حسب ما تبيع — لا حسب قالب جاهز.',
-    'ai.title': 'اعرف وش صار.<br>اعرف وش تسوي بعدين.',
-    'ai.sub': 'OMINO يحوّل بيانات نشاطك إلى قرارات — يحدد المشكلة، يشرح ليش صارت، ويقترح خطوتك التالية.',
+    'system.sub': 'OMINO يربط عمليات نشاطك اليومية في نظام تشغيل ذكي واحد — من أول عملية بيع إلى القرار التالي.',
+    'connected.idx': 'النظام / 003',
+    'connected.title': 'كل إجراء يجعل<br>النظام بأكمله أذكى.',
+    'connected.sub': 'البيع ما ينتهي لما تكتمل الدفعة. لازم يحدّث المخزون، وسجل العميل، والتحليلات، وذكاء الأعمال تلقائياً.',
+    'flow.1': 'العميل يشتري',
+    'flow.2': 'يُنشأ الطلب',
+    'flow.3': 'تُسجَّل الدفعة',
+    'flow.4': 'يُحدَّث المخزون',
+    'flow.5': 'يُحدَّث ملف العميل',
+    'flow.6': 'تُحدَّث التحليلات',
+    'flow.7': 'يُحدَّث ذكاء الأعمال',
+    'flow.8': 'OMINO يقترح الخطوة التالية',
+    'business.idx': 'مصمم حول عملك / 004',
+    'business.title': 'عملك فريد.<br>ونظام التشغيل لازم يكون كذلك.',
+    'business.sub': 'OMINO يتكيّف مع طريقة عملك — سواء كنت تبيع منتجات، تخدم عملاء، تدير مطعماً، أو تشرف على عدة فروع. منصة واحدة. أعمال مختلفة. وضوح واحد.',
+    'intel.idx': 'ذكاء الأعمال / 005',
+    'ai.title': 'لا تكتفي بمعرفة ما حدث.<br>افهم السبب.',
+    'ai.sub': 'OMINO يحوّل بيانات نشاطك إلى إجابات واضحة — يوضح ما تغيّر، ولماذا تغيّر، وما يستحق انتباهك بعد ذلك.',
     'chat.top': 'تحليل الربح',
     'chat.user': 'ليش الربح نزل هذا الشهر؟',
     'chat.ai': 'الإيرادات نمت 8%.<br>الربح الإجمالي نزل 4%.',
@@ -1668,17 +1960,72 @@ const copy = {
     'chat.3': 'الخصومات زادت 18%',
     'chat.rk': 'الخطوة التالية',
     'chat.rec': 'قلّل الخصم على المنتج أ، وارفع المنتج ب بنسبة 4%.',
-    'ai.note': 'ما في إرسال أو تغيير بدون موافقتك.',
-    'pricing.title': 'ابدأ بما تحتاجه.<br>ثم كبّر لكل شيء آخر.',
+    'ai.note': 'أنت تبقى مسيطراً. OMINO يقترح. وأنت تقرر.',
+    'loop.idx': 'حلقة الذكاء / 006',
+    'loop.title': 'من البيانات إلى القرارات.',
+    'loop.sub': 'OMINO لا يعرض أرقاماً فقط. يربط الإشارات وراءها لتتخذ قرارات أفضل بأقل تخمين.',
+    'loop.see': 'شاهد',
+    'loop.understand': 'افهم',
+    'loop.decide': 'قرّر',
+    'loop.act': 'نفّذ',
+    'loop.learn': 'تعلّم',
+    'ai.idx': 'AI / 007',
+    'ai.agent.title': 'ذكاء اصطناعي يفهم<br>عملك.',
+    'ai.agent.sub': 'OMINO AI يعمل مع سياق نشاطك — منتجاتك، طلباتك، عملاءك، مخزونك، تحليلاتك، وعملياتك — ليساعدك تفهم وتدير عملك.',
+    'ai.ex1': 'أي المنتجات تفقد الهامش؟',
+    'ai.ex2': 'ماذا أعيد تخزينه هذا الأسبوع؟',
+    'ai.ex3': 'أي العملاء يصبحون غير نشطين؟',
+    'ai.ex4': 'ما الذي تغيّر في مبيعاتي هذا الشهر؟',
+    'ai.ex5': 'أرني أين أفقد المال.',
+    'ai.agent.note': 'الذكاء الاصطناعي يفهم العمل — لا السؤال فقط.',
+    'control.idx': 'الثقة / 008',
+    'control.title': 'ذكي بما يكفي للمساعدة.<br>ومضبوط بما يكفي للثقة.',
+    'control.sub': 'OMINO يحدد الفرص، ويجهّز الإجراءات، ويؤتمت العمل الروتيني — مع إبقاء القرارات المهمة بيدك.',
+    'control.1': 'لا يحدث شيء مهم بدون موافقتك.',
+    'control.2': 'المبالغ المستردة، وتعديلات المخزون، والإجراءات المالية تحتاج تأكيداً.',
+    'control.3': 'ترى ما تغيّر، ومن وافق، ولماذا.',
+    'auto.idx': 'الأتمتة / 009',
+    'auto.title': 'توقف عن تكرار عمل يعرفه نشاطك مسبقاً.',
+    'auto.sub': 'اربط الأحداث بالإجراءات ودع OMINO يتولى العمليات الروتينية تلقائياً.',
+    'auto.1': 'مخزون منخفض ← تنبيه المنتج',
+    'auto.2': 'عميل جديد ← إضافة شريحة',
+    'auto.3': 'طلب مكتمل ← تحديث سجل العميل',
+    'auto.4': 'دفعة مستلمة ← تحديث مؤشرات الأعمال',
+    'auto.5': 'عميل غير نشط ← تجهيز فرصة تسويقية',
+    'auto.note': 'أتمت الروتين. وابقَ مسيطراً على المهم.',
+    'growth.idx': 'النمو / 010',
+    'growth.title': 'حوّل بيانات الأعمال إلى قرارات نمو أفضل.',
+    'growth.sub': 'اعرف من هم عملاؤك، وماذا يشترون، وماذا يستجيبون له، وأين فرصتك التالية. النمو ما لازم يعيش في نظام منفصل عن العمل نفسه.',
+    'growth.path': 'العملاء ← التحليلات ← التسويق ← الأتمتة ← AI',
+    'commerce.idx': 'التجارة / 011',
+    'commerce.title': 'بِع في أي مكان. وابقَ متصلاً في كل مكان.',
+    'commerce.sub': 'سواء اشترى العميل من متجرك أو أونلاين، OMINO يبقي الطلبات والمدفوعات والمخزون ومعلومات العملاء متصلة.',
+    'commerce.eq': 'في المتجر<br>+<br>أونلاين<br>=<br>عمل واحد',
+    'analytics.idx': 'التحليلات / 012',
+    'analytics.title': 'لوحة تحكم تقول لك شيئاً.',
+    'analytics.sub': 'شاهد الإيرادات والطلبات والعملاء والمنتجات والمخزون والأداء — ثم انتقل من الأرقام إلى المعنى. تقارير أقل. فهم أكثر.',
+    'pricing.idx': 'الباقات / 013',
+    'pricing.title': 'ابدأ ببساطة.<br>ونمُ دون إعادة بناء عملك.',
     'bill.month': 'شهري', 'bill.year': 'سنوي',
     'bill.per': '/ شهر', 'bill.perY': '/ شهر، سنوياً',
-    'plan.s.desc': 'شغّل نشاطك.', 'plan.s.1': 'OMINO Intelligence', 'plan.s.2': 'رؤى أساسية', 'plan.s.cta': 'ابدأ Starter',
-    'plan.p.desc': 'كبّر نشاطك.', 'plan.p.1': 'رؤى ذكاء متقدمة', 'plan.p.2': 'توصيات', 'plan.p.3': 'توقعات', 'plan.p.cta': 'ابدأ Pro',
-    'plan.b.desc': 'وسّع نشاطك.', 'plan.b.1': 'AI Business Agent', 'plan.b.2': 'أتمتة', 'plan.b.3': 'ذكاء متقدم', 'plan.b.cta': 'ابدأ Business',
-    founding: 'أول 50 نشاطاً يثبتون تسعير المؤسسين طالما بقوا على OMINO.',
+    'plan.s.name': 'Run',
+    'plan.s.desc': 'للأنشطة التي تبدأ مع OMINO.',
+    'plan.s.1': 'OMINO Intelligence', 'plan.s.2': 'رؤى أساسية', 'plan.s.cta': 'ابدأ Run',
+    'plan.p.name': 'Grow',
+    'plan.p.desc': 'للأنشطة الجاهزة لذكاء أعمق وأتمتة أكثر.',
+    'plan.p.1': 'رؤى ذكاء متقدمة', 'plan.p.2': 'توصيات', 'plan.p.3': 'توقعات', 'plan.p.cta': 'ابدأ Grow',
+    'plan.b.name': 'Scale',
+    'plan.b.desc': 'للأنشطة ذات التعقيد الأعلى.',
+    'plan.b.1': 'AI Business Agent', 'plan.b.2': 'أتمتة', 'plan.b.3': 'ذكاء متقدم', 'plan.b.cta': 'ابدأ Scale',
+    'founding.title': 'كن من أوائل الـ 50.',
+    founding: 'OMINO يُبنى مع الأعمال، لا لها فقط. أول 50 نشاطاً يصبحون جزءاً من مجموعة المؤسسين ويثبتون تسعير المؤسسين طالما بقوا على OMINO.',
+    'founding.cta': 'ابدأ البناء مع OMINO',
+    'final.title': 'عملك يملك البيانات أصلاً.',
+    'final.sub': 'الآن أعطه نظاماً يفهمها. اجمع عملك مع OMINO.',
+    'final.tag': 'عمل واحد. نظام واحد. صورة واضحة.',
     'fee.title': 'المدفوعات',
     fee: 'رسوم منصة OMINO 0.3%–0.5% على كل دفعة إلكترونية ناجحة، بالإضافة إلى رسوم مزود الدفع نفسه.',
-    'footer.copy': '© 2026 OMINO. جميع الحقوق محفوظة.',
+    'footer.copy': '© 2026 OMINO. All rights reserved.',
     'foot.privacy': 'الخصوصية', 'foot.terms': 'الشروط', 'foot.faq': 'أسئلة', 'foot.contact': 'تواصل', 'foot.cookies': 'الكوكيز'
   }
 };
@@ -1824,12 +2171,13 @@ function armOpening(){
   gsap.set('.hero-line > span', {opacity:0, y:'108%'});
   gsap.set('#heroSub', {opacity:0, y:18});
   gsap.set('#heroCtas', {opacity:0, y:16});
+  gsap.set('.hero-micro', {opacity:0, y:10});
   gsap.set('#heroFine', {opacity:0, y:10});
 }
 function playOpening(cinematic){
   document.documentElement.classList.remove('await-open');
   if(reduceMotion){
-    gsap.set('#siteNav, #orbit, #heroIndex, .hero-line > span, #heroSub, #heroCtas, #heroFine', {
+    gsap.set('#siteNav, #orbit, #heroIndex, .hero-line > span, #heroSub, #heroCtas, .hero-micro, #heroFine', {
       clearProps:'all'
     });
     return;
@@ -1851,7 +2199,8 @@ function playOpening(cinematic){
     .to('#orbit', {opacity:1, duration:full ? 0.9 : 0.5}, full ? 0.28 : 0.12)
     .to('#heroSub', {opacity:1, y:0, duration:full ? 0.8 : 0.5}, full ? 0.58 : 0.28)
     .to('#heroCtas', {opacity:1, y:0, duration:full ? 0.72 : 0.46}, full ? 0.74 : 0.38)
-    .to('#heroFine', {opacity:1, y:0, duration:full ? 0.6 : 0.4}, full ? 0.88 : 0.46);
+    .to('.hero-micro', {opacity:1, y:0, duration:full ? 0.55 : 0.38}, full ? 0.82 : 0.42)
+    .to('#heroFine', {opacity:1, y:0, duration:full ? 0.6 : 0.4}, full ? 0.92 : 0.48);
 }
 armOpening();
 if(window.OminoLoader){
@@ -1961,7 +2310,7 @@ if(!reduceMotion){
     .to({}, {duration:.48});
   }
   gsap.timeline({scrollTrigger:{trigger:'#revealList',start:'top 80%'}})
-    .from('.reveal-item',{opacity:0,y:8,duration:.55,stagger:.16,ease:fluidEase})
+    .from('#revealList .reveal-item',{opacity:0,y:8,duration:.55,stagger:.16,ease:fluidEase})
     .from('#recBox',{opacity:0,y:8,duration:.55,ease:fluidEase},'-=.15');
 }
 

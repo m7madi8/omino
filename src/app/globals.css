@@ -1,0 +1,385 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './storefront-themes.css';
+
+:root {
+  --ink: #070809;
+  --ink-2: #101214;
+  --paper: #f4f5f6;
+  --paper-2: #e8eaec;
+  --stone: #85898d;
+  --stone-2: #5d6267;
+  --hairline: #d7dadd;
+  --hairline-dark: #292d31;
+  --accent: #5b7cff;
+  --accent-soft: #cbd3ff;
+  --good: #63d6a0;
+  --danger: #c45b5b;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --font-display: 'Archivo', sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-ar: 'IBM Plex Sans Arabic', sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-hairline;
+  }
+
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-display font-medium tracking-tight;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--hairline) transparent;
+  }
+
+  .hero-rise {
+    animation: hero-rise 0.8s var(--ease) both;
+  }
+
+  .hero-rise-delayed {
+    animation: hero-rise 0.9s var(--ease) 0.08s both;
+  }
+
+  .sf-fade-in {
+    animation: sf-fade-in 0.55s var(--ease) both;
+  }
+
+  .sf-page-enter {
+    animation: sf-page-enter 0.28s var(--ease) both;
+  }
+
+  .sf-cart-pulse {
+    animation: sf-cart-pulse 0.45s var(--ease);
+  }
+
+  .sf-item-exit {
+    animation: sf-item-exit 0.35s var(--ease) forwards;
+  }
+}
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sf-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sf-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sf-cart-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.18);
+  }
+}
+
+@keyframes sf-item-exit {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise,
+  .hero-rise-delayed,
+  .sf-fade-in,
+  .sf-page-enter,
+  .sf-cart-pulse,
+  .sf-item-exit {
+    animation: none !important;
+  }
+
+  [data-storefront] .sf-image-hover {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  [data-storefront] .sf-header {
+    transition: none !important;
+  }
+
+  [data-storefront] .sf-nav-link::after {
+    transition: none !important;
+  }
+
+  [data-storefront] .sf-drawer-panel {
+    transition: none !important;
+  }
+}
+
+/* Storefront design tokens — derived from store primary/secondary */
+[data-storefront] {
+  color-scheme: light;
+  --sf-font-display: var(--font-display);
+  --sf-font-body: var(--font-body);
+  --sf-radius: 4px;
+  --sf-primary: var(--store-primary, var(--accent));
+  --sf-secondary: var(--store-secondary, var(--paper-2));
+  --sf-bg: #ffffff;
+  --sf-surface: color-mix(in srgb, var(--sf-secondary) 24%, #ffffff);
+  --sf-surface-elevated: color-mix(in srgb, var(--sf-secondary) 14%, #ffffff);
+  --sf-ink: color-mix(in srgb, var(--sf-primary) 80%, #14100d);
+  --sf-muted: color-mix(in srgb, var(--sf-primary) 40%, var(--sf-ink) 24%);
+  --sf-border: color-mix(in srgb, var(--sf-primary) 16%, #ffffff 84%);
+  --sf-accent-text: color-mix(in srgb, var(--sf-primary) 94%, #000000 6%);
+  --sf-gradient-hero: linear-gradient(
+    145deg,
+    #ffffff 0%,
+    color-mix(in srgb, var(--sf-primary) 6%, #ffffff) 100%
+  );
+  background-color: var(--sf-bg);
+  color: var(--sf-ink);
+  font-family: var(--sf-font-body, var(--font-body));
+}
+
+[data-storefront] .font-display {
+  font-family: var(--sf-font-display, var(--font-display));
+}
+
+[data-storefront] .sf-surface {
+  background-color: var(--sf-surface);
+}
+
+[data-storefront] .sf-border {
+  border-color: var(--sf-border);
+}
+
+[data-storefront] .sf-muted {
+  color: var(--sf-muted);
+}
+
+[data-storefront] .sf-ink {
+  color: var(--sf-ink);
+}
+
+[data-storefront] .sf-btn-primary {
+  background-color: var(--sf-primary);
+  color: color-mix(in srgb, #ffffff 92%, var(--sf-primary) 8%);
+}
+
+[data-storefront] .sf-btn-primary:hover {
+  background-color: color-mix(in srgb, var(--sf-primary) 88%, #000000 12%);
+}
+
+[data-storefront] .sf-link {
+  color: var(--sf-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+[data-storefront] .sf-image-hover {
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-storefront] .group:hover .sf-image-hover {
+  transform: scale(1.03);
+}
+
+[data-storefront] .sf-category-strip {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+[data-storefront] .sf-category-strip::-webkit-scrollbar {
+  display: none;
+}
+
+[data-storefront] .sf-category-item {
+  scroll-snap-align: start;
+}
+
+[data-storefront] .sf-header {
+  transition:
+    height 0.35s var(--ease),
+    background-color 0.35s var(--ease),
+    backdrop-filter 0.35s var(--ease),
+    border-color 0.35s var(--ease);
+}
+
+[data-storefront] .sf-header.sf-header-scrolled {
+  background-color: color-mix(in srgb, var(--sf-surface) 94%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+[data-storefront] .sf-nav-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: 0.5rem;
+}
+
+[data-storefront] .sf-nav-link::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0.5rem;
+  bottom: 10px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: var(--sf-underline-origin, left);
+  transition: transform 0.35s var(--ease);
+}
+
+[data-storefront] .sf-nav-link:hover::after,
+[data-storefront] .sf-nav-link:focus-visible::after {
+  transform: scaleX(1);
+}
+
+[data-storefront] .sf-drawer-panel {
+  transition: transform 0.4s var(--ease);
+}
+
+[data-storefront] .sf-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.55s var(--ease),
+    transform 0.55s var(--ease);
+}
+
+[data-storefront] .sf-reveal.sf-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-storefront] .sf-product-image {
+  aspect-ratio: 4 / 5;
+  max-height: clamp(280px, 55vh, 640px);
+}
+
+[data-storefront] .sf-product-image--hero {
+  max-height: clamp(420px, 48vh, 560px);
+}
+
+[data-storefront] .sf-product-image--compact {
+  max-height: clamp(200px, 28vh, 280px);
+}
+
+/* Hero */
+[data-storefront] .sf-btn-hero {
+  transition:
+    transform 0.35s var(--ease),
+    background-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+
+[data-storefront] .sf-btn-hero:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--sf-primary) 45%, transparent);
+}
+
+[data-storefront] .sf-btn-hero:focus-visible {
+  outline: 2px solid var(--sf-primary);
+  outline-offset: 3px;
+}
+
+[data-storefront] .sf-link-hero {
+  color: var(--sf-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition:
+    opacity 0.3s var(--ease),
+    text-underline-offset 0.3s var(--ease);
+}
+
+[data-storefront] .sf-link-hero:hover {
+  opacity: 0.75;
+  text-underline-offset: 6px;
+}
+
+@keyframes sf-hero-image-reveal {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+[data-storefront] .sf-hero-image-reveal {
+  animation: sf-hero-image-reveal 1s var(--ease) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-storefront] .sf-btn-hero:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  [data-storefront] .sf-hero-image-reveal {
+    animation: none;
+  }
+}
+
+[data-storefront] .sf-skeleton {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--sf-surface) 80%, transparent) 0%,
+    color-mix(in srgb, var(--sf-secondary) 40%, var(--sf-surface)) 50%,
+    color-mix(in srgb, var(--sf-surface) 80%, transparent) 100%
+  );
+  background-size: 200% 100%;
+  animation: sf-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes sf-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-storefront] .sf-skeleton {
+    animation: none;
+  }
+}

@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /main
+Allow: /store/
+Disallow: /app/
+Disallow: /api/
+Disallow: /onboarding
+Disallow: /login
+Disallow: /signup
+
+Sitemap: /sitemap.xml

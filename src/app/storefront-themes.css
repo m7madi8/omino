@@ -1,0 +1,108 @@
+/* Theme-specific storefront overrides — scoped by data-theme */
+
+[data-storefront][data-theme='aura'] {
+  --sf-bg: #ffffff;
+  --sf-surface: color-mix(in srgb, var(--store-secondary) 18%, #ffffff);
+  letter-spacing: 0.01em;
+}
+
+[data-storefront][data-theme='aura'] .font-display {
+  font-family: var(--store-font-heading);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+[data-storefront][data-theme='aura'] .sf-btn-primary {
+  border-radius: var(--store-radius-md);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+[data-storefront][data-theme='noir'] {
+  --sf-bg: #fafafa;
+  --sf-ink: #0a0a0a;
+  --sf-border: color-mix(in srgb, #0a0a0a 14%, #ffffff);
+}
+
+[data-storefront][data-theme='noir'] .font-display {
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+[data-storefront][data-theme='noir'] .sf-btn-primary {
+  border-radius: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+}
+
+[data-storefront][data-theme='form'] {
+  --sf-bg: #ffffff;
+  --sf-radius: var(--store-radius-sm);
+}
+
+[data-storefront][data-theme='form'] .font-display {
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+[data-storefront][data-theme='form'] .sf-product-card {
+  border: 1px solid var(--sf-border);
+  border-radius: var(--store-radius-sm);
+}
+
+[data-storefront][data-theme='atelier'] .font-display {
+  font-family: var(--store-font-heading);
+  font-style: italic;
+  font-weight: 400;
+}
+
+[data-storefront][data-theme='atelier'] .sf-section-title {
+  font-family: var(--store-font-heading);
+  font-style: italic;
+}
+
+[data-storefront][data-theme='pulse'] {
+  --sf-bg: #ffffff;
+}
+
+[data-storefront][data-theme='pulse'] .font-display {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+[data-storefront][data-theme='pulse'] .sf-btn-primary {
+  border-radius: var(--store-radius-lg);
+  font-weight: 600;
+  min-height: 52px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+[data-storefront] {
+  font-family: var(--store-font-body, var(--font-body));
+}
+
+[data-storefront] .font-display {
+  font-family: var(--store-font-heading, var(--font-display));
+}
+
+[data-storefront] .sf-themed-section {
+  padding-block: var(--store-space-section, 4rem);
+}
+
+[data-storefront] .sf-themed-card {
+  border-radius: var(--store-radius-md);
+  box-shadow: var(--store-shadow-card);
+}
+
+[data-storefront][data-theme='noir'] .sf-header {
+  border-bottom-width: 2px;
+}
+
+[data-storefront][data-theme='pulse'] .sf-header {
+  border-bottom: none;
+  box-shadow: 0 1px 0 var(--sf-border);
+}

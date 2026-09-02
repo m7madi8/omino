@@ -6,7 +6,7 @@ export function sessionHasPermission(
   permission: PermissionKey
 ): boolean {
   if (!session) return false;
-  if (session.roleSlug === 'OWNER') return true;
+  if (session.isPlatformAdmin || session.roleSlug === 'OWNER') return true;
   return session.permissions.includes(permission);
 }
 
@@ -23,6 +23,7 @@ export function assertOrgAccess(
   session: SessionUser | null | undefined,
   organizationId: string
 ): void {
+  if (session?.isPlatformAdmin) return;
   if (!session || session.organizationId !== organizationId) {
     throw new Error('FORBIDDEN');
   }

@@ -9,7 +9,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     redirect('/login');
   }
 
-  if (!session.user.onboardingComplete) {
+  if (!session.user.onboardingComplete && !session.user.isPlatformAdmin) {
     redirect('/onboarding');
   }
 

@@ -14,6 +14,7 @@ export type SessionUser = {
   roleSlug: string | null;
   permissions: PermissionKey[];
   onboardingComplete: boolean;
+  isPlatformAdmin: boolean;
 };
 
 export type ApiError = {

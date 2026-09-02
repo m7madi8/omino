@@ -6,6 +6,7 @@ type MiddlewareToken = {
   sub?: string;
   sessionUser?: {
     onboardingComplete?: boolean;
+    isPlatformAdmin?: boolean;
   };
 };
 
@@ -19,12 +20,13 @@ export async function middleware(request: NextRequest) {
 
   const isAuthed = Boolean(token?.sub);
   const onboardingComplete = token?.sessionUser?.onboardingComplete ?? false;
+  const isPlatformAdmin = token?.sessionUser?.isPlatformAdmin ?? false;
 
   if (pathname.startsWith('/app')) {
     if (!isAuthed) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
-    if (!onboardingComplete) {
+    if (!onboardingComplete && !isPlatformAdmin) {
       return NextResponse.redirect(new URL('/onboarding', request.url));
     }
     return NextResponse.next();
@@ -41,7 +43,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if ((pathname === '/login' || pathname === '/signup') && isAuthed) {
-    if (onboardingComplete) {
+    if (onboardingComplete || isPlatformAdmin) {
       return NextResponse.redirect(new URL('/app', request.url));
     }
     return NextResponse.redirect(new URL('/onboarding', request.url));

@@ -1,5 +1,7 @@
 import { prisma } from '@/lib/db';
 import type { PermissionKey } from '@/lib/permissions/constants';
+import { PERMISSIONS } from '@/lib/permissions/constants';
+import { resolvePlatformAdmin } from '@/lib/platform/admin';
 import type { SessionUser } from '@/types';
 
 export async function getUserPermissions(
@@ -52,6 +54,7 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
     user.memberships[0];
 
   if (!membership) {
+    const isPlatformAdmin = resolvePlatformAdmin(user.email, user.isPlatformAdmin);
     return {
       id: user.id,
       email: user.email,
@@ -63,9 +66,10 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
       storeName: null,
       branchId: null,
       branchName: null,
-      roleSlug: null,
-      permissions: [],
+      roleSlug: isPlatformAdmin ? 'PLATFORM_ADMIN' : null,
+      permissions: isPlatformAdmin ? [...PERMISSIONS] : [],
       onboardingComplete: false,
+      isPlatformAdmin,
     };
   }
 
@@ -111,6 +115,8 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
     org.name && org.country && org.currency && storeId && branchId
   );
 
+  const isPlatformAdmin = resolvePlatformAdmin(user.email, user.isPlatformAdmin);
+
   return {
     id: user.id,
     email: user.email,
@@ -122,10 +128,11 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
     storeName,
     branchId,
     branchName,
-    roleSlug: membership.role.slug,
-    permissions: membership.role.permissions.map(
-      (rp) => rp.permission.key as PermissionKey
-    ),
+    roleSlug: isPlatformAdmin ? 'PLATFORM_ADMIN' : membership.role.slug,
+    permissions: isPlatformAdmin
+      ? [...PERMISSIONS]
+      : membership.role.permissions.map((rp) => rp.permission.key as PermissionKey),
     onboardingComplete,
+    isPlatformAdmin,
   };
 }

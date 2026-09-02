@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { Prisma } from '@prisma/client';
 import { handleApiError, requireTenantContext } from '@/lib/api/tenant';
 import { IMAGE_MAX_BYTES } from '@/lib/storage/image-mime';
+import { mediaUploadErrorResponse } from '@/lib/storage/upload-api-errors';
 import {
   deleteStoreAssetFile,
   saveStoreAssetFile,
@@ -107,14 +108,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ url: saved.url, store: updated }, { status: 201 });
   } catch (err) {
-    if (err instanceof Error) {
-      if (err.message === 'INVALID_FILE_TYPE') {
-        return NextResponse.json({ error: 'INVALID_FILE_TYPE' }, { status: 400 });
-      }
-      if (err.message === 'FILE_TOO_LARGE') {
-        return NextResponse.json({ error: 'FILE_TOO_LARGE' }, { status: 400 });
-      }
-    }
+    const uploadErr = mediaUploadErrorResponse(err);
+    if (uploadErr) return uploadErr;
     return handleApiError(err);
   }
 }

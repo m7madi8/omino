@@ -1,6 +1,20 @@
-/** Client-side product image validation — mobile-safe (empty MIME, HEIC, extension fallback). */
+/** Shared client/server image upload validation — mobile-safe (empty MIME, HEIC, extensions). */
 
-const ALLOWED_MIMES = new Set(['image/png', 'image/jpeg', 'image/webp']);
+export const STANDARD_IMAGE_ACCEPT =
+  'image/png,image/jpeg,image/webp,.jpg,.jpeg,.png,.webp,image/*';
+
+export const FAVICON_ACCEPT =
+  'image/png,image/jpeg,image/webp,image/x-icon,image/vnd.microsoft.icon,.ico,.png,.jpg,.jpeg,image/*';
+
+const PRODUCT_MIMES = new Set(['image/png', 'image/jpeg', 'image/webp']);
+
+const FAVICON_MIMES = new Set([
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'image/x-icon',
+  'image/vnd.microsoft.icon',
+]);
 
 export type ImageValidationResult =
   | { ok: true; effectiveMime: string }
@@ -12,6 +26,7 @@ export function inferMimeFromFilename(filename: string): string | null {
   if (ext === 'jpg' || ext === 'jpeg') return 'image/jpeg';
   if (ext === 'png') return 'image/png';
   if (ext === 'webp') return 'image/webp';
+  if (ext === 'ico') return 'image/x-icon';
   if (ext === 'heic' || ext === 'heif') return 'image/heic';
   return null;
 }
@@ -22,43 +37,24 @@ export function resolveClientImageMime(file: File): string {
   return inferMimeFromFilename(file.name) || '';
 }
 
-export function validateProductImageFile(
+function heicError(): ImageValidationResult {
+  return {
+    ok: false,
+    code: 'HEIC_NOT_SUPPORTED',
+    message:
+      'HEIC photos are not supported. On iPhone: Settings → Camera → Formats → Most Compatible, or choose a JPG/PNG photo.',
+  };
+}
+
+export function validateImageFile(
   file: File,
-  maxBytes: number
+  options: { maxBytes: number; allowFavicon?: boolean }
 ): ImageValidationResult {
   const mime = resolveClientImageMime(file);
+  const allowed = options.allowFavicon ? FAVICON_MIMES : PRODUCT_MIMES;
 
   if (mime === 'image/heic' || mime === 'image/heif') {
-    return {
-      ok: false,
-      code: 'HEIC_NOT_SUPPORTED',
-      message:
-        'HEIC photos are not supported. On iPhone use Settings → Camera → Formats → Most Compatible, or pick a JPG/PNG photo.',
-    };
-  }
-
-  if (mime && !ALLOWED_MIMES.has(mime)) {
-    return {
-      ok: false,
-      code: 'INVALID_FILE_TYPE',
-      message: 'Only PNG, JPG, and WEBP images are allowed.',
-    };
-  }
-
-  if (!mime) {
-    return {
-      ok: false,
-      code: 'INVALID_FILE_TYPE',
-      message: 'Could not detect image type. Try JPG or PNG.',
-    };
-  }
-
-  if (file.size > maxBytes) {
-    return {
-      ok: false,
-      code: 'FILE_TOO_LARGE',
-      message: `Image must be ${Math.round(maxBytes / (1024 * 1024))} MB or smaller.`,
-    };
+    return heicError();
   }
 
   if (file.size === 0) {
@@ -69,8 +65,56 @@ export function validateProductImageFile(
     };
   }
 
+  if (file.size > options.maxBytes) {
+    return {
+      ok: false,
+      code: 'FILE_TOO_LARGE',
+      message: `Image must be ${Math.round(options.maxBytes / (1024 * 1024))} MB or smaller.`,
+    };
+  }
+
+  if (!mime) {
+    return {
+      ok: false,
+      code: 'INVALID_FILE_TYPE',
+      message: options.allowFavicon
+        ? 'Use PNG, JPG, WEBP, or ICO.'
+        : 'Could not detect image type. Try JPG or PNG.',
+    };
+  }
+
+  if (!allowed.has(mime)) {
+    return {
+      ok: false,
+      code: 'INVALID_FILE_TYPE',
+      message: options.allowFavicon
+        ? 'Only PNG, JPG, WEBP, and ICO files are allowed.'
+        : 'Only PNG, JPG, and WEBP images are allowed.',
+    };
+  }
+
   return { ok: true, effectiveMime: mime };
 }
+
+/** @deprecated use validateImageFile */
+export function validateProductImageFile(
+  file: File,
+  maxBytes: number
+): ImageValidationResult {
+  return validateImageFile(file, { maxBytes });
+}
+
+export const UPLOAD_ERROR_CODES = [
+  'INVALID_FILE_TYPE',
+  'FILE_TOO_LARGE',
+  'HEIC_NOT_SUPPORTED',
+  'EMPTY_FILE',
+  'STORAGE_UPLOAD_FAILED',
+  'STORAGE_BUCKET_MISSING',
+  'SUPABASE_NOT_CONFIGURED',
+] as const;
+
+export type UploadErrorCode = (typeof UPLOAD_ERROR_CODES)[number];
 
 export function uploadErrorMessage(code: string, fallback?: string): string {
   const map: Record<string, string> = {
@@ -86,4 +130,18 @@ export function uploadErrorMessage(code: string, fallback?: string): string {
     VALIDATION_ERROR: 'Invalid upload request.',
   };
   return map[code] || fallback || code || 'Upload failed';
+}
+
+export function parseUploadErrorCode(message: string): UploadErrorCode | null {
+  const code = message.split(':')[0];
+  return (UPLOAD_ERROR_CODES as readonly string[]).includes(code)
+    ? (code as UploadErrorCode)
+    : null;
+}
+
+export function uploadErrorFromResponse(data: {
+  error?: string;
+  message?: string;
+}): string {
+  return uploadErrorMessage(data.error ?? '', data.message);
 }

@@ -10,6 +10,7 @@ import { MediaUploader } from '@/components/media/media-uploader';
 import { StoreHero } from '@/components/storefront/store-hero';
 import { StorePreviewPanel } from '@/components/store-admin/store-preview-panel';
 import { deleteStoreMedia, uploadStoreMedia } from '@/lib/store-media';
+import { FAVICON_ACCEPT } from '@/lib/storage/file-validation';
 import type { StoreSocialLinks } from '@/types/store-contact';
 import { parseSocialLinks } from '@/lib/storefront/contact-links';
 import {
@@ -430,7 +431,7 @@ export default function StoreAdminPage() {
               <MediaUploader
                 label="Favicon"
                 hint="Browser tab icon for your store"
-                accept="image/png,image/jpeg,image/webp,image/x-icon,image/vnd.microsoft.icon"
+                accept={FAVICON_ACCEPT}
                 value={store.faviconUrl}
                 emptyTitle="Upload favicon"
                 emptyHint="PNG, JPG, WEBP, or ICO · up to 5 MB"

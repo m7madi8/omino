@@ -6,11 +6,12 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { IMAGE_MAX_BYTES } from '@/lib/storage/image-mime';
 import {
-  uploadErrorMessage,
-  validateProductImageFile,
+  STANDARD_IMAGE_ACCEPT,
+  uploadErrorFromResponse,
+  validateImageFile,
 } from '@/lib/storage/file-validation';
 
-const ACCEPT = 'image/png,image/jpeg,image/webp,.jpg,.jpeg,.png,.webp,image/*';
+const ACCEPT = STANDARD_IMAGE_ACCEPT;
 const MAX_BYTES = IMAGE_MAX_BYTES;
 
 export type PendingProductImage = {
@@ -29,7 +30,7 @@ export type ExistingProductImage = {
 };
 
 function validateFile(file: File): string | null {
-  const result = validateProductImageFile(file, MAX_BYTES);
+  const result = validateImageFile(file, { maxBytes: MAX_BYTES });
   return result.ok ? null : result.message;
 }
 
@@ -49,7 +50,7 @@ export async function uploadProductImageFile(
   });
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(uploadErrorMessage(data.error, data.message));
+    throw new Error(uploadErrorFromResponse(data));
   }
   return data;
 }

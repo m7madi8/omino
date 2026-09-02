@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { handleApiError, requireTenantContext } from '@/lib/api/tenant';
+import { mediaUploadErrorResponse } from '@/lib/storage/upload-api-errors';
 import {
   saveProductImageFile,
   PRODUCT_IMAGE_MAX_BYTES,
 } from '@/lib/storage/product-images';
-import { uploadErrorMessage } from '@/lib/storage/file-validation';
 import {
   addProductImages,
   getProductDetail,
@@ -71,27 +71,8 @@ export async function POST(
     const product = await getProductDetail(ctx.organizationId, productId);
     return NextResponse.json({ product, imageUrl: saved.url }, { status: 201 });
   } catch (err) {
-    if (err instanceof Error) {
-      const code = err.message.split(':')[0];
-      const known = [
-        'INVALID_FILE_TYPE',
-        'FILE_TOO_LARGE',
-        'HEIC_NOT_SUPPORTED',
-        'EMPTY_FILE',
-        'STORAGE_UPLOAD_FAILED',
-        'STORAGE_BUCKET_MISSING',
-        'SUPABASE_NOT_CONFIGURED',
-      ];
-      if (known.includes(code)) {
-        return NextResponse.json(
-          {
-            error: code,
-            message: uploadErrorMessage(code, err.message),
-          },
-          { status: code === 'FILE_TOO_LARGE' ? 400 : 400 }
-        );
-      }
-    }
+    const uploadErr = mediaUploadErrorResponse(err);
+    if (uploadErr) return uploadErr;
     return handleApiError(err);
   }
 }

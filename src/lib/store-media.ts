@@ -1,3 +1,5 @@
+import { uploadErrorFromResponse } from '@/lib/storage/file-validation';
+
 export async function uploadStoreMedia<TStore = Record<string, unknown>>(
   type: 'logo' | 'favicon' | 'hero' | 'hero-mobile',
   file: File
@@ -12,7 +14,7 @@ export async function uploadStoreMedia<TStore = Record<string, unknown>>(
   });
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(data.message || data.error || 'Upload failed');
+    throw new Error(uploadErrorFromResponse(data));
   }
   return data as { url: string; store: TStore };
 }
@@ -27,7 +29,7 @@ export async function deleteStoreMedia<TStore = Record<string, unknown>>(
   });
   const data = await res.json();
   if (!res.ok) {
-    throw new Error(data.message || data.error || 'Delete failed');
+    throw new Error(uploadErrorFromResponse(data));
   }
   return data as { store: TStore };
 }

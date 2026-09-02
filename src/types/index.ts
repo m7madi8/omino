@@ -9,12 +9,16 @@ export type SessionUser = {
   organizationSlug: string | null;
   storeId: string | null;
   storeName: string | null;
+  storePublicSlug: string | null;
   branchId: string | null;
   branchName: string | null;
   roleSlug: string | null;
   permissions: PermissionKey[];
   onboardingComplete: boolean;
   isPlatformAdmin: boolean;
+  locale: 'ar' | 'en';
+  merchantExperienceMode: 'simple' | 'standard';
+  currency: string;
 };
 
 export type ApiError = {

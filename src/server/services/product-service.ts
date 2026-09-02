@@ -590,3 +590,53 @@ export async function reorderProductImages(
     )
   );
 }
+
+export async function createQuickProduct(
+  ctx: {
+    organizationId: string;
+    userId: string;
+    storeId: string | null;
+    branchId: string | null;
+    currency: string;
+  },
+  input: {
+    name: string;
+    priceMinor: number;
+    quantity: number;
+    imageUrl?: string;
+    publish?: boolean;
+  }
+) {
+  const sku = await uniqueSku(ctx.organizationId, slugify(input.name));
+  const result = await createProduct(ctx, {
+    name: input.name,
+    sellingPrice: input.priceMinor,
+    status: input.publish ? 'ACTIVE' : 'DRAFT',
+    trackInventory: true,
+    variants: [
+      {
+        name: 'Default',
+        sku,
+        sellingPrice: input.priceMinor,
+        costPrice: input.priceMinor,
+        initialStock: input.quantity,
+        lowStockThreshold: 5,
+      },
+    ],
+  });
+
+  if (input.imageUrl) {
+    await prisma.productImage.create({
+      data: {
+        organizationId: ctx.organizationId,
+        productId: result.product.id,
+        url: input.imageUrl,
+        altText: input.name,
+        isPrimary: true,
+        position: 0,
+      },
+    });
+  }
+
+  return result;
+}

@@ -3,6 +3,7 @@
 import {
   BarChart3,
   Bot,
+  Calendar,
   ChevronDown,
   CreditCard,
   LayoutDashboard,
@@ -13,6 +14,7 @@ import {
   Settings,
   ShoppingBag,
   ShoppingCart,
+  SlidersHorizontal,
   Store,
   Users,
   Warehouse,
@@ -26,14 +28,18 @@ import { useMemo, useState } from 'react';
 import { AppNavLink } from '@/components/app/app-nav-link';
 import { NavigationProgress } from '@/components/app/navigation-progress';
 import { MobileBottomNav, pickMobileBottomNavItems } from '@/components/app/mobile-bottom-nav';
+import { SimpleMobileNav } from '@/components/app/simple-mobile-nav';
+import { MerchantProvider, useMerchant } from '@/components/providers/merchant-provider';
 import { MODULE_NAV } from '@/lib/permissions/constants';
 import { sessionHasPermission } from '@/lib/permissions/check';
 import { sessionIsPlatformAdmin } from '@/lib/platform/admin';
+import { ADVANCED_NAV_ENTRY } from '@/lib/merchant/simple-nav';
 import { cn } from '@/lib/utils';
 import type { SessionUser } from '@/types';
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   overview: LayoutDashboard,
+  today: Calendar,
   pos: ShoppingCart,
   store: Store,
   products: Package,
@@ -47,6 +53,7 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   marketing: Megaphone,
   team: Users,
   settings: Settings,
+  advanced: SlidersHorizontal,
 };
 
 export function AppShell({
@@ -56,7 +63,25 @@ export function AppShell({
   user: SessionUser;
   children: React.ReactNode;
 }) {
+  return (
+    <MerchantProvider
+      locale={user.locale}
+      experienceMode={user.merchantExperienceMode}
+    >
+      <AppShellInner user={user}>{children}</AppShellInner>
+    </MerchantProvider>
+  );
+}
+
+function AppShellInner({
+  user,
+  children,
+}: {
+  user: SessionUser;
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
+  const { isSimple, t, dir } = useMerchant();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
@@ -70,6 +95,22 @@ export function AppShell({
 
   const mobileNavItems = useMemo(() => pickMobileBottomNavItems(navItems), [navItems]);
 
+  const simpleSidebarItems = useMemo(
+    () => [
+      { slug: 'today', label: t('nav.today'), href: '/app/today', permission: undefined },
+      { slug: 'orders', label: t('nav.orders'), href: '/app/orders', permission: 'orders.read' as const },
+      {
+        slug: 'advanced',
+        label: t('nav.advanced'),
+        href: ADVANCED_NAV_ENTRY.href,
+        permission: undefined,
+      },
+    ].filter((item) => !item.permission || sessionHasPermission(user, item.permission)),
+    [user, t]
+  );
+
+  const sidebarItems = isSimple ? simpleSidebarItems : navItems;
+
   async function handleSignOut() {
     await signOut({ callbackUrl: '/main' });
   }
@@ -77,8 +118,12 @@ export function AppShell({
   const isPlatformAdmin = sessionIsPlatformAdmin(user);
   const roleLabel = isPlatformAdmin ? 'OMINO Platform Owner' : user.roleSlug;
 
+  const canAddProduct = sessionHasPermission(user, 'products.write');
+  const canAddOrder = sessionHasPermission(user, 'orders.write');
+  const canPos = sessionHasPermission(user, 'pos.sell');
+
   return (
-    <div className="min-h-svh bg-paper flex overflow-x-hidden">
+    <div className="min-h-svh bg-paper flex overflow-x-hidden" dir={dir}>
       <NavigationProgress />
 
       {sidebarOpen && (
@@ -90,7 +135,6 @@ export function AppShell({
         />
       )}
 
-      {/* Desktop sidebar + mobile drawer */}
       <aside
         className={cn(
           'fixed lg:sticky top-0 z-50 h-svh w-[min(100vw-3rem,16rem)] sm:w-64 bg-ink text-paper flex flex-col',
@@ -98,9 +142,10 @@ export function AppShell({
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
         aria-label="Dashboard navigation"
+        dir={dir}
       >
         <div className="flex items-center justify-between p-4 sm:p-5 border-b border-hairline-dark shrink-0">
-          <Link href="/app" prefetch={false} className="inline-flex items-center" aria-label="OMINO">
+          <Link href={isSimple ? '/app/today' : '/app'} prefetch={false} className="inline-flex items-center" aria-label="OMINO">
             <img
               src="/main/img/omino-lockup-paper.png"
               alt="OMINO"
@@ -126,7 +171,7 @@ export function AppShell({
         )}
 
         <nav className="flex-1 overflow-y-auto overscroll-contain p-3 space-y-0.5 scrollbar-thin">
-          {navItems.map((item) => {
+          {sidebarItems.map((item) => {
             const Icon = ICONS[item.slug] || LayoutDashboard;
             return (
               <AppNavLink
@@ -139,6 +184,28 @@ export function AppShell({
               />
             );
           })}
+          {isSimple && (
+            <div className="pt-4 mt-4 border-t border-hairline-dark/50">
+              <p className="px-3 pb-2 text-[10px] uppercase tracking-wider text-stone/60">
+                {t('nav.advanced')}
+              </p>
+              {navItems
+                .filter((item) => !['overview', 'orders'].includes(item.slug))
+                .map((item) => {
+                  const Icon = ICONS[item.slug] || LayoutDashboard;
+                  return (
+                    <AppNavLink
+                      key={item.slug}
+                      href={item.href}
+                      label={item.label}
+                      icon={<Icon className="w-4 h-4" />}
+                      compact
+                      onNavigate={() => setSidebarOpen(false)}
+                    />
+                  );
+                })}
+            </div>
+          )}
         </nav>
 
         <div className="p-4 border-t border-hairline-dark text-xs text-stone space-y-1 shrink-0">
@@ -151,16 +218,17 @@ export function AppShell({
 
       <div className="flex-1 flex flex-col min-w-0 w-full">
         <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-sm border-b border-hairline px-3 sm:px-6 h-14 sm:h-16 flex items-center gap-2 sm:gap-4 shrink-0">
-          <button
-            type="button"
-            className="lg:hidden p-2.5 -ml-1 rounded-sm hover:bg-paper-2 touch-manipulation active:scale-95 transition-transform duration-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
-            onClick={() => setSidebarOpen(true)}
-            aria-label="Open menu"
-          >
-            <Menu className="w-5 h-5" />
-          </button>
+          {!isSimple && (
+            <button
+              type="button"
+              className="lg:hidden p-2.5 -ml-1 rounded-sm hover:bg-paper-2 touch-manipulation active:scale-95 transition-transform duration-100 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Open menu"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
 
-          {/* Mobile context — org/store visible without opening drawer */}
           <div className="lg:hidden min-w-0 flex-1">
             <p className="text-sm font-medium truncate">{user.storeName || user.organizationName}</p>
             <p className="text-[11px] text-stone-2 truncate">{user.organizationName}</p>
@@ -169,7 +237,7 @@ export function AppShell({
           <div className="flex items-center gap-1 sm:gap-2 ml-auto shrink-0">
             <ContextSwitcher user={user} />
 
-            {sessionHasPermission(user, 'ai.use') && (
+            {sessionHasPermission(user, 'ai.use') && !isSimple && (
               <Link
                 href={`/app/ai${pathname !== '/app/ai' ? `?from=${encodeURIComponent(pathname)}` : ''}`}
                 prefetch={false}
@@ -220,7 +288,7 @@ export function AppShell({
                       className="block px-3 py-3 text-sm hover:bg-paper-2 touch-manipulation min-h-[44px]"
                       onClick={() => setUserMenuOpen(false)}
                     >
-                      Settings
+                      {t('nav.settings')}
                     </Link>
                     <button
                       type="button"
@@ -242,13 +310,22 @@ export function AppShell({
           className={cn(
             'flex-1 w-full min-w-0 overflow-x-hidden',
             'p-3 sm:p-6 lg:p-8',
-            'pb-[calc(3.75rem+env(safe-area-inset-bottom))] lg:pb-8'
+            'pb-[calc(4.5rem+env(safe-area-inset-bottom))] lg:pb-8'
           )}
         >
           {children}
         </main>
 
-        <MobileBottomNav items={mobileNavItems} onOpenMenu={() => setSidebarOpen(true)} />
+        {isSimple ? (
+          <SimpleMobileNav
+            canAddProduct={canAddProduct}
+            canAddOrder={canAddOrder}
+            canPos={canPos}
+            onOpenAdvanced={() => setSidebarOpen(true)}
+          />
+        ) : (
+          <MobileBottomNav items={mobileNavItems} onOpenMenu={() => setSidebarOpen(true)} />
+        )}
       </div>
     </div>
   );

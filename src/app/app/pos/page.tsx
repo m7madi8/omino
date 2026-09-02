@@ -2,9 +2,13 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { sessionHasPermission } from '@/lib/permissions/check';
 import { PosClient } from '@/components/commerce/pos-terminal';
-import { prisma } from '@/lib/db';
+import { isSimpleMode } from '@/lib/merchant/palestine-mode';
 
-export default async function PosPage() {
+export default async function PosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ mode?: string }>;
+}) {
   const session = await auth();
   if (!session?.user?.organizationId) redirect('/login');
 
@@ -12,10 +16,9 @@ export default async function PosPage() {
     redirect('/app');
   }
 
-  const org = await prisma.organization.findUnique({
-    where: { id: session.user.organizationId },
-    select: { currency: true },
-  });
+  const params = await searchParams;
+  const simpleMode =
+    params.mode === 'simple' || isSimpleMode(session.user.merchantExperienceMode);
 
-  return <PosClient currency={org?.currency || 'USD'} />;
+  return <PosClient currency={session.user.currency} simpleMode={simpleMode} />;
 }

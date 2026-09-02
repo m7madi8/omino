@@ -127,6 +127,7 @@ export async function listOrders(params: {
   status?: OrderStatus;
   paymentStatus?: PaymentStatus;
   source?: OrderSource;
+  codPending?: boolean;
   search?: string;
   sortBy?: 'createdAt' | 'totalMinor' | 'orderNumber';
   sortDir?: 'asc' | 'desc';
@@ -146,6 +147,11 @@ export async function listOrders(params: {
     ...(params.status && { status: params.status }),
     ...(params.paymentStatus && { paymentStatus: params.paymentStatus }),
     ...(params.source && { source: params.source }),
+    ...(params.codPending && {
+      paymentStatus: { in: ['PENDING', 'PARTIALLY_PAID'] },
+      status: { notIn: ['CANCELLED', 'COMPLETED'] },
+      payments: { some: { method: 'COD', status: 'PENDING' } },
+    }),
     ...(params.search && {
       OR: [
         { orderNumber: { contains: params.search, mode: 'insensitive' } },
@@ -444,5 +450,116 @@ export async function syncOrderPaymentStatus(tx: Tx, orderId: string) {
   await tx.order.update({
     where: { id: orderId },
     data: { paidMinor, paymentStatus },
+  });
+}
+
+export async function advanceOrderStatus(input: {
+  organizationId: string;
+  userId: string;
+  orderId: string;
+  action:
+    | 'confirm'
+    | 'process'
+    | 'out_for_delivery'
+    | 'deliver'
+    | 'cancel';
+  reason?: string;
+}) {
+  const result = await prisma.$transaction(async (tx) => {
+    const order = await tx.order.findFirst({
+      where: { id: input.orderId, organizationId: input.organizationId },
+    });
+    if (!order) throw new Error('NOT_FOUND');
+    if (order.status === 'CANCELLED' || order.status === 'COMPLETED') {
+      throw new Error('INVALID_STATE_TRANSITION');
+    }
+
+    let status = order.status as OrderStatus;
+    let fulfillmentStatus = order.fulfillmentStatus as FulfillmentStatus;
+    let eventType = '';
+
+    switch (input.action) {
+      case 'confirm':
+        assertOrderTransition(status, 'CONFIRMED');
+        status = 'CONFIRMED';
+        eventType = 'order.confirmed';
+        break;
+      case 'process':
+        assertOrderTransition(status, 'PROCESSING');
+        status = 'PROCESSING';
+        eventType = 'order.processing';
+        break;
+      case 'out_for_delivery':
+        if (status !== 'PROCESSING') assertOrderTransition(status, 'PROCESSING');
+        status = 'PROCESSING';
+        fulfillmentStatus = 'PARTIALLY_FULFILLED';
+        eventType = 'delivery.out_for_delivery';
+        break;
+      case 'deliver':
+        if (status !== 'PROCESSING') assertOrderTransition(status, 'PROCESSING');
+        status = 'PROCESSING';
+        fulfillmentStatus = 'FULFILLED';
+        eventType = 'delivery.delivered';
+        break;
+      default:
+        throw new Error('INVALID_ACTION');
+    }
+
+    const updated = await tx.order.update({
+      where: { id: order.id },
+      data: { status, fulfillmentStatus },
+    });
+
+    await recordOrderEvent(tx, {
+      organizationId: input.organizationId,
+      orderId: order.id,
+      userId: input.userId,
+      eventType,
+    });
+
+    return updated;
+  });
+
+  await emitOrderEvent({
+    type: 'order.updated',
+    organizationId: input.organizationId,
+    orderId: input.orderId,
+    userId: input.userId,
+  });
+
+  return result;
+}
+
+export async function completeOrderAfterCollection(
+  organizationId: string,
+  orderId: string,
+  userId: string
+) {
+  return prisma.$transaction(async (tx) => {
+    const order = await tx.order.findFirst({
+      where: { id: orderId, organizationId },
+    });
+    if (!order) throw new Error('NOT_FOUND');
+    if (order.status === 'COMPLETED') return order;
+
+    assertOrderTransition(order.status as OrderStatus, 'COMPLETED');
+
+    const updated = await tx.order.update({
+      where: { id: orderId },
+      data: {
+        status: 'COMPLETED',
+        fulfillmentStatus: 'FULFILLED',
+        completedAt: new Date(),
+      },
+    });
+
+    await recordOrderEvent(tx, {
+      organizationId,
+      orderId,
+      userId,
+      eventType: 'payment.collected',
+    });
+
+    return updated;
   });
 }

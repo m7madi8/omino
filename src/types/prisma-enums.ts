@@ -14,7 +14,7 @@ export type StockMovementType =
   | 'RESERVATION'
   | 'RELEASE';
 
-export type OrderSource = 'POS' | 'ONLINE';
+export type OrderSource = 'POS' | 'ONLINE' | 'MANUAL';
 export type OrderStatus =
   | 'DRAFT'
   | 'PENDING'

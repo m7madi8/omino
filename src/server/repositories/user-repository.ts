@@ -64,12 +64,16 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
       organizationSlug: null,
       storeId: null,
       storeName: null,
+      storePublicSlug: null,
       branchId: null,
       branchName: null,
       roleSlug: isPlatformAdmin ? 'PLATFORM_ADMIN' : null,
       permissions: isPlatformAdmin ? [...PERMISSIONS] : [],
       onboardingComplete: false,
       isPlatformAdmin,
+      locale: 'en',
+      merchantExperienceMode: 'standard',
+      currency: 'USD',
     };
   }
 
@@ -77,6 +81,7 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
   let storeId = user.context?.storeId ?? null;
   let branchId = user.context?.branchId ?? null;
   let storeName: string | null = null;
+  let storePublicSlug: string | null = null;
   let branchName: string | null = null;
 
   if (storeId) {
@@ -86,6 +91,7 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
     });
     if (store) {
       storeName = store.name;
+      storePublicSlug = store.publicSlug;
       if (branchId) {
         const branch = store.branches.find((b) => b.id === branchId);
         branchName = branch?.name ?? null;
@@ -104,6 +110,7 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
     if (defaultStore) {
       storeId = defaultStore.id;
       storeName = defaultStore.name;
+      storePublicSlug = defaultStore.publicSlug;
       if (defaultStore.branches[0]) {
         branchId = defaultStore.branches[0].id;
         branchName = defaultStore.branches[0].name;
@@ -126,6 +133,7 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
     organizationSlug: org.slug,
     storeId,
     storeName,
+    storePublicSlug,
     branchId,
     branchName,
     roleSlug: isPlatformAdmin ? 'PLATFORM_ADMIN' : membership.role.slug,
@@ -134,5 +142,9 @@ export async function buildSessionUser(userId: string): Promise<SessionUser | nu
       : membership.role.permissions.map((rp) => rp.permission.key as PermissionKey),
     onboardingComplete,
     isPlatformAdmin,
+    locale: (org.locale === 'ar' ? 'ar' : 'en') as 'ar' | 'en',
+    merchantExperienceMode:
+      org.merchantExperienceMode === 'simple' ? 'simple' : 'standard',
+    currency: org.currency,
   };
 }

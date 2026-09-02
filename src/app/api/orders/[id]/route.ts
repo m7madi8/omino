@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { handleApiError, requireTenantContext } from '@/lib/api/tenant';
-import { getOrderDetail, cancelOrder } from '@/server/services/order-service';
-import { createRefund } from '@/server/services/payment-service';
+import { getOrderDetail, cancelOrder, advanceOrderStatus } from '@/server/services/order-service';
+import { createRefund, collectCodPayment } from '@/server/services/payment-service';
 import { voidPosOrder } from '@/server/services/pos-service';
 
 const cancelSchema = z.object({
@@ -99,6 +99,37 @@ export async function POST(
         ...parsed.data,
       });
       return NextResponse.json(refund, { status: 201 });
+    }
+
+    const lifecycleActions = [
+      'confirm',
+      'process',
+      'out_for_delivery',
+      'deliver',
+      'collect_cod',
+    ] as const;
+
+    if (lifecycleActions.includes(action as (typeof lifecycleActions)[number])) {
+      const ctx = await requireTenantContext('orders.write');
+      if (action === 'collect_cod') {
+        await collectCodPayment({
+          organizationId: ctx.organizationId,
+          userId: ctx.userId,
+          orderId: id,
+          amountReceived: body.amountReceived,
+        });
+        const order = await getOrderDetail(ctx.organizationId, id);
+        return NextResponse.json(order);
+      }
+
+      const order = await advanceOrderStatus({
+        organizationId: ctx.organizationId,
+        userId: ctx.userId,
+        orderId: id,
+        action: action as 'confirm' | 'process' | 'out_for_delivery' | 'deliver' | 'cancel',
+        reason: body.reason,
+      });
+      return NextResponse.json(order);
     }
 
     return NextResponse.json({ error: 'VALIDATION_ERROR' }, { status: 400 });

@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
+import { isSimpleMode } from '@/lib/merchant/palestine-mode';
 import { sessionHasPermission } from '@/lib/permissions/check';
 import { getAnalyticsOverview } from '@/server/services/analytics/analytics-service';
 import { PageHeader } from '@/components/app/dashboard/page-header';
@@ -9,6 +10,10 @@ import { GettingStarted } from '@/components/app/getting-started';
 export default async function OverviewPage() {
   const session = await auth();
   if (!session?.user) redirect('/login');
+
+  if (isSimpleMode(session.user.merchantExperienceMode)) {
+    redirect('/app/today');
+  }
 
   const user = session.user;
   const canViewAnalytics = sessionHasPermission(user, 'analytics.read');
@@ -21,14 +26,8 @@ export default async function OverviewPage() {
         storeId: user.storeId ?? undefined,
         branchId: user.branchId ?? undefined,
         preset: 'last_30_days',
-        currency: 'USD',
+        currency: user.currency,
       });
-      const { prisma } = await import('@/lib/db');
-      const org = await prisma.organization.findUnique({
-        where: { id: user.organizationId },
-        select: { currency: true },
-      });
-      overview.currency = org?.currency || overview.currency;
     } catch (err) {
       console.error('[overview/analytics]', err);
     }

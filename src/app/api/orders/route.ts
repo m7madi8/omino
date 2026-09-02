@@ -1,5 +1,6 @@
 import { handleApiError, requireTenantContext } from '@/lib/api/tenant';
 import { listOrders } from '@/server/services/order-service';
+import type { OrderSource } from '@/types/prisma-enums';
 
 export async function GET(request: Request) {
   try {
@@ -7,11 +8,15 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('q') || undefined;
     const status = searchParams.get('status') as 'COMPLETED' | 'CANCELLED' | undefined;
+    const source = searchParams.get('source') as OrderSource | undefined;
+    const codPending = searchParams.get('cod') === 'pending';
     const page = Number(searchParams.get('page') || '1');
 
     const result = await listOrders({
       organizationId: ctx.organizationId,
-      source: 'POS',
+      storeId: ctx.storeId ?? undefined,
+      source,
+      codPending,
       search,
       status,
       page,

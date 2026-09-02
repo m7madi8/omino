@@ -6,6 +6,7 @@ import {
   type SystemRoleSlug,
 } from '@/lib/permissions/constants';
 import { slugify, uniqueSlug } from '@/lib/utils';
+import { resolveMerchantDefaults } from '@/lib/merchant/palestine-mode';
 
 type Tx = Prisma.TransactionClient;
 
@@ -67,6 +68,8 @@ export async function createOrganizationWithDefaults(input: {
 
   await ensurePermissions();
 
+  const defaults = resolveMerchantDefaults(input.country || 'US');
+
   return prisma.$transaction(
     async (tx) => {
     const org = await tx.organization.create({
@@ -75,7 +78,9 @@ export async function createOrganizationWithDefaults(input: {
         slug,
         businessType: input.businessType,
         country: input.country,
-        currency: input.currency || 'USD',
+        currency: input.currency || defaults.currency,
+        locale: defaults.locale,
+        merchantExperienceMode: defaults.merchantExperienceMode,
       },
     });
 
@@ -99,15 +104,16 @@ export async function createOrganizationWithDefaults(input: {
         publicSlug: storeSlug,
         isDefault: true,
         status: 'ACTIVE',
-        currency: input.currency,
+        currency: input.currency || defaults.currency,
         country: input.country,
+        timezone: defaults.timezone,
       },
     });
 
     const branch = await tx.branch.create({
       data: {
         storeId: store.id,
-        name: input.branchName || 'Main Branch',
+        name: input.branchName || (defaults.locale === 'ar' ? 'الفرع الرئيسي' : 'Main Branch'),
         slug: 'main',
         isDefault: true,
       },
@@ -126,6 +132,10 @@ export async function createOrganizationWithDefaults(input: {
 
     const { ensureDefaultRegister } = await import('@/server/services/pos-service');
     await ensureDefaultRegister(org.id, store.id, branch.id, tx);
+
+    if (input.country === 'PS') {
+      await seedPalestineDeliveryZones(tx, org.id, store.id);
+    }
 
     await tx.userContext.upsert({
       where: { userId: input.userId },
@@ -210,5 +220,34 @@ export async function getOrgStores(organizationId: string) {
     where: { organizationId },
     include: { branches: { orderBy: { createdAt: 'asc' } } },
     orderBy: { createdAt: 'asc' },
+  });
+}
+
+const PS_DELIVERY_ZONES = [
+  { name: 'رام الله', slug: 'ramallah', priceMinor: 1500 },
+  { name: 'البيرة', slug: 'al-bireh', priceMinor: 1500 },
+  { name: 'نابلس', slug: 'nablus', priceMinor: 2000 },
+  { name: 'الخليل', slug: 'hebron', priceMinor: 2500 },
+  { name: 'بيت لحم', slug: 'bethlehem', priceMinor: 2000 },
+  { name: 'جنين', slug: 'jenin', priceMinor: 2500 },
+];
+
+async function seedPalestineDeliveryZones(
+  tx: Tx,
+  organizationId: string,
+  storeId: string
+) {
+  await tx.shippingMethod.createMany({
+    data: PS_DELIVERY_ZONES.map((zone, index) => ({
+      organizationId,
+      storeId,
+      name: zone.name,
+      slug: zone.slug,
+      priceMinor: zone.priceMinor,
+      isActive: true,
+      position: index,
+      estimatedDelivery: '1-2 أيام',
+    })),
+    skipDuplicates: true,
   });
 }

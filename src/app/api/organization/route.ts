@@ -8,6 +8,8 @@ const updateSchema = z.object({
   name: z.string().min(1).max(200).optional(),
   currency: z.string().length(3).optional(),
   country: allowedCountrySchema.optional(),
+  locale: z.enum(['ar', 'en']).optional(),
+  merchantExperienceMode: z.enum(['simple', 'standard']).optional(),
 });
 
 export async function GET() {
@@ -67,6 +69,10 @@ export async function PATCH(request: Request) {
         ...(body.name && { name: body.name }),
         ...(body.currency && { currency: body.currency }),
         ...(body.country && { country: body.country }),
+        ...(body.locale && { locale: body.locale }),
+        ...(body.merchantExperienceMode && {
+          merchantExperienceMode: body.merchantExperienceMode,
+        }),
       },
     });
 

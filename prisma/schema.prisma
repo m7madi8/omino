@@ -87,14 +87,16 @@ model VerificationToken {
 // ─── Multi-tenancy core ────────────────────────────────────────────
 
 model Organization {
-  id           String   @id @default(uuid()) @db.Uuid
-  name         String
-  slug         String   @unique
-  businessType String?  @map("business_type")
-  country      String?
-  currency     String   @default("USD")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id                     String   @id @default(uuid()) @db.Uuid
+  name                   String
+  slug                   String   @unique
+  businessType           String?  @map("business_type")
+  country                String?
+  currency               String   @default("USD")
+  locale                 String   @default("en")
+  merchantExperienceMode String   @default("standard") @map("merchant_experience_mode")
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @updatedAt @map("updated_at")
 
   memberships Membership[]
   roles       Role[]
@@ -706,6 +708,7 @@ enum StoreStatus {
 enum OrderSource {
   POS
   ONLINE
+  MANUAL
 }
 
 enum OrderStatus {

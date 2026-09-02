@@ -16,9 +16,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { formatMoney } from '@/lib/money';
 import type { CartView, PosProduct } from '@/types/commerce';
+import { cachePosProducts, isOnline } from '@/lib/pos/offline-queue';
+import { useMerchant } from '@/components/providers/merchant-provider';
 
-export function PosClient({ currency }: { currency: string }) {
+export function PosClient({ currency, simpleMode = false }: { currency: string; simpleMode?: boolean }) {
+  const { t } = useMerchant();
   const router = useRouter();
+  const [online, setOnline] = useState(true);
   const [products, setProducts] = useState<PosProduct[]>([]);
   const [cart, setCart] = useState<CartView | null>(null);
   const [search, setSearch] = useState('');
@@ -48,7 +52,28 @@ export function PosClient({ currency }: { currency: string }) {
     if (res.ok) {
       const data = await res.json();
       setProducts(data.items);
+      void cachePosProducts(
+        (data.items as PosProduct[]).map((p) => ({
+          id: p.variantId,
+          name: p.name,
+          sku: p.sku,
+          sellingPrice: p.priceMinor,
+          updatedAt: Date.now(),
+        }))
+      );
     }
+  }, []);
+
+  useEffect(() => {
+    setOnline(isOnline());
+    const onOnline = () => setOnline(true);
+    const onOffline = () => setOnline(false);
+    window.addEventListener('online', onOnline);
+    window.addEventListener('offline', onOffline);
+    return () => {
+      window.removeEventListener('online', onOnline);
+      window.removeEventListener('offline', onOffline);
+    };
   }, []);
 
   useEffect(() => {
@@ -169,15 +194,20 @@ export function PosClient({ currency }: { currency: string }) {
 
   return (
     <div className="flex flex-col lg:flex-row gap-4 h-[calc(100svh-8rem)] min-h-[500px]">
+      {!online && (
+        <p className="lg:col-span-2 text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded-md px-3 py-2">
+          {t('pos.offline')}
+        </p>
+      )}
       <div className="flex-1 flex flex-col rounded-md border border-hairline bg-white overflow-hidden">
         <div className="p-4 border-b border-hairline">
-          <h1 className="text-xl font-display mb-3">Point of Sale</h1>
+          <h1 className="text-xl font-display mb-3">{simpleMode ? t('add.posSale') : 'Point of Sale'}</h1>
           <form onSubmit={handleSearch} className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search products, SKU, barcode…"
+              placeholder={t('pos.search')}
               className="w-full h-11 pl-10 pr-4 rounded-sm border border-hairline text-sm"
             />
           </form>

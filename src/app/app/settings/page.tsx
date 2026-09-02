@@ -9,7 +9,13 @@ import { COUNTRIES, CURRENCIES } from '@/lib/permissions/constants';
 import { BranchManager } from '@/components/settings/branch-manager';
 
 type OrgData = {
-  organization: { name: string; currency: string; country: string | null };
+  organization: {
+    name: string;
+    currency: string;
+    country: string | null;
+    locale?: string;
+    merchantExperienceMode?: string;
+  };
   stores: {
     id: string;
     name: string;
@@ -22,6 +28,8 @@ export default function SettingsPage() {
   const [name, setName] = useState('');
   const [currency, setCurrency] = useState('USD');
   const [country, setCountry] = useState('PS');
+  const [locale, setLocale] = useState<'ar' | 'en'>('en');
+  const [experienceMode, setExperienceMode] = useState<'simple' | 'standard'>('standard');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const [reloadKey, setReloadKey] = useState(0);
@@ -38,6 +46,10 @@ export default function SettingsPage() {
           setName(json.organization.name || '');
           setCurrency(json.organization.currency || 'USD');
           setCountry(json.organization.country || 'PS');
+          setLocale(json.organization.locale === 'ar' ? 'ar' : 'en');
+          setExperienceMode(
+            json.organization.merchantExperienceMode === 'simple' ? 'simple' : 'standard'
+          );
         }
         setData(json);
       });
@@ -49,7 +61,7 @@ export default function SettingsPage() {
     const res = await fetch('/api/organization', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, currency, country }),
+      body: JSON.stringify({ name, currency, country, locale, merchantExperienceMode: experienceMode }),
     });
     setSaving(false);
     if (res.ok) setMessage('Settings saved.');
@@ -78,6 +90,24 @@ export default function SettingsPage() {
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
             options={CURRENCIES.map((c) => ({ value: c.code, label: c.label }))}
+          />
+          <Select
+            label="Language"
+            value={locale}
+            onChange={(e) => setLocale(e.target.value as 'ar' | 'en')}
+            options={[
+              { value: 'ar', label: 'العربية' },
+              { value: 'en', label: 'English' },
+            ]}
+          />
+          <Select
+            label="Experience mode"
+            value={experienceMode}
+            onChange={(e) => setExperienceMode(e.target.value as 'simple' | 'standard')}
+            options={[
+              { value: 'simple', label: 'Simple (Today / Orders / Add)' },
+              { value: 'standard', label: 'Standard (full dashboard)' },
+            ]}
           />
           {message && <p className="text-sm text-good">{message}</p>}
           <Button onClick={save} disabled={saving}>

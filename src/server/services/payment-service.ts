@@ -88,7 +88,12 @@ export async function createPayment(
       organizationId: input.organizationId,
       orderId: input.orderId,
       userId: input.userId,
-      eventType: status === 'FAILED' ? 'payment.failed' : 'payment.paid',
+      eventType:
+        status === 'FAILED'
+          ? 'payment.failed'
+          : status === 'PENDING'
+            ? 'payment.created'
+            : 'payment.paid',
       metadata: {
         paymentId: payment.id,
         method: input.method,
@@ -114,8 +119,14 @@ export async function createPayment(
   const payment = tx ? await run(tx) : await prisma.$transaction(run);
 
   if (!tx) {
+    const eventType =
+      payment.status === 'FAILED'
+        ? 'payment.failed'
+        : payment.status === 'PENDING'
+          ? 'payment.created'
+          : 'payment.paid';
     await emitOrderEvent({
-      type: payment.status === 'FAILED' ? 'payment.failed' : 'payment.paid',
+      type: eventType,
       organizationId: input.organizationId,
       orderId: input.orderId,
       userId: input.userId,
@@ -124,6 +135,72 @@ export async function createPayment(
   }
 
   return payment;
+}
+
+export async function collectCodPayment(input: {
+  organizationId: string;
+  userId: string;
+  orderId: string;
+  amountReceived?: number;
+}) {
+  const { completeOrderAfterCollection } = await import('@/server/services/order-service');
+
+  const result = await prisma.$transaction(async (tx) => {
+    const order = await tx.order.findFirst({
+      where: { id: input.orderId, organizationId: input.organizationId },
+      include: { payments: true },
+    });
+    if (!order) throw new Error('NOT_FOUND');
+
+    const codPayment = order.payments.find(
+      (p) => p.method === 'COD' && p.status === 'PENDING'
+    );
+    if (!codPayment) throw new Error('NOT_FOUND');
+
+    const amountMinor = order.totalMinor - order.paidMinor;
+    if (amountMinor <= 0) throw new Error('VALIDATION_ERROR');
+
+    await tx.payment.update({
+      where: { id: codPayment.id },
+      data: {
+        status: 'PAID',
+        amountReceived: input.amountReceived ?? amountMinor,
+      },
+    });
+
+    await tx.paymentAttempt.create({
+      data: {
+        paymentId: codPayment.id,
+        status: 'PAID',
+        amountMinor,
+        reference: 'COD collected',
+      },
+    });
+
+    await syncOrderPaymentStatus(tx, order.id);
+
+    await recordOrderEvent(tx, {
+      organizationId: input.organizationId,
+      orderId: order.id,
+      userId: input.userId,
+      eventType: 'payment.collected',
+      metadata: { paymentId: codPayment.id, amountMinor },
+    });
+
+    return order;
+  });
+
+  await completeOrderAfterCollection(input.organizationId, input.orderId, input.userId);
+
+  await emitOrderEvent({
+    type: 'payment.paid',
+    organizationId: input.organizationId,
+    orderId: input.orderId,
+    userId: input.userId,
+    payload: { collected: true },
+  });
+
+  return result;
 }
 
 export async function recordPaymentFailure(input: {

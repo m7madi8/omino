@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OMINO</title>
-<meta name="description" content="OMINO brings your store, sales, inventory, customers, payments, and AI into one intelligent business system — so you see what's happening and know what to do next.">
-<meta property="og:title" content="OMINO — The Intelligent Operating System for Your Business">
-<meta property="og:description" content="One business. One system. One clear picture.">
+<meta name="description" content="OMINO is one place to run your store, in-store sales, inventory, orders, and business reports — and understand what needs your attention. From $9 a month.">
+<meta property="og:title" content="OMINO — Run your store, sales, and inventory in one place">
+<meta property="og:description" content="Your store, sales, and stock in one place. Sell online and in person. Know what to do next.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="/main/index.html">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
@@ -19,6 +19,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500;125,600;125,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Instrument+Serif:ital@1&family=Inter:wght@400;500;600&family=Zain:wght@400;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+<script src="js/omino-loader.js"></script>
+<script src="js/omino-cookies.js"></script>
+<script src="js/omino-split-text.js"></script>
 <style>
 /* ============================================================
    TOKENS
@@ -29,7 +33,7 @@
   --stone:#85898D; --stone-2:#5D6267;
   --hairline:#D7DADD; --hairline-dark:#292D31;
   --accent:#5B7CFF; --accent-soft:#CBD3FF;
-  --good:#63D6A0; --warn:#E8A855;
+  --good:#63D6A0; --warn:#E8A855; --danger:#E87A85;
   --radius-xs:10px; --radius-sm:14px; --radius-md:20px; --radius-lg:28px; --radius-xl:36px; --radius-pill:999px;
   --ease:cubic-bezier(.22,1,.36,1);
   --shadow-soft:0 18px 40px -28px rgba(7,8,9,.16);
@@ -45,7 +49,11 @@
   --font-ar-display:'Zain',sans-serif;
 }
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;scroll-padding-top:88px;-webkit-text-size-adjust:100%;}
+html{
+  scroll-behavior:smooth;scroll-padding-top:88px;-webkit-text-size-adjust:100%;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;width:0;height:0;}
 body{
   margin:0;
   background:radial-gradient(ellipse 80% 40% at 72% -6%,rgba(91,124,255,.07),transparent 58%) var(--paper);
@@ -54,6 +62,7 @@ body{
   font-size:16px;line-height:1.6;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
+  scrollbar-width:none;
 }
 html[lang="ar"] body{font-family:var(--font-ar);line-height:1.75;}
 h1,h2{font-family:var(--font-display);font-weight:600;font-stretch:125%;margin:0;letter-spacing:-.025em;}
@@ -226,8 +235,9 @@ html.menu-open .menu-btn span{background:var(--paper);}
 html.menu-open .nav-actions .btn-primary{display:none;}
 
 /* ---------- section rhythm ---------- */
-.section{padding-block:clamp(72px,11vw,132px);}
-.section-tight{padding-block:clamp(56px,8vw,96px);}
+.section{padding-block:clamp(64px,9vw,112px);overflow:visible;}
+#solution{overflow:visible;}
+.section-tight{padding-block:clamp(48px,7vw,88px);}
 .on-dark{background:var(--ink);color:var(--paper);}
 .section-index{margin:0 0 14px;font-size:11px;color:var(--stone);font-family:var(--font-body);font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
 html[lang="ar"] .section-index{font-family:var(--font-ar);letter-spacing:0;text-transform:none;font-size:13px;}
@@ -240,49 +250,208 @@ p.section-sub{font-size:16px;color:var(--stone-2);max-width:44ch;margin-top:16px
 .center{text-align:center;}
 .center .section-sub,.center h2.section-head{margin-inline:auto;}
 
-/* ============================================================
-   HERO
-   ============================================================ */
-.hero{padding-top:clamp(132px,20vw,180px);padding-bottom:clamp(56px,9vw,96px);overflow:visible;}
-.hero-grid{display:grid;gap:48px;align-items:center;}
-@media(min-width:980px){.hero-grid{grid-template-columns:1fr .96fr;gap:56px;}}
-.hero-copy h1{font-size:clamp(2.15rem,5.4vw,3.85rem);line-height:1.06;max-width:15ch;}
-html[lang="ar"] .hero-copy h1{max-width:12ch;}
-.hero-copy .sub{font-size:17px;max-width:42ch;margin-top:20px;line-height:1.6;color:var(--stone-2);}
-.hero-ctas{display:flex;align-items:center;gap:12px;margin-top:28px;flex-wrap:wrap;}
-.hero-fine{margin-top:14px;font-size:13px;color:var(--stone);}
-.hero-badges{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;}
-.hero-badge{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--stone-2);}
-.hero-badge i{width:6px;height:6px;border-radius:50%;background:var(--good);flex:none;}
-
-/* ---- product mockup: the concrete "this is the product" moment ---- */
-.mock{position:relative;}
-.mock-card{
-  background:var(--ink);color:var(--paper);border-radius:var(--radius-lg);
-  padding:22px 22px 24px;box-shadow:var(--shadow-deep);
-  border:1px solid rgba(255,255,255,.06);
-  max-width:440px;margin-inline:auto;
+/* ============ HERO ============ */
+.hero{
+  position:relative;
+  padding:164px 0 0;
+  overflow:hidden;
 }
-.mock-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--hairline-dark);}
-.mock-top .who{display:flex;align-items:center;gap:8px;font-size:12px;color:#A8ADB3;}
-.mock-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);}
-.mock-live{font-family:var(--font-mono);font-size:10px;color:#63D6A0;letter-spacing:.08em;}
-.mock-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;}
-.mock-stat{background:#14171A;border-radius:14px;padding:14px 16px;}
-.mock-stat .k{font-size:11px;color:#8A9096;font-family:var(--font-body);letter-spacing:.06em;text-transform:uppercase;}
-html[lang="ar"] .mock-stat .k{font-family:var(--font-ar);letter-spacing:0;text-transform:none;}
-.mock-stat .v{font-family:var(--font-mono);font-size:clamp(1.3rem,2.4vw,1.6rem);font-weight:500;margin-top:6px;letter-spacing:-.02em;direction:ltr;}
-.mock-stat .d{font-size:12px;margin-top:4px;color:#63D6A0;direction:ltr;display:inline-block;}
-.mock-stat .d.down{color:#E8A855;}
-.mock-alert{margin-top:12px;display:flex;align-items:flex-start;gap:10px;background:rgba(232,168,85,.1);border:1px solid rgba(232,168,85,.25);border-radius:12px;padding:12px 14px;}
-.mock-alert i{width:6px;height:6px;border-radius:50%;background:var(--warn);flex:none;margin-top:6px;}
-.mock-alert p{font-size:13px;color:#E8EAEC;line-height:1.5;}
-.mock-alert span{display:block;font-size:11px;color:#8A9096;margin-top:2px;}
-.mock-ai{margin-top:12px;background:linear-gradient(165deg,rgba(91,124,255,.16),rgba(91,124,255,.03));border:1px solid rgba(91,124,255,.28);border-radius:12px;padding:14px 16px;}
-.mock-ai .rk{font-size:11px;color:var(--accent-soft);font-weight:600;letter-spacing:.04em;}
-html[lang="ar"] .mock-ai .rk{font-family:var(--font-ar);letter-spacing:0;}
-.mock-ai p{font-size:14px;color:#E8EAEC;line-height:1.55;margin-top:6px;}
-.mock-glow{position:absolute;width:70%;height:70%;inset-inline-end:-8%;top:6%;background:radial-gradient(ellipse at 60% 40%,rgba(91,124,255,.28),transparent 68%);filter:blur(46px);pointer-events:none;z-index:-1;}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset-inline-start:50%;
+  top:-140px;
+  width:900px;height:900px;
+  background:radial-gradient(circle, rgba(91,124,255,0.10) 0%, rgba(91,124,255,0) 70%);
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1.08fr) minmax(0,0.92fr);
+  align-items:center;
+  gap:24px;
+  padding-bottom:64px;
+}
+.hero-copy h1{
+  font-size:clamp(2.6rem, 4.6vw, 4.4rem);
+  line-height:1.02;
+  max-width:13.5ch;
+  color:var(--ink);
+  overflow:hidden;
+}
+.hero-copy h1.split-parent{max-width:none;}
+.hero-copy h1 .split-line{display:block;overflow:hidden;padding-bottom:.06em;}
+html[lang="ar"] .hero-copy h1{line-height:1.24;max-width:15ch;}
+html[lang="ar"] .hero-copy h1 .split-line{max-width:15ch;}
+.serif-accent{
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-weight:400;
+  color:var(--accent);
+  letter-spacing:0;
+}
+html[lang="ar"] .serif-accent{font-family:var(--font-ar-display);font-style:normal;font-weight:700;}
+.hero-copy .sub{
+  margin-top:22px;
+  max-width:42ch;
+  font-size:17px;
+  line-height:1.7;
+  color:var(--stone-2);
+}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px;}
+.hero-tag{margin-top:16px;font-family:var(--font-serif);font-style:italic;font-size:15px;color:var(--stone-2);line-height:1.5;max-width:40ch;}
+html[lang="ar"] .hero-tag{font-family:var(--font-ar-display);font-style:normal;font-weight:600;font-size:16px;}
+.hero-badges{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:22px;}
+.what-is{padding-top:clamp(48px,7vw,72px);padding-bottom:clamp(32px,5vw,48px);}
+.what-is .section-sub{max-width:52ch;}
+.manage-grid{display:grid;gap:14px;margin-top:36px;text-align:start;}
+@media(min-width:640px){.manage-grid{grid-template-columns:repeat(2,1fr);}}
+@media(min-width:960px){.manage-grid{grid-template-columns:repeat(3,1fr);}}
+.manage-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius-md);padding:20px 20px 18px;}
+.manage-card h3{font-size:14px;font-weight:600;color:#E8EAEC;margin:0 0 8px;}
+html[lang="ar"] .manage-card h3{font-size:15px;}
+.manage-card p{font-size:13px;color:#8A9096;line-height:1.55;margin:0;}
+html[lang="ar"] .manage-card p{font-size:14px;}
+.ai-agent-note{margin-top:18px;font-size:14px;color:#A8ADB3;line-height:1.6;max-width:46ch;padding-top:16px;border-top:1px solid var(--hairline-dark);}
+html[lang="ar"] .ai-agent-note{font-size:15px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--stone-2);}
+.hero-badge i{
+  width:16px;height:16px;flex:none;border-radius:50%;
+  background:var(--paper-2);border:1px solid var(--hairline);position:relative;
+}
+.hero-badge i::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--good);}
+
+/* split-text (section headlines) */
+.split-parent{overflow:hidden;display:block;}
+.split-line{display:block;overflow:hidden;padding-bottom:.06em;}
+.split-char,.split-word{display:inline-block;will-change:transform,opacity;}
+.split-char-space,.split-word-space{min-width:.28em;}
+html[lang="ar"] .split-char,html[lang="ar"] .split-word{display:inline-block;}
+
+/* hero visual */
+.hero-visual{
+  position:relative;
+  width:100%;
+  aspect-ratio:1/1;
+  max-width:620px;
+  margin-inline-start:auto;
+  min-height:280px;
+}
+@media(min-width:901px){.hero-visual{margin-inline-start:-36px;z-index:2;}}
+.hv-stage{position:absolute;inset:0;}
+.hv-readouts{display:contents;}
+.hv-mark{
+  position:absolute;inset:0;width:100%;height:100%;
+  transform-origin:50% 50%;
+  will-change:transform,opacity;
+}
+.hv-mark-o{fill:none;stroke:var(--ink);stroke-width:1;opacity:0.12;}
+.hv-lines{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;}
+.hv-line{fill:none;stroke:var(--stone);stroke-width:1;opacity:0.45;vector-effect:non-scaling-stroke;}
+.hv-readout{
+  position:absolute;
+  inset-inline-start:var(--x);
+  top:var(--y);
+  transform:translate(-50%,-50%);
+  display:flex;flex-direction:column;gap:2px;
+  max-width:180px;
+  will-change:transform,opacity;
+}
+html[dir="rtl"] .hv-readout{transform:translate(50%,-50%);}
+.hv-label{
+  font-family:var(--font-mono);font-size:11px;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--stone);
+}
+html[lang="ar"] .hv-label{font-family:var(--font-ar);letter-spacing:0;text-transform:none;font-size:13px;}
+.hv-num{
+  font-family:var(--font-display);font-size:clamp(1.5rem,2.8vw,2.1rem);color:var(--ink);line-height:1.1;
+  direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums;
+  display:inline-block;transform-origin:50% 100%;
+}
+.hv-readout--hero .hv-num{font-size:clamp(2rem,4vw,3.1rem);}
+.hv-readout--hero .hv-label::before{
+  content:"";display:inline-block;width:5px;height:5px;border-radius:50%;
+  background:var(--accent);margin-inline-end:6px;vertical-align:middle;
+}
+.hv-delta{font-family:var(--font-mono);font-size:12px;color:var(--stone-2);direction:ltr;unicode-bidi:isolate;}
+.hv-delta::before{content:"↑ ";}
+.hv-delta--down::before{content:"↓ ";}
+.hv-sub{font-size:13px;color:var(--stone-2);line-height:1.5;}
+
+/* proof strip */
+.hero-proof{border-top:1px solid var(--hairline);padding:20px 0;}
+.hero-proof .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.proof-founding{font-family:var(--font-mono);font-size:12px;letter-spacing:0.08em;color:var(--stone-2);}
+html[lang="ar"] .proof-founding{font-family:var(--font-ar);letter-spacing:0;font-size:13px;}
+.proof-sep{color:var(--stone);}
+.proof-demo{
+  font-size:13px;color:var(--ink);border-bottom:1px solid var(--ink);padding:8px 0;
+  min-height:44px;display:inline-flex;align-items:center;
+}
+
+@media(max-width:900px){
+  .hero{padding-top:128px;}
+  .hero-grid{grid-template-columns:1fr;gap:28px;padding-bottom:40px;}
+  .hero-copy h1{font-size:clamp(2rem,8.5vw,2.85rem);max-width:none;line-height:1.08;}
+  html[lang="ar"] .hero-copy h1{max-width:none;}
+  .hero-copy .sub{max-width:none;font-size:16px;line-height:1.65;}
+  .hero-ctas{margin-top:28px;}
+  .hero-badges{margin-top:22px;gap:8px 16px;}
+  .hero-visual{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    margin-inline:auto;
+    max-width:100%;
+    aspect-ratio:auto;
+    min-height:0;
+  }
+  .hv-stage{
+    position:relative;
+    width:min(72vw,260px);
+    aspect-ratio:1/1;
+    margin-inline:auto;
+    flex:none;
+  }
+  .hv-lines{display:none;}
+  .hv-readouts{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    width:100%;
+  }
+  .hv-readout{
+    position:static;
+    inset:auto;
+    transform:none;
+    max-width:none;
+    padding:12px 14px;
+    background:rgba(255,255,255,0.72);
+    border:1px solid var(--hairline);
+    border-radius:var(--radius-sm);
+    box-shadow:var(--shadow-soft);
+  }
+  html[dir="rtl"] .hv-readout{transform:none;}
+  .hv-readout--hero{
+    grid-column:1/-1;
+    align-items:center;
+    text-align:center;
+    padding:16px;
+  }
+  .hv-readout--insight{grid-column:1/-1;}
+  .hv-num{font-size:clamp(1.35rem,5vw,1.75rem)!important;}
+  .hv-readout--hero .hv-num{font-size:clamp(1.75rem,7vw,2.25rem)!important;}
+}
+@media(max-width:480px){
+  .hero{padding-top:118px;}
+  .hv-stage{width:min(68vw,220px);}
+  .hv-readouts{grid-template-columns:1fr;gap:8px;}
+  .hv-readout{padding:10px 12px;}
+  .hv-readout--hero,.hv-readout--insight{grid-column:1;}
+  .hv-sub{font-size:12px;line-height:1.45;}
+}
 
 /* ============================================================
    PROBLEM -> SOLUTION (merged single section)
@@ -302,10 +471,115 @@ html[lang="ar"] .shift-label{font-family:var(--font-ar);letter-spacing:0;}
 .shift-arrow{display:flex;align-items:center;justify-content:center;color:#5A6066;font-size:20px;}
 @media(max-width:859px){.shift-arrow{transform:rotate(90deg);margin:2px auto;}}
 
-.flow-strip{margin-top:44px;display:flex;flex-wrap:wrap;align-items:center;gap:0;justify-content:center;}
-.flow-step{font-size:13px;color:#C5C9CE;padding:10px 16px;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-pill);background:rgba(255,255,255,.03);white-space:nowrap;}
-.flow-sep{color:#5A6066;font-family:var(--font-mono);font-size:12px;padding-inline:10px;}
-@media(max-width:640px){.flow-strip{flex-direction:column;align-items:stretch;gap:8px;}.flow-step{text-align:center;}.flow-sep{display:none;}}
+.merge-stage{margin-top:clamp(40px,6vw,64px);overflow:visible;}
+.merge-arrow{display:flex;justify-content:center;margin:0 0 28px;}
+.merge-into{
+  display:flex;
+  justify-content:center;
+  overflow:visible;
+  min-height:clamp(110px,20vw,168px);
+  align-items:center;
+}
+.merge-lock{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(14px,2.6vw,24px);
+  direction:ltr;
+  position:relative;
+  overflow:visible;
+}
+.merge-mark{
+  display:block;
+  flex:none;
+  width:clamp(52px,10vw,78px);
+  line-height:0;
+  transform-origin:50% 50%;
+  will-change:transform,opacity,filter;
+}
+.merge-mark svg{display:block;width:100%;height:auto;color:var(--paper);}
+.merge-mark-live{display:block;line-height:0;transform-origin:50% 50%;}
+.merge-mark .void{fill:var(--ink);}
+.merge-word{
+  display:flex;
+  align-items:center;
+  font-family:var(--font-mark);
+  font-stretch:normal;
+  font-weight:500;
+  font-size:clamp(1.7rem,5.1vw,3.05rem);
+  letter-spacing:0;
+  line-height:1;
+  color:var(--paper);
+  text-transform:uppercase;
+  overflow:visible;
+  text-rendering:geometricPrecision;
+  -webkit-font-smoothing:antialiased;
+}
+.merge-letter{
+  display:inline-block;
+  margin-inline-end:0.3em;
+  transform-origin:50% 70%;
+  will-change:transform,opacity,filter;
+}
+.merge-letter:last-child{margin-inline-end:0;}
+.merge-glyph{
+  display:block;
+  transform-origin:50% 80%;
+}
+@media (prefers-reduced-motion: no-preference){
+  .merge-lock:not(.is-gsap) .merge-mark{
+    animation:mergeMarkLoop 6.4s cubic-bezier(.22,1,.36,1) infinite;
+  }
+  .merge-lock:not(.is-gsap) .merge-letter{
+    opacity:0;
+    animation:mergeLetterLoop 6.4s cubic-bezier(.22,1,.36,1) infinite;
+  }
+  .merge-lock:not(.is-gsap) .merge-letter:nth-child(1){--sx:-28px;--sy:-56px;--sr:-18deg;--ex:-36px;--ey:42px;--er:14deg;animation-delay:.06s;}
+  .merge-lock:not(.is-gsap) .merge-letter:nth-child(2){--sx:18px;--sy:54px;--sr:12deg;--ex:-8px;--ey:-48px;--er:-10deg;animation-delay:.16s;}
+  .merge-lock:not(.is-gsap) .merge-letter:nth-child(3){--sx:0px;--sy:-64px;--sr:8deg;--ex:12px;--ey:56px;--er:-16deg;animation-delay:.24s;}
+  .merge-lock:not(.is-gsap) .merge-letter:nth-child(4){--sx:52px;--sy:36px;--sr:20deg;--ex:48px;--ey:-40px;--er:18deg;animation-delay:.32s;}
+  .merge-lock:not(.is-gsap) .merge-letter:nth-child(5){--sx:78px;--sy:-28px;--sr:-12deg;--ex:70px;--ey:38px;--er:-14deg;animation-delay:.4s;}
+}
+@keyframes mergeMarkLoop{
+  0%,7%{opacity:0;transform:translate3d(-42px,10px,0) rotate(-26deg) scale(.68);filter:blur(10px);}
+  24%{opacity:1;transform:translate3d(0,-2px,0) rotate(0) scale(1.06);filter:blur(0);}
+  32%,58%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1);filter:blur(0);}
+  76%,100%{opacity:0;transform:translate3d(-30px,-18px,0) rotate(18deg) scale(.78);filter:blur(8px);}
+}
+@keyframes mergeLetterLoop{
+  0%,9%{opacity:0;transform:translate3d(var(--sx),var(--sy),0) rotate(var(--sr)) scale(.72);filter:blur(8px);}
+  30%{opacity:1;transform:translate3d(0,-3px,0) rotate(0) scale(1.04);filter:blur(0);}
+  38%,60%{opacity:1;transform:translate3d(0,0,0) rotate(0) scale(1);filter:blur(0);}
+  80%,100%{opacity:0;transform:translate3d(var(--ex),var(--ey),0) rotate(var(--er)) scale(.7);filter:blur(7px);}
+}
+@media (prefers-reduced-motion: reduce){
+  .merge-mark,.merge-letter,.merge-glyph{opacity:1;transform:none;filter:none;animation:none;}
+}
+.merge-caption,
+.solution-signature{
+  margin-top:22px;
+  text-align:center;
+  font-family:var(--font-serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:clamp(1.15rem,2.2vw,1.4rem);
+  letter-spacing:0;
+  color:#C5C9CE;
+  max-width:40ch;
+  margin-inline:auto;
+  line-height:1.45;
+}
+html[lang="ar"] .merge-caption,
+html[lang="ar"] .solution-signature{
+  font-family:var(--font-ar-display);
+  font-style:normal;
+  font-weight:400;
+}
+.product-ai-block{margin-top:clamp(56px,8vw,80px);padding-top:clamp(48px,7vw,64px);border-top:1px solid var(--hairline-dark);}
+.product-ai-block .section-index{margin-bottom:14px;}
+.product-ai-block .section-sub{margin-top:12px;max-width:42ch;}
+.trust-line{margin-top:20px;font-size:14px;color:#8A9096;line-height:1.55;max-width:48ch;}
+html[lang="ar"] .trust-line{font-size:15px;}
 
 /* ============================================================
    OMNICHANNEL + INDUSTRIES
@@ -316,6 +590,11 @@ html[lang="ar"] .shift-label{font-family:var(--font-ar);letter-spacing:0;}
 .industry-rail{margin-top:28px;padding-top:24px;border-top:1px solid var(--hairline);display:flex;flex-wrap:wrap;gap:10px;}
 .industry-pill{font-size:13px;padding:9px 16px;border:1px solid var(--hairline);border-radius:var(--radius-pill);color:var(--ink-2);background:#fff;}
 html[lang="ar"] .industry-pill{font-size:14px;}
+.ev-example{margin-top:16px;font-size:14px;color:var(--stone-2);max-width:54ch;line-height:1.55;margin-inline:auto;}
+.everywhere-strip{margin-top:32px;}
+.everywhere-tagline{font-size:clamp(15px,2vw,16px);color:#A8ADB3;max-width:44ch;margin:0 auto;line-height:1.55;}
+.on-dark .industry-rail{border-top:none;padding-top:16px;margin-top:16px;justify-content:center;}
+.on-dark .industry-pill{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.14);color:#E8EAEC;}
 
 /* ============================================================
    AI SECTION
@@ -360,6 +639,7 @@ html[lang="ar"] .auto-col .k{font-family:var(--font-ar);letter-spacing:0;text-tr
 @media(min-width:768px){.trust-points{grid-template-columns:repeat(3,1fr);}}
 .trust-points li{font-size:13.5px;color:#C5C9CE;line-height:1.55;padding-inline-start:16px;position:relative;}
 .trust-points li::before{content:'';position:absolute;inset-inline-start:0;top:.5em;width:5px;height:5px;border-radius:50%;background:var(--accent);}
+.pricing-foot{margin-top:20px;font-size:13px;color:var(--stone-2);max-width:52ch;line-height:1.55;}
 
 /* ============================================================
    PRICING (normal flow — no forced viewport lock)
@@ -379,6 +659,8 @@ html[lang="ar"] .price-toggle button{font-family:var(--font-ar);font-size:14px;l
 html[lang="ar"] .plan-tab{font-family:var(--font-ar);letter-spacing:0;}
 .plan-name{font-size:12px;color:var(--stone);font-weight:600;letter-spacing:.06em;}
 html[lang="ar"] .plan-name{font-family:var(--font-ar);letter-spacing:0;font-size:14px;}
+.plan-tag{font-size:13px;color:var(--stone-2);margin-top:4px;line-height:1.4;}
+.plan.pro .plan-tag{color:#A8ADB3;}
 .plan.pro .plan-name{color:#A8ADB3;}
 .plan-price{font-family:var(--font-mono);font-size:clamp(2rem,3.2vw,2.9rem);font-weight:500;margin-top:10px;display:flex;align-items:baseline;gap:6px;letter-spacing:-.03em;direction:ltr;}
 .plan-price .pfx{font-size:1.3rem;color:var(--stone);}
@@ -394,17 +676,7 @@ html[lang="ar"] .plan-price .per{font-family:var(--font-ar);letter-spacing:0;tex
 .plan .btn{width:100%;margin-top:22px;}
 .plan-save{font-size:12px;color:var(--good);margin-top:6px;min-height:1.2em;}
 .plan-save:empty{display:none;}
-.pricing-note{margin-top:20px;font-size:14.5px;color:var(--stone-2);max-width:60ch;line-height:1.55;}
-.compare-wrap{margin-top:22px;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:16px;border:1px solid var(--hairline);}
-.compare-table{width:100%;min-width:640px;border-collapse:collapse;font-size:13px;}
-.compare-table th,.compare-table td{padding:13px 16px;border-bottom:1px solid var(--hairline);text-align:start;vertical-align:middle;}
-.compare-table tr:last-child td{border-bottom:none;}
-.compare-table th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--stone);font-weight:600;background:var(--paper-2);}
-html[lang="ar"] .compare-table th{font-family:var(--font-ar);text-transform:none;letter-spacing:0;font-size:13px;}
-.compare-table tbody th{text-transform:none;letter-spacing:0;color:var(--ink-2);font-weight:500;font-size:13.5px;background:transparent;}
-.compare-table .col-hero{background:rgba(91,124,255,.06);}
-.compare-table thead .col-hero{background:rgba(91,124,255,.12);color:var(--ink);}
-.fee-note{margin-top:22px;background:var(--paper-2);border:1px solid var(--hairline);border-radius:16px;padding:16px 20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;}
+.fee-note{margin-top:28px;background:var(--paper-2);border:1px solid var(--hairline);border-radius:16px;padding:16px 20px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;}
 .fee-note h4{font-size:12px;font-weight:600;}
 html[lang="ar"] .fee-note h4{font-family:var(--font-ar);font-weight:700;font-size:14px;}
 .fee-note p{font-size:13px;color:var(--stone-2);margin-top:4px;max-width:420px;}
@@ -421,7 +693,6 @@ html[lang="ar"] .fee-note h4{font-family:var(--font-ar);font-weight:700;font-siz
 .closing-ctas{margin-top:26px;display:flex;gap:12px;flex-wrap:wrap;}
 .closing-tag{margin-top:18px;font-family:var(--font-serif);font-style:italic;font-size:clamp(1rem,1.8vw,1.15rem);color:#C5C9CE;}
 html[lang="ar"] .closing-tag{font-family:var(--font-ar-display);font-style:normal;}
-
 /* ============================================================
    FOOTER
    ============================================================ */
@@ -466,14 +737,14 @@ footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
       </a>
       <nav class="nav-links" aria-label="Primary">
         <a class="en" href="#solution" data-i18n="nav.product">Product</a>
-        <a class="en" href="#ai" data-i18n="nav.ai">AI</a>
+        <a class="en" href="#ai" data-i18n="nav.ai">Insights</a>
         <a class="en" href="#pricing" data-i18n="nav.pricing">Pricing</a>
         <a class="en" href="about.html" data-i18n="nav.about">About</a>
         <a class="en" href="/login" data-i18n="nav.login">Login</a>
       </nav>
       <div class="nav-actions">
         <button type="button" class="lang-btn" id="langToggle" aria-label="العربية">AR</button>
-        <a href="/signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Start for free</a>
+        <a href="/signup" class="btn btn-primary btn-sm" data-i18n="cta.start">Get started</a>
         <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
           <span></span><span></span>
         </button>
@@ -486,7 +757,7 @@ footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
   <button type="button" class="menu-scrim" id="menuScrim" tabindex="-1" aria-label="Close menu"></button>
   <aside class="menu-drawer" role="dialog" aria-modal="true" aria-labelledby="menuTag">
     <div class="menu-drawer-top">
-      <p class="menu-tag" id="menuTag" data-i18n="menu.tag">AI Business OS</p>
+      <p class="menu-tag" id="menuTag" data-i18n="menu.tag">Business management</p>
     </div>
     <nav class="menu-nav" aria-label="Mobile">
       <a class="menu-link" href="#solution"><span class="menu-name" data-i18n="nav.product">Product</span></a>
@@ -495,7 +766,7 @@ footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
       <a class="menu-link" href="about.html"><span class="menu-name" data-i18n="nav.about">About</span></a>
       <a class="menu-link" href="/login"><span class="menu-name" data-i18n="nav.login">Login</span></a>
     </nav>
-    <div class="menu-cta"><a href="/signup" class="btn btn-primary" data-i18n="cta.start">Start for free</a></div>
+    <div class="menu-cta"><a href="/signup" class="btn btn-primary" data-i18n="cta.start">Get started</a></div>
     <div class="menu-foot">
       <span class="menu-connect" data-i18n="menu.connect">Connect</span>
       <div class="socials">
@@ -515,72 +786,99 @@ footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
 
 <main>
 
-<!-- ============ HERO — the product itself, in seconds ============ -->
+<!-- ============ HERO ============ -->
 <section class="hero" id="hero">
   <div class="wrap hero-grid">
     <div class="hero-copy">
-      <h1 id="heroTitle" data-i18n-html="hero.title">Your business has data.<br>OMINO turns it into decisions.</h1>
-      <p class="sub" data-i18n="hero.sub">One system for your store, POS, inventory, customers, and payments — with AI that tells you what matters today and what to do next.</p>
+      <h1 id="heroTitle" data-i18n-html="hero.title">Your store, sales, and stock.<br>One place.</h1>
+      <p class="sub" data-i18n="hero.sub">Run your shop, online store, inventory, and orders — and see what needs your attention. From $9 a month.</p>
+      <p class="hero-tag" data-i18n="hero.tag">Know what matters. Act on it.</p>
       <div class="hero-ctas">
-        <a href="/signup" class="btn btn-primary btn-lg" data-i18n="cta.start">Start for free</a>
-        <a href="#solution" class="btn btn-ghost btn-lg" data-i18n="cta.see">See how it works</a>
+        <a href="/signup" class="btn btn-primary btn-lg" data-i18n="cta.start">Get started</a>
+        <a href="#what" class="btn btn-ghost btn-lg" data-i18n="cta.see">See how it works</a>
       </div>
       <div class="hero-badges">
-        <span class="hero-badge"><i></i><span data-i18n="hero.b1">No credit card required</span></span>
-        <span class="hero-badge"><i></i><span data-i18n="hero.b2">Arabic &amp; English, mobile-first</span></span>
+        <span class="hero-badge"><i aria-hidden="true"></i><span data-i18n="hero.b1">From $9 a month</span></span>
+        <span class="hero-badge"><i aria-hidden="true"></i><span data-i18n="hero.b2">Arabic and English</span></span>
       </div>
-      <p class="hero-fine" data-i18n="hero.fine">Founding pricing for the first 50 businesses.</p>
     </div>
-    <div class="mock reveal reveal-init">
-      <div class="mock-glow" aria-hidden="true"></div>
-      <div class="mock-card">
-        <div class="mock-top">
-          <span class="who"><span class="mock-dot"></span><span data-i18n="mock.top">Today</span></span>
-          <span class="mock-live en" data-i18n="mock.live">● Live</span>
+
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hv-stage">
+        <svg class="hv-mark" viewBox="0 0 640 640" aria-hidden="true">
+          <circle class="hv-mark-o" cx="260" cy="320" r="160"/>
+          <circle class="hv-mark-o" cx="380" cy="320" r="160"/>
+        </svg>
+        <svg class="hv-lines" viewBox="0 0 640 640" aria-hidden="true">
+          <path class="hv-line" d="M420,180 L560,110"/>
+          <path class="hv-line" d="M480,320 L600,320"/>
+          <path class="hv-line" d="M420,460 L560,520"/>
+          <path class="hv-line" d="M220,180 L90,120"/>
+        </svg>
+      </div>
+
+      <div class="hv-readouts">
+        <div class="hv-readout hv-readout--hero" style="--x:52%; --y:14%;">
+          <span class="hv-label en" data-i18n="mock.revenue">Revenue</span>
+          <span class="hv-num en" data-count="2480" data-prefix="$">$0</span>
+          <span class="hv-delta en">+18%</span>
         </div>
-        <div class="mock-stats">
-          <div class="mock-stat">
-            <div class="k" data-i18n="mock.revenue">Revenue</div>
-            <div class="v">$2,480</div>
-            <div class="d">+18%</div>
-          </div>
-          <div class="mock-stat">
-            <div class="k" data-i18n="mock.orders">Orders</div>
-            <div class="v">34</div>
-            <div class="d down">−4%</div>
-          </div>
+
+        <div class="hv-readout hv-readout--orders" style="--x:86%; --y:46%;">
+          <span class="hv-label en" data-i18n="mock.orders">Orders</span>
+          <span class="hv-num en" data-count="34">0</span>
+          <span class="hv-delta hv-delta--down en">−4%</span>
         </div>
-        <div class="mock-alert">
-          <i></i>
-          <p data-i18n="mock.alertText">Rose Oud Perfume — 3 left in stock<span data-i18n="mock.alertSpan">Restock before the weekend</span></p>
+
+        <div class="hv-readout hv-readout--alert" style="--x:78%; --y:78%;">
+          <span class="hv-label" data-i18n="mock.alertTitle">Rose Oud Perfume — 3 left</span>
+          <span class="hv-sub" data-i18n="mock.alertSub">Restock before the weekend</span>
         </div>
-        <div class="mock-ai">
-          <div class="rk en" data-i18n="mock.aiLabel">OMINO Insight</div>
-          <p data-i18n="mock.aiText">Discounting is eroding margin on 3 products this week — worth a look.</p>
+
+        <div class="hv-readout hv-readout--insight" style="--x:8%; --y:16%;">
+          <span class="hv-label en" data-i18n="mock.aiLabel">What OMINO noticed</span>
+          <span class="hv-sub" data-i18n="mock.aiText">Discounts cut into profit on 3 products this week.</span>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="hero-proof">
+    <div class="wrap">
+      <span class="proof-founding en" data-i18n="proof.founding">Founding pricing. First 50 businesses.</span>
+      <span class="proof-sep" aria-hidden="true">·</span>
+      <a class="proof-demo" href="/store/novae" data-i18n="proof.demo">See a live store</a>
+    </div>
+  </div>
 </section>
 
-<!-- ============ PROBLEM -> SOLUTION (merged) ============ -->
+<!-- ============ WHAT OMINO IS ============ -->
+<section class="section what-is" id="what">
+  <div class="wrap center">
+    <p class="section-index" data-i18n="what.idx">What OMINO is</p>
+    <h2 class="section-head split-headline" data-i18n-html="what.title" data-split-text="lines,words">One app for<br>how you run your business.</h2>
+    <p class="section-sub" data-i18n="what.sub">From the first sale to the last item on the shelf — your online store, in-store POS, inventory, orders, customers, and sales reports stay connected.</p>
+  </div>
+</section>
+
+<!-- ============ PROBLEM + SOLUTION + MANAGE + AI ============ -->
 <section class="section on-dark" id="solution">
   <div class="wrap center">
-    <p class="section-index" data-i18n="solution.idx">The shift</p>
-    <h2 class="section-head reveal reveal-init" data-i18n-html="solution.title">Your business is connected. Your tools aren't — until now.</h2>
-    <p class="section-sub" data-i18n="solution.sub">Most businesses run on disconnected pieces. OMINO replaces them with one system that talks to itself.</p>
+    <p class="section-index" data-i18n="solution.idx">Sound familiar</p>
+    <h2 class="section-head split-headline" data-i18n-html="solution.title" data-split-text="lines,words">Your business lives<br>in too many places.</h2>
+    <p class="section-sub" data-i18n="solution.sub">Orders on WhatsApp. Stock in a notebook. Sales in a spreadsheet. Maybe a separate online store. Nothing talks to anything else.</p>
 
     <div class="shift">
       <div class="shift-col before">
-        <div class="shift-label en" data-i18n="solution.before.label">Before</div>
+        <div class="shift-label en" data-i18n="solution.before.label">Today</div>
         <div class="shift-chips">
+          <span class="shift-chip en">Instagram</span>
+          <span class="shift-chip en">WhatsApp</span>
+          <span class="shift-chip en">Notebook</span>
+          <span class="shift-chip en">Spreadsheet</span>
           <span class="shift-chip en">POS</span>
-          <span class="shift-chip en">Spreadsheets</span>
-          <span class="shift-chip en">WhatsApp orders</span>
-          <span class="shift-chip en">Store</span>
-          <span class="shift-chip en">Paper stock lists</span>
         </div>
-        <p class="shift-note" data-i18n="solution.before.note">Manual re-entry. Numbers that don't match. Decisions made on guesses.</p>
+        <p class="shift-note" data-i18n="solution.before.note">Numbers do not match. Stock is a guess. You are not sure what you actually made this month.</p>
       </div>
       <div class="shift-arrow" aria-hidden="true">→</div>
       <div class="shift-col after">
@@ -589,69 +887,94 @@ footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
           <span class="shift-chip en">Store</span>
           <span class="shift-chip en">POS</span>
           <span class="shift-chip en">Inventory</span>
-          <span class="shift-chip en">Customers</span>
-          <span class="shift-chip en">AI</span>
+          <span class="shift-chip en">Orders</span>
+          <span class="shift-chip en">Reports</span>
         </div>
-        <p class="shift-note" data-i18n="solution.after.note">One record of truth. Every part of the business stays in sync automatically.</p>
+        <p class="shift-note" data-i18n="solution.after.note">Sell in-store or online. Stock updates on its own. Every sale, order, and customer in one place.</p>
       </div>
     </div>
 
-    <div class="flow-strip" aria-label="What happens on one sale">
-      <span class="flow-step" data-i18n="flow.0">Customer buys</span><span class="flow-sep" aria-hidden="true">→</span>
-      <span class="flow-step" data-i18n="flow.1">Inventory updates</span><span class="flow-sep" aria-hidden="true">→</span>
-      <span class="flow-step" data-i18n="flow.2">Customer record updates</span><span class="flow-sep" aria-hidden="true">→</span>
-      <span class="flow-step" data-i18n="flow.3">OMINO surfaces what matters next</span>
+    <div class="merge-stage" id="system">
+      <div class="merge-arrow" aria-hidden="true">
+        <svg width="18" height="34" viewBox="0 0 18 34" fill="none"><path d="M9 0V32M9 32L2 25M9 32L16 25" stroke="#8A9096" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="merge-into" id="mergeInto">
+        <div class="merge-lock" id="mergeLock" aria-label="OMINO">
+          <span class="merge-mark" aria-hidden="true">
+            <span class="merge-mark-live">
+              <svg viewBox="560 540 940 980" focusable="false">
+                <path fill="currentColor" d="M999.452 583.377C1002.55 582.864 1011.79 582.534 1015.45 582.52C1124.57 582.099 1238.99 628.369 1317.19 703.496C1404.53 787.545 1455.19 902.654 1458.17 1023.83C1459.59 1107.13 1419.3 1182.53 1345.73 1222.97C1309.27 1243.01 1279.13 1246.95 1238.7 1247.38C1238.42 1265.6 1237.68 1283.5 1233.94 1301.39C1214.83 1392.95 1141.63 1453.75 1050.25 1464.47C1047.01 1465.05 1037.72 1465.39 1033.89 1465.44C950.752 1466.53 864.349 1439.48 795.274 1393.52C772.236 1378.19 747.765 1357.32 728.1 1338.27C641.587 1254.46 594.019 1140.41 592.025 1020.18C591.024 959.834 610.557 907.971 652.127 864.289C695.119 819.111 748.835 802.174 809.971 800.894C808.405 683.74 882.351 597.052 999.452 583.377z"/>
+                <path class="void" d="M810.758 800.525C836.938 798.78 871.66 800.025 898.336 799.863C938.965 800.75 979.686 798.785 1020.3 799.771C1138.95 802.654 1237.7 897.607 1237.85 1017.49C1237.94 1095.14 1239.45 1171.02 1237.99 1247.5L1031.78 1247.12C968.782 1246.94 918.661 1225.44 873.509 1181.59C804.097 1114.17 810.901 1033.82 810.516 946.11L810.758 800.525z"/>
+              </svg>
+            </span>
+          </span>
+          <span class="merge-word" aria-hidden="true">
+            <span class="merge-letter"><span class="merge-glyph">O</span></span><span class="merge-letter"><span class="merge-glyph">M</span></span><span class="merge-letter"><span class="merge-glyph">I</span></span><span class="merge-letter"><span class="merge-glyph">N</span></span><span class="merge-letter"><span class="merge-glyph">O</span></span>
+          </span>
+        </div>
+      </div>
+      <p class="merge-caption reveal reveal-init" data-i18n="solution.signature">One place. Your whole business.</p>
     </div>
-  </div>
-</section>
 
-<!-- ============ OMNICHANNEL + INDUSTRIES (merged) ============ -->
-<section class="section section-tight" id="everywhere">
-  <div class="wrap">
-    <p class="section-index" data-i18n="ev.idx">Everywhere you sell</p>
-    <h2 class="section-head reveal reveal-init" data-i18n-html="ev.title">Sell online. Sell in-store. Run it from one place.</h2>
-    <p class="section-sub" data-i18n="ev.sub">One customer, one order history, one inventory — whether they bought on your site or walked into your shop.</p>
-    <div class="truth-row">
-      <span data-i18n="ev.t1">One customer record</span>
-      <span data-i18n="ev.t2">One order history</span>
-      <span data-i18n="ev.t3">One inventory</span>
-      <span data-i18n="ev.t4">One source of truth</span>
-    </div>
-    <div class="industry-rail" aria-label="Industries">
-      <span class="industry-pill" data-i18n="ind.1">Retail</span>
-      <span class="industry-pill" data-i18n="ind.2">Fashion</span>
-      <span class="industry-pill" data-i18n="ind.3">Beauty &amp; Perfume</span>
-      <span class="industry-pill" data-i18n="ind.4">Cafés &amp; Restaurants</span>
-      <span class="industry-pill" data-i18n="ind.5">Electronics</span>
-      <span class="industry-pill" data-i18n="ind.6">Services</span>
-      <span class="industry-pill" data-i18n="ind.7">Wholesale</span>
-    </div>
-  </div>
-</section>
-
-<!-- ============ AI ============ -->
-<section class="section on-dark" id="ai">
-  <div class="wrap ai-layout">
-    <div>
-      <p class="section-index" data-i18n="ai.idx">AI for your business</p>
-      <h2 class="section-head reveal reveal-init" data-i18n-html="ai.title">Numbers tell you what happened. OMINO tells you why — and what's next.</h2>
-      <p class="section-sub" data-i18n="ai.sub">Ask about products, orders, customers, and performance — OMINO answers with your real business context, not generic advice.</p>
-      <div class="ai-prompts">
-        <p class="ai-prompt"><span class="qm en">?</span><span data-i18n="ai.ex1">Which products are losing margin?</span></p>
-        <p class="ai-prompt"><span class="qm en">?</span><span data-i18n="ai.ex2">What should I restock this week?</span></p>
-        <p class="ai-prompt"><span class="qm en">?</span><span data-i18n="ai.ex3">Which customers are becoming inactive?</span></p>
+    <div class="manage-grid reveal reveal-init">
+      <div class="manage-card">
+        <h3 data-i18n="manage.store.t">Online store</h3>
+        <p data-i18n="manage.store.d">Show your products and take orders online.</p>
+      </div>
+      <div class="manage-card">
+        <h3 data-i18n="manage.pos.t">In-store sales</h3>
+        <p data-i18n="manage.pos.d">Ring up sales at the counter. Fast and simple.</p>
+      </div>
+      <div class="manage-card">
+        <h3 data-i18n="manage.inv.t">Inventory</h3>
+        <p data-i18n="manage.inv.d">See what you have — and what is about to run out.</p>
+      </div>
+      <div class="manage-card">
+        <h3 data-i18n="manage.orders.t">Orders</h3>
+        <p data-i18n="manage.orders.d">Track every order from the moment it comes in.</p>
+      </div>
+      <div class="manage-card">
+        <h3 data-i18n="manage.cust.t">Customers</h3>
+        <p data-i18n="manage.cust.d">Keep customer details and purchase history together.</p>
+      </div>
+      <div class="manage-card">
+        <h3 data-i18n="manage.rep.t">Sales reports</h3>
+        <p data-i18n="manage.rep.d">See what sold, what you earned, and what is moving.</p>
       </div>
     </div>
-    <div class="chat-shell">
-      <div class="chat-top"><span class="mock-dot"></span><span data-i18n="chat.top">Profit analysis</span></div>
-      <div class="chat-body">
-        <div class="msg user"><div class="bubble" data-i18n="chat.user">Why did my profit drop this month?</div></div>
-        <div class="msg ai">
-          <div class="bubble" data-i18n-html="chat.ai">Costs increased.<br>Margins fell on 3 key products.<br>Discounting went up.</div>
-          <div class="reveal-list"><div class="reveal-item"><span class="m">01</span><span data-i18n="chat.1">These products carry more volume with less profit.</span></div></div>
-          <div class="rec-box">
-            <div class="rk en" data-i18n="chat.rk">Recommended next step</div>
-            <div class="rv" data-i18n="chat.rec">Review margin on top sellers and tighten discounting where it's eroding profit.</div>
+
+    <div class="everywhere-strip">
+      <p class="everywhere-tagline reveal reveal-init" data-i18n="ev.compact">Built for shops like yours.</p>
+      <div class="industry-rail" aria-label="Industries">
+        <span class="industry-pill" data-i18n="ind.1">Retail</span>
+        <span class="industry-pill" data-i18n="ind.2">Fashion</span>
+        <span class="industry-pill" data-i18n="ind.3">Beauty &amp; Perfume</span>
+        <span class="industry-pill" data-i18n="ind.4">Cafés &amp; Restaurants</span>
+        <span class="industry-pill" data-i18n="ind.6">Services</span>
+      </div>
+      <p class="ev-example reveal reveal-init" data-i18n="ev.example">A perfume shop tracks stock, sales, and repeat customers in one place — like Rose Oud in the demo store.</p>
+    </div>
+
+    <div class="product-ai-block" id="ai">
+      <div class="ai-layout">
+        <div>
+          <p class="section-index" data-i18n="ai.idx">Business help</p>
+          <h2 class="section-head split-headline" data-i18n-html="ai.title" data-split-text="lines,words">See what happened.<br>Know what to do.</h2>
+          <p class="section-sub" data-i18n="ai.sub">OMINO reads your sales, stock, and orders — and tells you what needs attention. Not generic advice. Your numbers.</p>
+          <p class="trust-line" data-i18n="trust.line">You stay in control. Nothing important happens without your approval.</p>
+          <p class="ai-agent-note" data-i18n="ai.agent">On Scale, OMINO can help carry out routine tasks — but only after you approve them.</p>
+        </div>
+        <div class="chat-shell">
+          <div class="chat-top"><span class="mock-dot"></span><span data-i18n="chat.top">Profit analysis</span></div>
+          <div class="chat-body">
+            <div class="msg user"><div class="bubble" data-i18n="chat.user">Why did my profit drop this month?</div></div>
+            <div class="msg ai">
+              <div class="bubble" data-i18n-html="chat.ai">Costs increased.<br>Margins fell on 3 key products.<br>Discounting went up.</div>
+              <div class="rec-box">
+                <div class="rk en" data-i18n="chat.rk">Recommended next step</div>
+                <div class="rv" data-i18n="chat.rec">Review margin on top sellers and tighten discounting where it's eroding profit.</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -659,49 +982,12 @@ footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
   </div>
 </section>
 
-<!-- ============ TRUST + AUTOMATION ============ -->
-<section class="section on-dark" id="trust">
-  <div class="wrap">
-    <p class="section-index" data-i18n="trust.idx">Automation, with control</p>
-    <h2 class="section-head reveal reveal-init" data-i18n-html="trust.title">Intelligent enough to help. Controlled enough to trust.</h2>
-    <p class="section-sub" data-i18n="trust.sub">OMINO detects, recommends, and automates routine work. Important decisions stay yours.</p>
-    <div class="auto-rail" aria-label="Automation examples">
-      <div class="auto-row">
-        <div class="auto-col"><div class="k" data-i18n="auto.k">Event</div><div class="v" data-i18n="auto.r1.e">Low stock detected</div></div>
-        <div class="auto-arrow" aria-hidden="true">→</div>
-        <div class="auto-col"><div class="k" data-i18n="auto.a">OMINO action</div><div class="v" data-i18n="auto.r1.act">Flags the product</div></div>
-        <div class="auto-arrow" aria-hidden="true">→</div>
-        <div class="auto-col"><div class="k" data-i18n="auto.o">Outcome</div><div class="v" data-i18n="auto.r1.out">Restocked before lost sales</div></div>
-      </div>
-      <div class="auto-row">
-        <div class="auto-col"><div class="k" data-i18n="auto.k">Event</div><div class="v" data-i18n="auto.r2.e">Order completed</div></div>
-        <div class="auto-arrow" aria-hidden="true">→</div>
-        <div class="auto-col"><div class="k" data-i18n="auto.a">OMINO action</div><div class="v" data-i18n="auto.r2.act">Updates the customer's history</div></div>
-        <div class="auto-arrow" aria-hidden="true">→</div>
-        <div class="auto-col"><div class="k" data-i18n="auto.o">Outcome</div><div class="v" data-i18n="auto.r2.out">Records stay current, no manual entry</div></div>
-      </div>
-      <div class="auto-row">
-        <div class="auto-col"><div class="k" data-i18n="auto.k">Event</div><div class="v" data-i18n="auto.r3.e">Customer goes inactive</div></div>
-        <div class="auto-arrow" aria-hidden="true">→</div>
-        <div class="auto-col"><div class="k" data-i18n="auto.a">OMINO action</div><div class="v" data-i18n="auto.r3.act">Surfaces the opportunity</div></div>
-        <div class="auto-arrow" aria-hidden="true">→</div>
-        <div class="auto-col"><div class="k" data-i18n="auto.o">Outcome</div><div class="v" data-i18n="auto.r3.out">You decide whether to follow up</div></div>
-      </div>
-    </div>
-    <ul class="trust-points">
-      <li data-i18n="trust.1">Nothing important happens without your approval.</li>
-      <li data-i18n="trust.2">Refunds and financial actions always require confirmation.</li>
-      <li data-i18n="trust.3">You see what changed, who approved it, and why.</li>
-    </ul>
-  </div>
-</section>
-
 <!-- ============ PRICING — normal flowing section ============ -->
 <section class="section" id="pricing">
   <div class="wrap">
     <p class="section-index" data-i18n="pricing.idx">Plans</p>
-    <h2 class="section-head reveal reveal-init" data-i18n-html="pricing.title">Start simple. Grow without rebuilding your business.</h2>
-    <p class="section-sub" data-i18n="pricing.sub">Replace scattered POS, spreadsheet inventory, and paper reports — store, sales, stock, and intelligence in one place.</p>
+    <h2 class="section-head split-headline" data-i18n-html="pricing.title" data-split-text="lines,words">Pick the plan<br>that fits today.</h2>
+    <p class="section-sub" data-i18n="pricing.sub">Every plan includes your store, POS, inventory, and orders. Founding pricing for the first 50 businesses.</p>
 
     <div class="price-toggle-wrap">
       <div class="price-toggle" role="group" aria-label="Billing period">
@@ -710,19 +996,16 @@ footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
       </div>
       <span class="save en" data-i18n="bill.save">Save 2 mo</span>
     </div>
-
     <div class="plans">
       <div class="plan">
         <div class="plan-name en" data-i18n="plan.s.name">Run</div>
         <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="9" data-yearly="7.5">9</span><span class="per">/ month</span></div>
-        <div class="plan-save" data-save="58" aria-hidden="true"></div>
-        <div class="plan-desc" data-i18n="plan.s.desc">Everything you need to sell — online and in-store.</div>
+        <div class="plan-save" data-save="18" aria-hidden="true"></div>
+        <div class="plan-desc" data-i18n="plan.s.desc">For businesses getting started.</div>
         <div class="plan-feats">
-          <div data-i18n="plan.s.1">Online store + POS</div>
-          <div data-i18n="plan.s.2">Products, orders &amp; inventory</div>
-          <div data-i18n="plan.s.3">Customers &amp; basic analytics</div>
-          <div data-i18n="plan.s.4">Essential AI insights</div>
-          <div data-i18n="plan.s.5">Unlimited products</div>
+          <div data-i18n="plan.s.1">Online store and in-store POS</div>
+          <div data-i18n="plan.s.2">Products, orders, and inventory</div>
+          <div data-i18n="plan.s.3">Basic sales summaries and alerts</div>
         </div>
         <a href="checkout.html?plan=starter&amp;billing=monthly" class="btn btn-ghost plan-go" data-plan="starter" data-i18n="plan.s.cta">Start with Run</a>
       </div>
@@ -730,54 +1013,30 @@ footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
         <div class="plan-tab en" data-i18n="plan.p.badge">Most popular</div>
         <div class="plan-name en" data-i18n="plan.p.name">Grow</div>
         <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="29" data-yearly="24.2">29</span><span class="per">/ month</span></div>
-        <div class="plan-save" data-save="118" aria-hidden="true"></div>
-        <div class="plan-desc" data-i18n="plan.p.desc">For owners who want clarity — not more spreadsheets.</div>
+        <div class="plan-save" data-save="58" aria-hidden="true"></div>
+        <div class="plan-desc" data-i18n="plan.p.desc">For owners who want a clearer picture of their business.</div>
         <div class="plan-feats">
           <div data-i18n="plan.p.1">Everything in Run</div>
-          <div data-i18n="plan.p.2">AI insights &amp; recommendations</div>
-          <div data-i18n="plan.p.3">Sales &amp; demand forecasting</div>
-          <div data-i18n="plan.p.4">Customer segmentation</div>
-          <div data-i18n="plan.p.5">Profit &amp; margin analysis</div>
+          <div data-i18n="plan.p.2">What happened, why, and what to do next</div>
+          <div data-i18n="plan.p.3">Profit and margin by product</div>
         </div>
         <a href="checkout.html?plan=pro&amp;billing=monthly" class="btn btn-primary plan-go" data-plan="pro" data-i18n="plan.p.cta">Start with Grow</a>
       </div>
       <div class="plan">
         <div class="plan-name en" data-i18n="plan.b.name">Scale</div>
         <div class="plan-price"><span class="pfx">$</span><span class="pval" data-monthly="59" data-yearly="49.2">59</span><span class="per">/ month</span></div>
-        <div class="plan-save" data-save="238" aria-hidden="true"></div>
-        <div class="plan-desc" data-i18n="plan.b.desc">For teams operating at higher complexity.</div>
+        <div class="plan-save" data-save="118" aria-hidden="true"></div>
+        <div class="plan-desc" data-i18n="plan.b.desc">For growing businesses and teams.</div>
         <div class="plan-feats">
           <div data-i18n="plan.b.1">Everything in Grow</div>
-          <div data-i18n="plan.b.2">AI Business Agent</div>
-          <div data-i18n="plan.b.3">Agentic workflows</div>
-          <div data-i18n="plan.b.4">Advanced team &amp; permissions</div>
-          <div data-i18n="plan.b.5">Priority support</div>
+          <div data-i18n="plan.b.2">Help with routine tasks — you approve every step</div>
+          <div data-i18n="plan.b.3">Priority support when you need it</div>
         </div>
         <a href="checkout.html?plan=business&amp;billing=monthly" class="btn btn-ghost plan-go" data-plan="business" data-i18n="plan.b.cta">Start with Scale</a>
       </div>
     </div>
 
-    <p class="pricing-note" data-i18n="pricing.note">Shopify Basic is ~$39/mo before apps and POS add-ons. OMINO Run includes store, POS, inventory, and intelligence from $9.</p>
-
-    <div class="compare-wrap">
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th scope="col" data-i18n="cmp.col.feature">Capability</th>
-            <th scope="col" data-i18n="plan.s.name">Run</th>
-            <th scope="col" class="col-hero" data-i18n="plan.p.name">Grow</th>
-            <th scope="col" data-i18n="plan.b.name">Scale</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><th scope="row" data-i18n="cmp.r1">Online store + POS</th><td data-i18n="cmp.yes">✓</td><td class="col-hero" data-i18n="cmp.yes">✓</td><td data-i18n="cmp.yes">✓</td></tr>
-          <tr><th scope="row" data-i18n="cmp.r3">AI insights</th><td data-i18n="cmp.l.basic">Basic</td><td class="col-hero" data-i18n="cmp.l.advanced">Advanced</td><td data-i18n="cmp.l.agent">Agent</td></tr>
-          <tr><th scope="row" data-i18n="cmp.r5">Forecasting &amp; segments</th><td data-i18n="cmp.no">—</td><td class="col-hero" data-i18n="cmp.yes">✓</td><td data-i18n="cmp.yes">✓</td></tr>
-          <tr><th scope="row" data-i18n="cmp.r6">AI Business Agent</th><td data-i18n="cmp.no">—</td><td class="col-hero" data-i18n="cmp.no">—</td><td data-i18n="cmp.yes">✓</td></tr>
-          <tr><th scope="row" data-i18n="cmp.r8">Priority support</th><td data-i18n="cmp.no">—</td><td class="col-hero" data-i18n="cmp.no">—</td><td data-i18n="cmp.yes">✓</td></tr>
-        </tbody>
-      </table>
-    </div>
+    <p class="pricing-foot" data-i18n="pricing.foot">Store, POS, inventory, and orders on every plan. Online payment fees apply separately.</p>
 
     <div class="fee-note">
       <div>
@@ -788,19 +1047,19 @@ footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
   </div>
 </section>
 
-<!-- ============ FOUNDING + FINAL CTA (merged) ============ -->
-<section class="section closing on-dark" id="final">
+<!-- ============ FOUNDING 50 ============ -->
+<section class="section closing on-dark" id="founding">
   <div class="wrap">
     <div class="closing-inner">
       <div class="closing-num" aria-hidden="true">50</div>
       <div class="closing-copy">
-        <h2 class="reveal reveal-init" data-i18n-html="final.title">The first 50 businesses build OMINO with us.</h2>
-        <p class="sub" data-i18n="final.sub">Lock in founding pricing for as long as you stay on OMINO — and help shape what comes next.</p>
+        <h2 class="split-headline" data-i18n-html="founding.title" data-split-text="lines,words">Ready to run your business<br>from one place?</h2>
+        <p class="sub" data-i18n="founding.sub">See your sales, stock, and orders clearly — and know what needs you next.</p>
         <div class="closing-ctas">
-          <a href="/signup" class="btn btn-primary btn-lg" data-i18n="final.cta">Become a founding business</a>
-          <a href="#solution" class="btn btn-ghost btn-lg" data-i18n="cta.fit">Explore OMINO</a>
+          <a href="/signup" class="btn btn-primary btn-lg" data-i18n="founding.cta">Get started</a>
+          <a href="/store/novae" class="btn btn-ghost btn-lg" data-i18n="proof.demo">See a live store</a>
         </div>
-        <p class="closing-tag" data-i18n="final.tag">One business. One system. One clear picture.</p>
+        <p class="closing-tag" data-i18n="founding.tag">Founding pricing for the first 50 businesses.</p>
       </div>
     </div>
   </div>
@@ -829,6 +1088,13 @@ footer.band-footer{background:var(--ink);color:#8A9096;padding:44px 0 28px;}
 <script>
 document.documentElement.classList.add('js');
 gsap.registerPlugin(ScrollTrigger);
+if(window.CustomEase){
+  gsap.registerPlugin(CustomEase);
+  CustomEase.create('fluid','0.22, 1, 0.36, 1');
+  CustomEase.create('dock','M0,0 C0.16,1.18 0.32,1.02 1,1');
+  CustomEase.create('drift','M0,0 C0.4,0 0.18,1 1,1');
+}
+const fluidEase = window.CustomEase ? 'fluid' : 'power4.out';
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- nav + orbit scroll progress ---------- */
@@ -914,16 +1180,359 @@ document.getElementById('menuScrim').addEventListener('click', ()=> setMenu(fals
 mobileMenu.querySelectorAll('.menu-link, .menu-cta a').forEach(a=>a.addEventListener('click', ()=> setMenu(false)));
 document.addEventListener('keydown', e=>{ if(e.key==='Escape' && mobileMenu.classList.contains('open')) setMenu(false); });
 
-/* ---------- restrained scroll reveal (headers + hero mockup only) ---------- */
-if(!reduceMotion){
-  gsap.utils.toArray('.reveal-init').forEach(el=>{
-    gsap.to(el,{opacity:1,y:0,duration:.8,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 85%'}});
-  });
-  gsap.from('.hero-copy h1',{opacity:0,y:14,duration:.8,ease:'power3.out',delay:.1});
-  gsap.from('.hero-copy .sub, .hero-ctas, .hero-badges, .hero-fine',{opacity:0,y:12,duration:.7,ease:'power3.out',stagger:.08,delay:.25});
-} else {
-  document.querySelectorAll('.reveal-init').forEach(el=>{el.style.opacity=1;el.style.transform='none';});
+/* ---------- split-text headlines (SplitText-style) ---------- */
+let revealReady = false;
+const revealTriggers = [];
+const splitScrollTriggers = [];
+const SPLIT = {
+  delay: 50,
+  duration: 1.25,
+  ease: 'power3.out',
+  from: { opacity: 0, y: 40 },
+  to: { opacity: 1, y: 0 },
+  threshold: 0.1,
+  rootMargin: '-100px'
+};
+
+function killSplitScrollTriggers(){
+  splitScrollTriggers.forEach(st => st.kill());
+  splitScrollTriggers.length = 0;
 }
+
+let heroLandingTween = null;
+let heroMarkPulse = null;
+
+function formatHeroNum(n, prefix){
+  return (prefix || '') + Math.round(n).toLocaleString('en-US');
+}
+
+function setHeroNumsFinal(){
+  document.querySelectorAll('.hv-num[data-count]').forEach(el => {
+    el.textContent = formatHeroNum(Number(el.dataset.count), el.dataset.prefix);
+  });
+}
+
+function resetHeroNums(){
+  document.querySelectorAll('.hv-num[data-count]').forEach(el => {
+    el.textContent = formatHeroNum(0, el.dataset.prefix);
+  });
+}
+
+function addCountUpToTimeline(tl, el, position){
+  if(!el?.dataset?.count) return;
+  const target = Number(el.dataset.count);
+  if(!Number.isFinite(target)) return;
+  const prefix = el.dataset.prefix || '';
+  const state = { val: 0 };
+  el.textContent = formatHeroNum(0, prefix);
+  tl.to(state, {
+    val: target,
+    duration: 1.15,
+    ease: 'power2.out',
+    onUpdate: () => { el.textContent = formatHeroNum(state.val, prefix); },
+    onComplete: () => {
+      gsap.fromTo(el, { scale: 1.06 }, { scale: 1, duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
+    }
+  }, position);
+}
+
+function revertHeroTitle(){
+  const heroTitle = document.getElementById('heroTitle');
+  if(!heroTitle) return;
+  if(window.OminoSplitText) OminoSplitText.revert(heroTitle);
+  const lines = heroTitle.querySelectorAll(':scope > .split-line');
+  if(lines.length){
+    heroTitle.innerHTML = [...lines].map(line => line.innerHTML.trim()).join('<br>');
+  }
+  heroTitle.classList.remove('split-parent', 'split-ready');
+  heroTitle.removeAttribute('aria-label');
+}
+
+function splitHeroTitleLines(el){
+  if(!el) return [];
+  revertHeroTitle();
+  const html = el.innerHTML;
+  const accessible = (el.textContent || '').replace(/\s+/g, ' ').trim();
+  const lines = html.split(/<br\s*\/?>/i);
+  el.innerHTML = lines.map(line => `<span class="split-line">${line.trim()}</span>`).join('');
+  el.classList.add('split-parent');
+  el.setAttribute('aria-label', accessible);
+  return el.querySelectorAll('.split-line');
+}
+
+function prepHeroLines(){
+  return [...document.querySelectorAll('.hv-line')].map(line => {
+    const len = line.getTotalLength();
+    line.style.strokeDasharray = String(len);
+    line.style.strokeDashoffset = String(len);
+    return { line, len };
+  });
+}
+
+function resetHeroLines(){
+  document.querySelectorAll('.hv-line').forEach(line => {
+    line.style.strokeDashoffset = '0';
+  });
+}
+
+function startHeroMarkPulse(){
+  heroMarkPulse?.kill();
+  if(reduceMotion) return;
+  heroMarkPulse = gsap.to('.hv-mark', {
+    scale: 1.015,
+    duration: 6,
+    ease: 'sine.inOut',
+    yoyo: true,
+    repeat: -1,
+    transformOrigin: '50% 50%'
+  });
+}
+
+function playHeroLanding(){
+  heroLandingTween?.kill();
+  heroMarkPulse?.kill();
+  const heroTitle = document.getElementById('heroTitle');
+  const hvMark = document.querySelector('.hv-mark');
+  const hvReadouts = document.querySelectorAll('.hv-readout');
+  const revenueNum = document.querySelector('.hv-readout--hero .hv-num[data-count]');
+  const ordersNum = document.querySelector('.hv-readout--orders .hv-num[data-count]');
+
+  if(reduceMotion){
+    revertHeroTitle();
+    gsap.set([heroTitle, '.hero-copy .sub', '.hero-tag', '.hero-ctas', '.hero-badges', hvMark, '.hv-readout', '.hero-proof'], {
+      opacity: 1, y: 0, x: 0, scale: 1, clearProps: 'all'
+    });
+    resetHeroLines();
+    setHeroNumsFinal();
+    return;
+  }
+
+  resetHeroNums();
+
+  const lineData = prepHeroLines();
+  const lines = splitHeroTitleLines(heroTitle);
+
+  gsap.set(lines, { opacity: 0, y: 26 });
+  gsap.set('.hero-copy .sub', { opacity: 0, y: 12 });
+  gsap.set('.hero-tag', { opacity: 0, y: 10 });
+  gsap.set('.hero-ctas', { opacity: 0, y: 12 });
+  gsap.set('.hero-badges', { opacity: 0, y: 10 });
+  gsap.set(hvMark, { opacity: 0, scale: 0.94, transformOrigin: '50% 50%' });
+  gsap.set(hvReadouts, { opacity: 0, y: 8 });
+  gsap.set('.hero-proof', { opacity: 0, y: 8 });
+
+  const tl = gsap.timeline({
+    defaults: { ease: 'power2.out' },
+    onComplete: () => {
+      setHeroNumsFinal();
+      startHeroMarkPulse();
+    }
+  });
+  heroLandingTween = tl;
+
+  tl.to(lines, { opacity: 1, y: 0, duration: 0.7, stagger: 0.08 })
+    .to('.hero-copy .sub', { opacity: 1, y: 0, duration: 0.5 }, '-=0.35')
+    .to('.hero-tag', { opacity: 1, y: 0, duration: 0.45 }, '-=0.32')
+    .to('.hero-ctas', { opacity: 1, y: 0, duration: 0.5 }, '-=0.3')
+    .to('.hero-badges', { opacity: 1, y: 0, duration: 0.4 }, '-=0.25')
+    .to(hvMark, { opacity: 1, scale: 1, duration: 1.1, ease: 'expo.out' }, '-=0.6');
+
+  if(window.matchMedia('(min-width:901px)').matches){
+    lineData.forEach(({ line, len }, i) => {
+      const obj = { offset: len };
+      tl.to(obj, {
+        offset: 0,
+        duration: 0.6,
+        ease: 'power1.inOut',
+        onUpdate: () => { line.style.strokeDashoffset = String(obj.offset); }
+      }, i ? `-=${0.45}` : '-=0.5');
+    });
+  } else {
+    resetHeroLines();
+  }
+
+  tl.to(hvReadouts, { opacity: 1, y: 0, duration: 0.5, stagger: 0.12 }, '-=0.55')
+    .addLabel('counts', '-=0.22');
+  addCountUpToTimeline(tl, revenueNum, 'counts');
+  addCountUpToTimeline(tl, ordersNum, 'counts+=0.14');
+  tl.to('.hero-proof', { opacity: 1, y: 0, duration: 0.4 }, 'counts+=0.08');
+}
+
+function initScrollSplit(){
+  if(reduceMotion || !window.OminoSplitText) return;
+  killSplitScrollTriggers();
+  document.querySelectorAll('.split-headline').forEach(el=>{
+    OminoSplitText.revert(el);
+    const inView = OminoSplitText.isInView(el, SPLIT.threshold);
+    const tween = OminoSplitText.animate(el, {
+      ...SPLIT,
+      splitType: 'lines,words',
+      trigger: inView ? 'load' : 'scroll',
+      playDelay: inView ? 0.08 : 0
+    });
+    if(tween && tween.scrollTrigger) splitScrollTriggers.push(tween.scrollTrigger);
+  });
+  ScrollTrigger.refresh();
+}
+
+function initSplitTexts(){
+  if(reduceMotion){
+    window.OminoSplitText?.revertAll();
+    revertHeroTitle();
+    return;
+  }
+  initScrollSplit();
+}
+
+/* ---------- restrained scroll reveal (mockup + non-split blocks) ---------- */
+function initReveal(){
+  revealTriggers.forEach(st => st.kill());
+  revealTriggers.length = 0;
+  if(reduceMotion){
+    document.querySelectorAll('.reveal-init').forEach(el=>{el.style.opacity=1;el.style.transform='none';});
+    ScrollTrigger.refresh();
+    return;
+  }
+  gsap.utils.toArray('.reveal-init').forEach(el=>{
+    gsap.killTweensOf(el);
+    gsap.set(el, { clearProps: 'opacity,transform' });
+    gsap.set(el, { opacity: 0, y: 16 });
+    const tween = gsap.to(el, {
+      opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 85%', once: true }
+    });
+    if(tween.scrollTrigger) revealTriggers.push(tween.scrollTrigger);
+  });
+  ScrollTrigger.refresh();
+}
+
+function playLanding(cinematic){
+  document.documentElement.classList.remove('await-open');
+  const boot = ()=>{
+    requestAnimationFrame(()=>{
+      if(!reduceMotion){
+        initReveal();
+        initSplitTexts();
+        playHeroLanding();
+      } else {
+        document.querySelectorAll('.reveal-init').forEach(el=>{el.style.opacity=1;el.style.transform='none';});
+        window.OminoSplitText?.revertAll();
+        playHeroLanding();
+      }
+      revealReady = true;
+    });
+  };
+  const start = ()=>{
+    if(window.OminoSplitText) OminoSplitText.whenFontsReady().then(boot);
+    else boot();
+  };
+  if(cinematic) setTimeout(start, 520);
+  else start();
+}
+if(window.OminoLoader) OminoLoader.onReady(playLanding);
+else playLanding(false);
+
+/* ---------- OMINO lockup: letters gather to the mark ---------- */
+(function initMergeLockup(){
+  const mergeLock = document.getElementById('mergeLock');
+  const mergeMark = mergeLock && mergeLock.querySelector('.merge-mark');
+  const mergeMarkLive = mergeLock && mergeLock.querySelector('.merge-mark-live');
+  const mergeLetters = mergeLock ? gsap.utils.toArray(mergeLock.querySelectorAll('.merge-letter')) : [];
+  const mergeGlyphs = mergeLock ? gsap.utils.toArray(mergeLock.querySelectorAll('.merge-glyph')) : [];
+  if(!mergeMark || !mergeLetters.length || reduceMotion) return;
+
+  mergeLock.classList.add('is-gsap');
+  const useBlur = window.matchMedia('(min-width: 700px)').matches;
+  const from = [
+    {x:-36, y:-62, r:-22, s:.68},
+    {x:22, y:58, r:14, s:.74},
+    {x:4, y:-72, r:10, s:.62},
+    {x:58, y:40, r:24, s:.7},
+    {x:86, y:-34, r:-16, s:.72}
+  ];
+  const away = [
+    {x:-42, y:46, r:16, s:.7},
+    {x:-12, y:-54, r:-12, s:.68},
+    {x:16, y:62, r:-18, s:.66},
+    {x:54, y:-46, r:20, s:.72},
+    {x:78, y:42, r:-14, s:.7}
+  ];
+  const blurIn = useBlur ? 'blur(10px)' : 'blur(0px)';
+  const blurOut = useBlur ? 'blur(8px)' : 'blur(0px)';
+  const dock = window.CustomEase ? 'dock' : 'power3.out';
+  const drift = window.CustomEase ? 'drift' : 'power2.in';
+
+  gsap.set(mergeMark,{opacity:0, x:-48, y:12, rotation:-28, scale:.64, filter:blurIn});
+  mergeLetters.forEach((letter,i)=>{
+    const p = from[i];
+    gsap.set(letter,{opacity:0, x:p.x, y:p.y, rotation:p.r, scale:p.s, filter:blurIn});
+  });
+  mergeGlyphs.forEach((glyph,i)=>{
+    gsap.to(glyph,{
+      y: i % 2 ? 3.5 : -3.5,
+      rotation: i % 2 ? 1.4 : -1.4,
+      duration: 1.7 + i * 0.16,
+      yoyo:true,
+      repeat:-1,
+      ease:'sine.inOut',
+      delay: i * 0.11
+    });
+  });
+  if(mergeMarkLive){
+    gsap.to(mergeMarkLive,{
+      y:-3,
+      rotation:2.2,
+      duration:2.4,
+      yoyo:true,
+      repeat:-1,
+      ease:'sine.inOut'
+    });
+  }
+
+  const mergeTl = gsap.timeline({
+    repeat:-1,
+    defaults:{ease:dock},
+    paused:true
+  });
+  mergeTl
+    .to(mergeMark,{opacity:1, x:0, y:0, rotation:0, scale:1.06, filter:'blur(0px)', duration:1.08})
+    .to(mergeMark,{scale:1, duration:.4, ease:fluidEase},'-=.2')
+    .addLabel('letters', 0.38);
+  mergeLetters.forEach((letter,i)=>{
+    mergeTl.to(letter,{
+      opacity:1, x:0, y:0, rotation:0, scale:1.06, filter:'blur(0px)', duration:1
+    }, 'letters+=' + (i * 0.1));
+    mergeTl.to(letter,{scale:1, duration:.34, ease:fluidEase},'-=0.26');
+  });
+  mergeTl
+    .to({}, {duration:2.2})
+    .addLabel('break');
+  mergeLetters.forEach((letter,i)=>{
+    const p = away[i];
+    mergeTl.to(letter,{
+      opacity:0, x:p.x, y:p.y, rotation:p.r, scale:p.s, filter:blurOut,
+      duration:.88, ease:drift
+    }, 'break+=' + (i * 0.07));
+  });
+  mergeTl.to(mergeMark,{
+    opacity:0, x:-32, y:-16, rotation:18, scale:.76, filter:blurOut,
+    duration:.92, ease:drift
+  }, 'break+=.1')
+  .to({}, {duration:.48});
+
+  if(window.ScrollTrigger){
+    ScrollTrigger.create({
+      trigger: '#mergeInto',
+      start: 'top 88%',
+      onEnter: ()=> mergeTl.play(),
+      onEnterBack: ()=> mergeTl.play(),
+      onLeave: ()=> mergeTl.pause(),
+      onLeaveBack: ()=> mergeTl.pause()
+    });
+  } else {
+    mergeTl.play();
+  }
+})();
 
 /* ---------- pricing toggle ---------- */
 const toggleMonthly = document.getElementById('toggleMonthly');
@@ -945,118 +1554,148 @@ toggleYearly.addEventListener('click', ()=>setBilling('yearly'));
 /* ---------- i18n ---------- */
 const copy = {
   en: {
-    title:'OMINO — The Intelligent Operating System for Your Business',
+    title:'OMINO — Run your store, sales, and inventory in one place',
     skip:'Skip to content',
-    'nav.product':'Product','nav.ai':'AI','nav.pricing':'Pricing','nav.about':'About','nav.login':'Login',
-    'cta.start':'Start for free','cta.see':'See how it works','cta.fit':'Explore OMINO',
-    'menu.tag':'AI Business OS','menu.connect':'Connect',
-    'hero.title':'Your business has data.<br>OMINO turns it into decisions.',
-    'hero.sub':'One system for your store, POS, inventory, customers, and payments — with AI that tells you what matters today and what to do next.',
-    'hero.b1':'No credit card required','hero.b2':'Arabic & English, mobile-first',
-    'hero.fine':'Founding pricing for the first 50 businesses.',
-    'mock.top':'Today','mock.live':'● Live','mock.revenue':'Revenue','mock.orders':'Orders',
-    'mock.alertText':'Rose Oud Perfume — 3 left in stock','mock.alertSpan':'Restock before the weekend',
-    'mock.aiLabel':'OMINO Insight','mock.aiText':'Discounting is eroding margin on 3 products this week — worth a look.',
-    'solution.idx':'The shift','solution.title':'Your business is connected. Your tools aren\'t — until now.',
-    'solution.sub':'Most businesses run on disconnected pieces. OMINO replaces them with one system that talks to itself.',
-    'solution.before.label':'Before','solution.before.note':'Manual re-entry. Numbers that don\'t match. Decisions made on guesses.',
-    'solution.after.label':'With OMINO','solution.after.note':'One record of truth. Every part of the business stays in sync automatically.',
+    'nav.product':'Product','nav.ai':'Insights','nav.pricing':'Pricing','nav.about':'About','nav.login':'Login',
+    'cta.start':'Get started','cta.see':'See how it works','cta.fit':'Explore OMINO',
+    'menu.tag':'Business management','menu.connect':'Connect',
+    'hero.title':'Your store, sales, and stock.<br>One place.',
+    'hero.sub':'Run your shop, online store, inventory, and orders — and see what needs your attention. From $9 a month.',
+    'hero.tag':'Know what matters. Act on it.',
+    'hero.b1':'From $9 a month','hero.b2':'Arabic and English',
+    'proof.founding':'Founding pricing. First 50 businesses.',
+    'proof.demo':'See a live store',
+    'mock.top':'Today','mock.live':'Live','mock.revenue':'Revenue','mock.orders':'Orders',
+    'mock.alertTitle':'Rose Oud Perfume — 3 left','mock.alertSub':'Restock before the weekend',
+    'mock.aiLabel':'What OMINO noticed','mock.aiText':'Discounts cut into profit on 3 products this week.',
+    'what.idx':'What OMINO is','what.title':'One app for<br>how you run your business.',
+    'what.sub':'From the first sale to the last item on the shelf — your online store, in-store POS, inventory, orders, customers, and sales reports stay connected.',
+    'solution.idx':'Sound familiar','solution.title':'Your business lives<br>in too many places.',
+    'solution.sub':'Orders on WhatsApp. Stock in a notebook. Sales in a spreadsheet. Maybe a separate online store. Nothing talks to anything else.',
+    'solution.before.label':'Today','solution.before.note':'Numbers do not match. Stock is a guess. You are not sure what you actually made this month.',
+    'solution.after.label':'With OMINO','solution.after.note':'Sell in-store or online. Stock updates on its own. Every sale, order, and customer in one place.',
+    'solution.signature':'One place. Your whole business.',
+    'manage.store.t':'Online store','manage.store.d':'Show your products and take orders online.',
+    'manage.pos.t':'In-store sales','manage.pos.d':'Ring up sales at the counter. Fast and simple.',
+    'manage.inv.t':'Inventory','manage.inv.d':'See what you have — and what is about to run out.',
+    'manage.orders.t':'Orders','manage.orders.d':'Track every order from the moment it comes in.',
+    'manage.cust.t':'Customers','manage.cust.d':'Keep customer details and purchase history together.',
+    'manage.rep.t':'Sales reports','manage.rep.d':'See what sold, what you earned, and what is moving.',
     'flow.0':'Customer buys','flow.1':'Inventory updates','flow.2':'Customer record updates','flow.3':'OMINO surfaces what matters next',
     'ev.idx':'Everywhere you sell','ev.title':'Sell online. Sell in-store. Run it from one place.',
     'ev.sub':'One customer, one order history, one inventory — whether they bought on your site or walked into your shop.',
-    'ev.t1':'One customer record','ev.t2':'One order history','ev.t3':'One inventory','ev.t4':'One source of truth',
+    'ev.compact':'Built for shops like yours.',
+    'ev.t1':'One customer record','ev.t2':'One order history','ev.t3':'One inventory','ev.t4':'One place for your numbers',
     'ind.1':'Retail','ind.2':'Fashion','ind.3':'Beauty & Perfume','ind.4':'Cafés & Restaurants','ind.5':'Electronics','ind.6':'Services','ind.7':'Wholesale',
-    'ai.idx':'AI for your business','ai.title':'Numbers tell you what happened. OMINO tells you why — and what\'s next.',
-    'ai.sub':'Ask about products, orders, customers, and performance — OMINO answers with your real business context, not generic advice.',
+    'ev.example':'A perfume shop tracks stock, sales, and repeat customers in one place — like Rose Oud in the demo store.',
+    'ai.idx':'Business help','ai.title':'See what happened.<br>Know what to do.',
+    'ai.sub':'OMINO reads your sales, stock, and orders — and tells you what needs attention. Not generic advice. Your numbers.',
+    'ai.agent':'On Scale, OMINO can help carry out routine tasks — but only after you approve them.',
+    'trust.line':'You stay in control. Nothing important happens without your approval.',
     'ai.ex1':'Which products are losing margin?','ai.ex2':'What should I restock this week?','ai.ex3':'Which customers are becoming inactive?',
-    'chat.top':'Profit analysis','chat.user':'Why did my profit drop this month?',
-    'chat.ai':'Costs increased.<br>Margins fell on 3 key products.<br>Discounting went up.',
-    'chat.1':'These products carry more volume with less profit.',
-    'chat.rk':'Recommended next step','chat.rec':'Review margin on top sellers and tighten discounting where it\'s eroding profit.',
+    'chat.top':'Profit check','chat.user':'Why did my profit drop this month?',
+    'chat.ai':'Costs went up.<br>Three products sold more but earned less.<br>Discounts were higher than usual.',
+    'chat.1':'These three products drove volume without enough margin.',
+    'chat.rk':'Suggested next step','chat.rec':'Review pricing and discounts on your top sellers this week.',
     'trust.idx':'Automation, with control','trust.title':'Intelligent enough to help. Controlled enough to trust.',
     'trust.sub':'OMINO detects, recommends, and automates routine work. Important decisions stay yours.',
     'auto.k':'Event','auto.a':'OMINO action','auto.o':'Outcome',
-    'auto.r1.e':'Low stock detected','auto.r1.act':'Flags the product','auto.r1.out':'Restocked before lost sales',
-    'auto.r2.e':'Order completed','auto.r2.act':'Updates the customer\'s history','auto.r2.out':'Records stay current, no manual entry',
-    'auto.r3.e':'Customer goes inactive','auto.r3.act':'Surfaces the opportunity','auto.r3.out':'You decide whether to follow up',
+    'auto.r1.e':'Low stock detected','auto.r1.act':'Flags the product','auto.r1.out':'Helps you restock before lost sales',
+    'auto.r2.e':'Order completed','auto.r2.act':'Updates the customer\'s history','auto.r2.out':'Keeps records current without manual entry',
+    'auto.r3.e':'Customer goes inactive','auto.r3.act':'Surfaces the opportunity','auto.r3.out':'Surfaces the opportunity — you decide whether to follow up',
     'trust.1':'Nothing important happens without your approval.',
     'trust.2':'Refunds and financial actions always require confirmation.',
     'trust.3':'You see what changed, who approved it, and why.',
-    'pricing.idx':'Plans','pricing.title':'Start simple. Grow without rebuilding your business.',
-    'pricing.sub':'Replace scattered POS, spreadsheet inventory, and paper reports — store, sales, stock, and intelligence in one place.',
-    'pricing.note':'Shopify Basic is ~$39/mo before apps and POS add-ons. OMINO Run includes store, POS, inventory, and intelligence from $9.',
+    'pricing.idx':'Plans','pricing.title':'Pick the plan<br>that fits today.',
+    'pricing.sub':'Every plan includes your store, POS, inventory, and orders. Founding pricing for the first 50 businesses.',
+    'pricing.foot':'Store, POS, inventory, and orders on every plan. Online payment fees apply separately.',
     'bill.month':'Monthly','bill.year':'Yearly','bill.per':'/ month','bill.perY':'/ month, billed yearly','bill.save':'Save 2 mo','bill.savePlan':'Save ${n}/yr',
-    'plan.s.name':'Run','plan.s.desc':'Everything you need to sell — online and in-store.',
-    'plan.s.1':'Online store + POS','plan.s.2':'Products, orders & inventory','plan.s.3':'Customers & basic analytics','plan.s.4':'Essential AI insights','plan.s.5':'Unlimited products','plan.s.cta':'Start with Run',
-    'plan.p.name':'Grow','plan.p.badge':'Most popular','plan.p.desc':'For owners who want clarity — not more spreadsheets.',
-    'plan.p.1':'Everything in Run','plan.p.2':'AI insights & recommendations','plan.p.3':'Sales & demand forecasting','plan.p.4':'Customer segmentation','plan.p.5':'Profit & margin analysis','plan.p.cta':'Start with Grow',
-    'plan.b.name':'Scale','plan.b.desc':'For teams operating at higher complexity.',
-    'plan.b.1':'Everything in Grow','plan.b.2':'AI Business Agent','plan.b.3':'Agentic workflows','plan.b.4':'Advanced team & permissions','plan.b.5':'Priority support','plan.b.cta':'Start with Scale',
+    'plan.s.name':'Run','plan.s.desc':'For businesses getting started.',
+    'plan.s.1':'Online store and in-store POS','plan.s.2':'Products, orders, and inventory','plan.s.3':'Basic sales summaries and alerts','plan.s.cta':'Start with Run',
+    'plan.p.name':'Grow','plan.p.badge':'Most popular','plan.p.desc':'For owners who want a clearer picture of their business.',
+    'plan.p.1':'Everything in Run','plan.p.2':'What happened, why, and what to do next','plan.p.3':'Profit and margin by product','plan.p.cta':'Start with Grow',
+    'plan.b.name':'Scale','plan.b.desc':'For growing businesses and teams.',
+    'plan.b.1':'Everything in Grow','plan.b.2':'Help with routine tasks — you approve every step','plan.b.3':'Priority support when you need it','plan.b.cta':'Start with Scale',
     'cmp.col.feature':'Capability','cmp.r1':'Online store + POS','cmp.r3':'AI insights','cmp.r5':'Forecasting & segments','cmp.r6':'AI Business Agent','cmp.r8':'Priority support',
     'cmp.yes':'✓','cmp.no':'—','cmp.l.basic':'Basic','cmp.l.advanced':'Advanced','cmp.l.agent':'Agent',
     'fee.title':'Payments','fee':'Small OMINO platform fee on online payments. Transparent pricing, no hidden costs.',
-    'final.title':'The first 50 businesses build OMINO with us.',
-    'final.sub':'Lock in founding pricing for as long as you stay on OMINO — and help shape what comes next.',
-    'final.cta':'Become a founding business','final.tag':'One business. One system. One clear picture.',
-    'final.brand':'The intelligent operating system for your business.',
+    'founding.title':'Ready to run your business<br>from one place?',
+    'founding.sub':'See your sales, stock, and orders clearly — and know what needs you next.',
+    'founding.cta':'Get started','founding.tag':'Founding pricing for the first 50 businesses.',
+    'final.brand':'One place to run and understand your business.',
     'footer.copy':'© 2026 OMINO. All rights reserved.',
     'foot.privacy':'Privacy','foot.terms':'Terms','foot.faq':'FAQ','foot.contact':'Contact'
   },
   ar: {
-    title:'OMINO — نظام التشغيل الذكي لأعمالك',
+    title:'OMINO — إدارة المحل والمبيعات والمخزون في مكان واحد',
     skip:'تخطي إلى المحتوى',
-    'nav.product':'المنتج','nav.ai':'AI','nav.pricing':'التسعير','nav.about':'عن OMINO','nav.login':'دخول',
-    'cta.start':'ابدأ مجاناً','cta.see':'شاهد كيف يعمل','cta.fit':'استكشف OMINO',
-    'menu.tag':'نظام تشغيل الأعمال','menu.connect':'تواصل',
-    'hero.title':'عملك يملك البيانات.<br>OMINO يحوّلها إلى قرارات.',
-    'hero.sub':'نظام واحد لمتجرك ونقطة البيع والمخزون والعملاء والمدفوعات — مع ذكاء اصطناعي يقولك شو المهم اليوم وشو الخطوة الجاية.',
-    'hero.b1':'لا حاجة لبطاقة ائتمان','hero.b2':'عربي وإنجليزي، مصمم للجوال أولاً',
-    'hero.fine':'تسعير المؤسسين لأول 50 نشاطاً تجارياً.',
-    'mock.top':'اليوم','mock.live':'● مباشر','mock.revenue':'الإيرادات','mock.orders':'الطلبات',
-    'mock.alertText':'عطر Rose Oud — تبقّى 3 قطع بالمخزون','mock.alertSpan':'أعِد التخزين قبل نهاية الأسبوع',
-    'mock.aiLabel':'رؤية OMINO','mock.aiText':'الخصومات بتاكل من هامش الربح على 3 منتجات هالأسبوع — يستاهل تراجعها.',
-    'solution.idx':'التحوّل','solution.title':'عملك متصل. أدواتك ما كانت — لهلق.',
-    'solution.sub':'معظم الأعمال بتشتغل على أدوات متفرقة. OMINO بيستبدلها بنظام واحد بيحكي مع نفسه.',
-    'solution.before.label':'قبل','solution.before.note':'إدخال يدوي مكرر. أرقام ما بتتطابق. قرارات مبنية على تخمين.',
-    'solution.after.label':'مع OMINO','solution.after.note':'سجل واحد للحقيقة. كل جزء من العمل بيبقى متزامن تلقائياً.',
+    'nav.product':'المنتج','nav.ai':'مساعدة','nav.pricing':'التسعير','nav.about':'عن OMINO','nav.login':'دخول',
+    'cta.start':'ابدأ الآن','cta.see':'شوف كيف بيشتغل','cta.fit':'استكشف OMINO',
+    'menu.tag':'إدارة الأعمال','menu.connect':'تواصل',
+    'hero.title':'محلك، مبيعاتك، ومخزونك.<br>بمكان واحد.',
+    'hero.sub':'OMINO بيساعدك تدير المحل، المتجر الإلكتروني، المخزون والطلبات — وتعرف شو بيحتاج انتباهك. من 9$ شهرياً.',
+    'hero.tag':'اعرف ما يهم. وتصرّف بثقة.',
+    'hero.b1':'من 9$ شهرياً','hero.b2':'بالعربية والإنجليزية',
+    'proof.founding':'تسعير المؤسسين. للـ50 الأوائل.',
+    'proof.demo':'شاهد متجراً حقيقياً',
+    'mock.top':'اليوم','mock.live':'مباشر','mock.revenue':'الإيرادات','mock.orders':'الطلبات',
+    'mock.alertTitle':'عطر Rose Oud — تبقّى 3 قطع','mock.alertSub':'أعد التخزين قبل نهاية الأسبوع',
+    'mock.aiLabel':'شو لاحظ OMINO','mock.aiText':'التخفيضات قلّصت الربح على 3 منتجات هالأسبوع.',
+    'what.idx':'شو هو OMINO','what.title':'برنامج واحد<br>لإدارة شغلك.',
+    'what.sub':'من أول عملية بيع لآخر قطعة بالمخزون — متجرك الإلكتروني، نقطة البيع، المخزون، الطلبات، العملاء وتقارير المبيعات بمكان واحد.',
+    'solution.idx':'مألوف؟','solution.title':'شغلك منتشر<br>بأكثر من مكان.',
+    'solution.sub':'طلبات على واتساب. مخزون بكراسة. مبيعات بإكسل. وربما متجر إلكتروني منفصل. ولا شيء مربوط ببعض.',
+    'solution.before.label':'اليوم','solution.before.note':'الأرقام ما بتطابق. المخزون تخمين. وما بتعرف بالضبط كم ربحت هالشهر.',
+    'solution.after.label':'مع OMINO','solution.after.note':'بيع من المحل أو أونلاين. المخزون بيتحدّث تلقائياً. كل مبيعاتك وطلباتك وعملاءك بمكان واحد.',
+    'solution.signature':'مكان واحد. شغلك كله.',
+    'manage.store.t':'متجر إلكتروني','manage.store.d':'اعرض منتجاتك واستقبل الطلبات أونلاين.',
+    'manage.pos.t':'مبيعات المحل','manage.pos.d':'سجّل مبيعات الكاش بسرعة.',
+    'manage.inv.t':'المخزون','manage.inv.d':'اعرف شو موجود، وشو قرب يخلص.',
+    'manage.orders.t':'الطلبات','manage.orders.d':'تابع كل طلب من لحظة استلامه.',
+    'manage.cust.t':'العملاء','manage.cust.d':'احتفظ ببيانات عملائك ومشترياتهم بمكان واحد.',
+    'manage.rep.t':'تقارير المبيعات','manage.rep.d':'اعرف شو انباع، كم ربحت، وشو بتحرّك تجارتك.',
     'flow.0':'العميل يشتري','flow.1':'المخزون يتحدّث','flow.2':'سجل العميل يتحدّث','flow.3':'OMINO يُبرز الأهم',
     'ev.idx':'بكل مكان تبيع فيه','ev.title':'بِع أونلاين. بِع من المحل. أدر كل شيء من مكان واحد.',
     'ev.sub':'عميل واحد، سجل طلبات واحد، مخزون واحد — سواء اشترى من موقعك أو من محلك.',
+    'ev.compact':'مصمم لمحلات مثل محلك.',
     'ev.t1':'سجل عميل واحد','ev.t2':'سجل طلبات واحد','ev.t3':'مخزون واحد','ev.t4':'مصدر حقيقة واحد',
     'ind.1':'تجزئة','ind.2':'أزياء','ind.3':'جمال وعطور','ind.4':'مقاهي ومطاعم','ind.5':'إلكترونيات','ind.6':'خدمات','ind.7':'جملة',
-    'ai.idx':'الذكاء الاصطناعي لعملك','ai.title':'الأرقام تقول شو صار. OMINO يقول ليش — وشو الخطوة الجاية.',
-    'ai.sub':'اسأل عن المنتجات والطلبات والعملاء والأداء — OMINO بيجاوب بسياق عملك الحقيقي، مش نصائح عامة.',
+    'ev.example':'محل عطور بتابع المخزون والمبيعات والعملاء المتكررين بمكان واحد — مثل Rose Oud بالمتجر التجريبي.',
+    'ai.idx':'مساعدة لشغلك','ai.title':'شو صار.<br>وشو تعمل.',
+    'ai.sub':'OMINO بقرأ مبيعاتك ومخزونك وطلباتك — وبحكيلك شو بيحتاج انتباهك. مش نصائح عامة. أرقامك.',
+    'ai.agent':'بباقة Scale، OMINO بيساعدك تنفّذ مهام روتينية — بس بعد ما توافق.',
+    'trust.line':'أنت مسيطر. لا شيء مهم بصير بدون موافقتك.',
     'ai.ex1':'أي المنتجات تخسر هامشها؟','ai.ex2':'شو أعيد تخزينه هالأسبوع؟','ai.ex3':'أي العملاء صاروا غير نشطين؟',
-    'chat.top':'تحليل الربح','chat.user':'ليش انخفض ربحي هالشهر؟',
-    'chat.ai':'التكاليف ارتفعت.<br>الهوامش انخفضت على 3 منتجات أساسية.<br>الخصومات زادت.',
-    'chat.1':'هاي المنتجات بتحمل حجم مبيعات أكبر بربح أقل.',
-    'chat.rk':'الخطوة المقترحة','chat.rec':'راجع هامش أكثر منتجاتك مبيعاً وقلّل الخصومات حيث بتآكل الربح.',
+    'chat.top':'مراجعة الربح','chat.user':'ليش انخفض ربحي هالشهر؟',
+    'chat.ai':'التكاليف ارتفعت.<br>3 منتجات انباعت أكثر بربح أقل.<br>الخصومات كانت أعلى من المعتاد.',
+    'chat.1':'هاي المنتجات جابت حجم مبيعات بدون هامش كافي.',
+    'chat.rk':'الخطوة المقترحة','chat.rec':'راجع أسعار وخصومات أكثر منتجاتك مبيعاً هالأسبوع.',
     'trust.idx':'أتمتة، بتحكّم كامل','trust.title':'ذكي بما يكفي للمساعدة. مضبوط بما يكفي للثقة.',
     'trust.sub':'OMINO يكتشف، يوصي، ويؤتمت الروتين. القرارات المهمة تبقى لك.',
     'auto.k':'حدث','auto.a':'إجراء OMINO','auto.o':'النتيجة',
-    'auto.r1.e':'مخزون منخفض','auto.r1.act':'ينبّه على المنتج','auto.r1.out':'إعادة تخزين قبل خسارة مبيعات',
-    'auto.r2.e':'طلب مكتمل','auto.r2.act':'يحدّث سجل العميل','auto.r2.out':'السجلات تبقى محدّثة بدون إدخال يدوي',
-    'auto.r3.e':'عميل أصبح غير نشط','auto.r3.act':'يُبرز الفرصة','auto.r3.out':'أنت تقرر إذا بدك تتابع',
+    'auto.r1.e':'مخزون منخفض','auto.r1.act':'ينبّه على المنتج','auto.r1.out':'يساعدك على إعادة التخزين قبل خسارة مبيعات',
+    'auto.r2.e':'طلب مكتمل','auto.r2.act':'يحدّث سجل العميل','auto.r2.out':'يبقي السجلات محدّثة دون إدخال يدوي',
+    'auto.r3.e':'عميل أصبح غير نشط','auto.r3.act':'يُبرز الفرصة','auto.r3.out':'يُبرز الفرصة — وأنت تقرر المتابعة',
     'trust.1':'لا شيء مهم يحدث بدون موافقتك.',
     'trust.2':'المبالغ المستردة والإجراءات المالية دائماً تحتاج تأكيداً.',
-    'trust.3':'ترى شو تغيّر، ومين وافق، وليش.',
-    'pricing.idx':'الباقات','pricing.title':'ابدأ ببساطة. انمُ دون إعادة بناء عملك.',
-    'pricing.sub':'استبدل نقاط البيع المتفرقة والمخزون على إكسل والتقارير الورقية — متجر ومبيعات ومخزون وذكاء في مكان واحد.',
-    'pricing.note':'Shopify Basic حوالي 39$/شهر قبل الإضافات. OMINO Run يشمل المتجر ونقطة البيع والمخزون والذكاء من 9$.',
+    'trust.3':'ترى ما تغيّر، ومن وافق، ولماذا.',
+    'pricing.idx':'الباقات','pricing.title':'اختار الباقة<br>اللي بتناسبك.',
+    'pricing.sub':'كل باقة تشمل المتجر، نقطة البيع، المخزون والطلبات. تسعير المؤسسين للـ50 الأوائل.',
+    'pricing.foot':'المتجر ونقطة البيع والمخزون والطلبات بكل الباقات. رسوم المدفوعات أونلاين منفصلة.',
     'bill.month':'شهري','bill.year':'سنوي','bill.per':'/ شهر','bill.perY':'/ شهر، سنوياً','bill.save':'وفّر شهرين','bill.savePlan':'وفّر ${n}$/سنة',
-    'plan.s.name':'Run','plan.s.desc':'كل ما تحتاجه للبيع — أونلاين ومن المحل.',
-    'plan.s.1':'متجر أونلاين + نقطة بيع','plan.s.2':'منتجات وطلبات ومخزون','plan.s.3':'عملاء وتحليلات أساسية','plan.s.4':'رؤى ذكاء اصطناعي أساسية','plan.s.5':'منتجات بلا حدود','plan.s.cta':'ابدأ مع Run',
-    'plan.p.name':'Grow','plan.p.badge':'الأكثر شعبية','plan.p.desc':'للتاجر اللي بدو وضوح — مش جداول إكسل أكثر.',
-    'plan.p.1':'كل ما في Run','plan.p.2':'رؤى وتوصيات ذكاء اصطناعي','plan.p.3':'توقعات المبيعات والطلب','plan.p.4':'تقسيم العملاء','plan.p.5':'تحليل الربح والهامش','plan.p.cta':'ابدأ مع Grow',
-    'plan.b.name':'Scale','plan.b.desc':'للفرق اللي بتشتغل بتعقيد أعلى.',
-    'plan.b.1':'كل ما في Grow','plan.b.2':'AI Business Agent','plan.b.3':'سير عمل ذكي (Agentic)','plan.b.4':'فريق وصلاحيات متقدمة','plan.b.5':'دعم أولوية','plan.b.cta':'ابدأ مع Scale',
+    'plan.s.name':'Run','plan.s.desc':'للمحلات اللي ببلّشوا.',
+    'plan.s.1':'متجر إلكتروني ونقطة بيع','plan.s.2':'منتجات، طلبات ومخزون','plan.s.3':'ملخص مبيعات وتنبيهات أساسية','plan.s.cta':'ابدأ مع Run',
+    'plan.p.name':'Grow','plan.p.badge':'الأكثر شعبية','plan.p.desc':'للتاجر اللي بدو صورة أوضح عن شغله.',
+    'plan.p.1':'كل ما في Run','plan.p.2':'شو صار، ليش، وشو تعمل بعده','plan.p.3':'الربح والهامش لكل منتج','plan.p.cta':'ابدأ مع Grow',
+    'plan.b.name':'Scale','plan.b.desc':'للأعمال والفرق اللي بتكبر.',
+    'plan.b.1':'كل ما في Grow','plan.b.2':'مساعدة بالمهام الروتينية — وأنت بتوافق على كل خطوة','plan.b.3':'دعم أولوية لما تحتاج','plan.b.cta':'ابدأ مع Scale',
     'cmp.col.feature':'القدرة','cmp.r1':'متجر أونلاين + نقطة بيع','cmp.r3':'رؤى الذكاء الاصطناعي','cmp.r5':'توقعات وتقسيم العملاء','cmp.r6':'AI Business Agent','cmp.r8':'دعم أولوية',
     'cmp.yes':'✓','cmp.no':'—','cmp.l.basic':'أساسي','cmp.l.advanced':'متقدم','cmp.l.agent':'وكيل',
     'fee.title':'المدفوعات','fee':'رسوم منصة بسيطة على المدفوعات أونلاين. تسعير شفاف، بدون تكاليف خفية.',
-    'final.title':'أول 50 نشاطاً يبنون OMINO معنا.',
-    'final.sub':'ثبّت تسعير المؤسسين طالما بقيت على OMINO — وساهم في تشكيل الخطوة الجاية.',
-    'final.cta':'كن من نشاطات المؤسسين','final.tag':'عمل واحد. نظام واحد. صورة واضحة.',
-    'final.brand':'نظام التشغيل الذكي لأعمالك.',
+    'founding.title':'جاهز تدير شغلك<br>من مكان واحد؟',
+    'founding.sub':'شوف مبيعاتك ومخزونك وطلباتك بوضوح — واعرف شو بيحتاجك.',
+    'founding.cta':'ابدأ الآن','founding.tag':'تسعير المؤسسين للـ50 الأوائل.',
+    'final.brand':'مكان واحد لإدارة شغلك وفهمه.',
     'footer.copy':'© 2026 OMINO. جميع الحقوق محفوظة.',
     'foot.privacy':'الخصوصية','foot.terms':'الشروط','foot.faq':'أسئلة','foot.contact':'تواصل'
   }
@@ -1064,10 +1703,20 @@ const copy = {
 let lang = 'en', billing = 'monthly';
 function t(key){ return copy[lang][key]; }
 function applyCopy(){
+  if(window.OminoSplitText) OminoSplitText.revertAll();
   document.querySelectorAll('[data-i18n]').forEach(el=>{ const v=t(el.dataset.i18n); if(v!=null) el.textContent=v; });
   document.querySelectorAll('[data-i18n-html]').forEach(el=>{ const v=t(el.dataset.i18nHtml); if(v!=null) el.innerHTML=v; });
   document.title = t('title');
   setBilling(billing);
+  if(revealReady){
+    initReveal();
+    const refreshHero = ()=>{
+      initSplitTexts();
+      playHeroLanding();
+    };
+    if(window.OminoSplitText) OminoSplitText.whenFontsReady().then(refreshHero);
+    else refreshHero();
+  }
 }
 const langToggle = document.getElementById('langToggle');
 function setLang(next){
@@ -1084,7 +1733,6 @@ langToggle.addEventListener('click', ()=> setLang(lang==='en' ? 'ar' : 'en'));
 let savedLang = 'en';
 try{ savedLang = localStorage.getItem('omino-lang')==='ar' ? 'ar' : 'en'; }catch(e){}
 setLang(savedLang);
-document.documentElement.classList.remove('await-open');
 </script>
 </body>
 </html>
